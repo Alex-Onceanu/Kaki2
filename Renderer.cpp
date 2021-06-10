@@ -8,7 +8,6 @@ struct Position;
 
 void Renderer::Init()
 {
-	std::ofstream log("log.txt");
 	try
 	{
 		if (SDL_Init(SDL_INIT_VIDEO) != 0)
@@ -16,7 +15,7 @@ void Renderer::Init()
 			throw("SDL could not be loaded.");
 		}
 
-		window = SDL_CreateWindow("Bibi sb3",
+		window = SDL_CreateWindow("Kaki 2",
 			SDL_WINDOWPOS_UNDEFINED,
 			SDL_WINDOWPOS_UNDEFINED,
 			RES_X, RES_Y,
@@ -47,6 +46,7 @@ void Renderer::Init()
 	}
 	catch (const char* e)
 	{
+		std::ofstream log("log.txt");
 		log << e << std::endl;
 	}
 

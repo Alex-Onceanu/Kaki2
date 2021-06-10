@@ -8,8 +8,7 @@ int main(int argc, char** argv)
 {
 
 	Renderer::Init();
-	std::ofstream log("log.txt");
-
+	
 	try
 	{
 		auto game = std::make_unique<Game>();
@@ -18,6 +17,7 @@ int main(int argc, char** argv)
 	}
 	catch (char* e)
 	{
+		std::ofstream log("log.txt");
 		log << e << std::endl;
 		return -1;
 	}
