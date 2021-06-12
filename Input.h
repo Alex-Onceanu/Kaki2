@@ -8,7 +8,7 @@ namespace Input
 
 	int GetMouseInput(int& x, int& y);
 
-	bool CheckEvent(GeneralEvent e);
+	bool CheckEvent(GeneralEvent gE);
 	bool CheckKeyPress(KeyEvent k);
 
 }

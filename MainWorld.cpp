@@ -36,6 +36,8 @@ void MainWorld::Update()
 
 void MainWorld::Draw()
 {
+	Renderer::Clear(50, 200, 80);
+
 	for (auto&& e : entities)
 	{
 		e->Draw();

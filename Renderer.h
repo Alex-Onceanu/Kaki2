@@ -37,7 +37,7 @@ namespace Renderer
 	void DrawRect(Rect& rect, int r, int g, int b);
 	void DrawFillRect(Rect& rect, int r, int g, int b);
 	void DrawFillRectAlpha(Rect& rect, int r, int g, int b, int a);
-
+	void Clear(int r, int g, int b);
 
 };
 

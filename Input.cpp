@@ -3,6 +3,7 @@
 
 #include <SDL.h>
 
+#include <iostream>
 namespace Input
 {
 	const char* GetKeyboardInput()

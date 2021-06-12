@@ -7,6 +7,7 @@
 #include "MainWorld.h"
 #include "EventsEnum.h"
 #include "Input.h"
+#include "Renderer.h"
 
 Game::Game()
 	:running(true)
@@ -23,7 +24,7 @@ void Game::MainLoop()
 {
 	while (running)
 	{
-		//handle quit event
+		running = !Input::CheckEvent(QUIT);
 		Frame();
 	}
 }
@@ -33,4 +34,5 @@ void Game::Frame()
 	currentWorld->ProcessInput();
 	currentWorld->Update();
 	currentWorld->Draw();
+	Renderer::Flip();
 }

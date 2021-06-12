@@ -13,7 +13,5 @@ public:
 
 private:
 	std::unique_ptr<SDL_Event> rendererEvent;
-
-	int EventType;
 };
 

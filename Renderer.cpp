@@ -145,3 +145,9 @@ void Renderer::DrawFillRectAlpha(Rect& rect, int r, int g, int b, int a)
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
 	SDL_RenderFillRect(renderer, (SDL_Rect*)&rect);
 }
+
+void Renderer::Clear(int r, int g, int b)
+{
+	SDL_SetRenderDrawColor(renderer, r, g, b, SDL_ALPHA_OPAQUE);
+	SDL_RenderClear(renderer);
+}
