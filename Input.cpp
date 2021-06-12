@@ -1,7 +1,7 @@
 #include "Input.h"
+#include "Event.h"
 
 #include <SDL.h>
-
 
 namespace Input
 {
@@ -17,13 +17,22 @@ namespace Input
 		return (int)SDL_GetMouseState(&x, &y);
 	}
 
-	bool CheckEvent()
+	bool CheckEvent(GeneralEvent gE)
 	{
-
+		auto e = Event();
+		while (SDL_PollEvent(e.GetRendererEvent()) != 0)
+		{
+			if (e.GetType() == gE)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
-	bool CheckKeyPress()
+	bool CheckKeyPress(KeyEvent k)
 	{
-
+		auto i = GetKeyboardInput();
+		return i[k];
 	}
 }

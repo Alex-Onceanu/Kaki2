@@ -5,7 +5,8 @@
 #include "Game.h"
 #include "World.h"
 #include "MainWorld.h"
-
+#include "EventsEnum.h"
+#include "Input.h"
 
 Game::Game()
 	:running(true)

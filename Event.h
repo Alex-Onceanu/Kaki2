@@ -9,7 +9,11 @@ class Event
 public:
 	Event();
 	SDL_Event* GetRendererEvent();
+	int GetType();
+
 private:
 	std::unique_ptr<SDL_Event> rendererEvent;
+
+	int EventType;
 };
 
