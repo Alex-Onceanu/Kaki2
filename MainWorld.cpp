@@ -1,16 +1,18 @@
 #include "MainWorld.h"
-
+#include "MC.h"
 #include "TextureManager.h"
+#include <memory>
 
 MainWorld::MainWorld(bool& running)
 	:World()
 {
+	tm = make_unique<TextureManager>();
 	CreateWorld();
 }
 
 void MainWorld::CreateWorld()
 {
-	
+	entities.push_back(std::make_unique<MC>(tm.get()));
 }
 
 MainWorld::~MainWorld()

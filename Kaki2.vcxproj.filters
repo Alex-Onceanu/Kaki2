@@ -42,6 +42,9 @@
     <ClCompile Include="Event.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MC.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -84,6 +87,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="EventsEnum.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MC.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
