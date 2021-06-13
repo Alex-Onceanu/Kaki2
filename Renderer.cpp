@@ -86,8 +86,6 @@ void Renderer::Blit(Texture* texture, Rect& srcRect, Rect& dstRect)
 
 std::shared_ptr<Texture> Renderer::LoadImage(const std::string_view path)
 {
-	std::ofstream log("log.txt");
-
 	try {
 		SDL_Surface* surf = IMG_Load(path.data());
 
@@ -103,6 +101,7 @@ std::shared_ptr<Texture> Renderer::LoadImage(const std::string_view path)
 	}
 	catch (const char* e)
 	{
+		std::ofstream log("log.txt");
 		log << e << std::endl;
 	}
 	return nullptr;
