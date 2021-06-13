@@ -67,17 +67,17 @@ void MC::ProcessInput()
 		*currentAnimation = (*allAnimations)[INDEX_DOWN];
 		pos.y += speed;
 	}
-	if (Input::CheckKeyPress(K_UP) || Input::CheckKeyPress(K_w))
+	else if (Input::CheckKeyPress(K_UP) || Input::CheckKeyPress(K_w))
 	{
 		*currentAnimation = (*allAnimations)[INDEX_UP];
 		pos.y -= speed;
 	}
-	if (Input::CheckKeyPress(K_LEFT) || Input::CheckKeyPress(K_a))
+	else if (Input::CheckKeyPress(K_LEFT) || Input::CheckKeyPress(K_a))
 	{
 		*currentAnimation = (*allAnimations)[INDEX_LEFT];
 		pos.x -= speed;
 	}
-	if (Input::CheckKeyPress(K_RIGHT) || Input::CheckKeyPress(K_d))
+	else if (Input::CheckKeyPress(K_RIGHT) || Input::CheckKeyPress(K_d))
 	{
 		*currentAnimation = (*allAnimations)[INDEX_RIGHT];
 		pos.x += speed;

@@ -36,26 +36,6 @@ namespace Input
 	bool CheckKeyPress(KeyEvent k)
 	{
 		UpdateKeyboardState();
-		if (keyboard[k] == 1) std::cout << "YEAA" << std::endl;
 		return keyboard[k];
 	}
-	
-	/*
-	bool CheckKeyPress(KeyEvent k)
-	{
-		auto e = Event();
-
-		while (SDL_PollEvent(e.GetRendererEvent()))
-		{
-			if (e.GetType() == SDL_KEYDOWN)
-			{
-				if (e.GetRendererEvent()->key.keysym.sym == k)
-				{
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	*/
 }
