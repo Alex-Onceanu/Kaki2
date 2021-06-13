@@ -37,5 +37,6 @@ protected:
 
     int frameCount;
     int animCount;
+    int speed;
 };
 

@@ -6,10 +6,11 @@
 #include <iostream>
 namespace Input
 {
-	const char* GetKeyboardInput()
+	auto keyboard = SDL_GetKeyboardState(NULL);
+
+	void UpdateKeyboardState()
 	{
 		SDL_PumpEvents();
-		return (char*)SDL_GetKeyboardState(NULL);
 	}
 
 	int GetMouseInput(int& x, int& y)
@@ -21,7 +22,7 @@ namespace Input
 	bool CheckEvent(GeneralEvent gE)
 	{
 		auto e = Event();
-		while (SDL_PollEvent(e.GetRendererEvent()) != 0)
+		while (SDL_PollEvent(e.GetRendererEvent()))
 		{
 			if (e.GetType() == gE)
 			{
@@ -31,9 +32,30 @@ namespace Input
 		return false;
 	}
 
+	
 	bool CheckKeyPress(KeyEvent k)
 	{
-		auto i = GetKeyboardInput();
-		return i[k];
+		UpdateKeyboardState();
+		if (keyboard[k] == 1) std::cout << "YEAA" << std::endl;
+		return keyboard[k];
 	}
+	
+	/*
+	bool CheckKeyPress(KeyEvent k)
+	{
+		auto e = Event();
+
+		while (SDL_PollEvent(e.GetRendererEvent()))
+		{
+			if (e.GetType() == SDL_KEYDOWN)
+			{
+				if (e.GetRendererEvent()->key.keysym.sym == k)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	*/
 }

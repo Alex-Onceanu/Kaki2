@@ -4,9 +4,7 @@
 
 namespace Input
 {
-	const char* GetKeyboardInput();
-
-	int GetMouseInput(int& x, int& y);
+	void UpdateKeyboardState();
 
 	bool CheckEvent(GeneralEvent gE);
 	bool CheckKeyPress(KeyEvent k);

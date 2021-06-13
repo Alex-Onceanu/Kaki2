@@ -1,6 +1,7 @@
 #include "MainWorld.h"
 #include "MC.h"
 #include "TextureManager.h"
+#include "Input.h"
 #include <memory>
 
 MainWorld::MainWorld(bool& running)
