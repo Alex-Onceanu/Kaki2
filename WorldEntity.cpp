@@ -3,11 +3,12 @@
 #include "Position.h"
 #include "TextureManager.h"
 
-WorldEntity::WorldEntity(TextureManager* tm_, std::string imgPath)
-	:tm(tm_)
+WorldEntity::WorldEntity(TextureManager* tm_)
+	:tm(tm_),
+	pos({ 0,0 }),
+	rect({ 0,0,0,0 })
 {
-	img = tm->GetTexture(imgPath);
-	rect = Renderer::GetRect(img.get());
+
 }
 
 WorldEntity::~WorldEntity()

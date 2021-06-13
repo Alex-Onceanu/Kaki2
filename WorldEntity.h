@@ -14,7 +14,7 @@ class WorldEntity :
     public Entity
 {
 public:
-    WorldEntity(TextureManager* tm_, std::string imgPath);
+    WorldEntity(TextureManager* tm_);
     ~WorldEntity();
 
     virtual void ProcessCollision() = 0;
@@ -30,8 +30,6 @@ public:
     void AddPosition(Position src);
 
 protected:
-
-    std::shared_ptr<Texture> img;
     Rect rect;
     Position pos;
 
