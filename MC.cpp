@@ -7,7 +7,8 @@
 
 MC::MC(TextureManager* tm_)
 	:WorldEntity(tm_),
-	frameCount(0)
+	frameCount(0),
+	animCount(0)
 {
 	allAnimations = std::make_unique<std::vector<std::vector<std::shared_ptr<Texture>>>>();
 	currentAnimation = std::make_unique<std::vector<shared_ptr<Texture>>>();
@@ -20,7 +21,6 @@ MC::MC(TextureManager* tm_)
 	pos = { 200,200 };
 	
 	UpdateRectCoordinates();
-	comppt = 0;
 }
 
 MC::~MC()
@@ -63,12 +63,16 @@ void MC::ProcessInput()
 
 void MC::Update()
 {
-	if (++frameCount > 3) frameCount = 0;
-	
+	if (++frameCount > 3600) frameCount = 0;
+
+	if (frameCount % 12 == 0)
+	{
+		if (++animCount > 3) animCount = 0;
+	}
 	UpdateRectCoordinates();
 }
 
 void MC::Draw()
 {
-	Renderer::FullBlit((*currentAnimation)[frameCount].get(), rect);
+	Renderer::FullBlit((*currentAnimation)[animCount].get(), rect);
 }

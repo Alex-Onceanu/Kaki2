@@ -36,6 +36,6 @@ protected:
     unique_ptr<vector<shared_ptr<Texture>>> currentAnimation;
 
     int frameCount;
-    int comppt;
+    int animCount;
 };
 
