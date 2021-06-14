@@ -98,5 +98,12 @@ void MC::Update()
 
 void MC::Draw()
 {
-	Renderer::FullBlit((*currentAnimation)[animCount].get(), rect);
+	if (shouldMirrorBlit)
+	{
+		Renderer::FullBlitMirrorHorizontal((*currentAnimation)[animCount].get(), rect);
+	}
+	else
+	{
+		Renderer::FullBlit((*currentAnimation)[animCount].get(), rect);
+	}
 }

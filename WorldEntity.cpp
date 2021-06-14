@@ -6,7 +6,8 @@
 WorldEntity::WorldEntity(TextureManager* tm_)
 	:tm(tm_),
 	pos({ 0,0 }),
-	rect({ 0,0,0,0 })
+	rect({ 0,0,0,0 }),
+	shouldMirrorBlit(false)
 {
 
 }

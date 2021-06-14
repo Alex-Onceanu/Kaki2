@@ -76,6 +76,17 @@ void Renderer::FullBlit(Texture* texture, Rect& rect)
 		(SDL_Rect *)&rect);
 }
 
+void Renderer::FullBlitMirror(Texture* texture, Rect& rect)
+{
+	SDL_RenderCopyEx(renderer,
+		texture->GetRendererTexture(),
+		NULL, 
+		(SDL_Rect*)&rect,
+		0, 
+		nullptr, 
+		SDL_FLIP_HORIZONTAL);
+}
+
 void Renderer::Blit(Texture* texture, Rect& srcRect, Rect& dstRect)
 {
 	SDL_RenderCopy(renderer,

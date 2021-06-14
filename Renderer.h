@@ -28,6 +28,7 @@ namespace Renderer
 	void Flip();
 
 	void FullBlit(Texture* texture, Rect& rect);
+	void FullBlitMirrorHorizontal(Texture* texture, Rect& rect);
 	void Blit(Texture* texture, Rect& srcRect, Rect& dstRect);
 	
 	std::shared_ptr<Texture> LoadImage(const std::string_view path);
