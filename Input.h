@@ -1,6 +1,6 @@
 #pragma once
 
-#include "EventsEnum.h"
+#include "InputEventsEnum.h"
 
 namespace Input
 {

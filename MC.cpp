@@ -1,5 +1,5 @@
 #include "MC.h"
-#include "EventsEnum.h"
+#include "InputEventsEnum.h"
 #include "Input.h"
 
 #include <sstream>
