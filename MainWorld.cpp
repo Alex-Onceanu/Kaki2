@@ -2,6 +2,9 @@
 #include "MC.h"
 #include "TextureManager.h"
 #include "Input.h"
+#include "InputEventsEnum.h"
+#include "EventSystem.h"
+#include "EventEnum.h"
 #include <memory>
 
 MainWorld::MainWorld(bool& running)
@@ -23,6 +26,12 @@ MainWorld::~MainWorld()
 
 void MainWorld::ProcessInput()
 {
+	if (Input::CheckKeyPress(K_w))
+	{
+		auto e = Event(EventEnum::MOVE_UP);
+		EventSystem::Launch(&e);
+	}
+
 	for (auto&& e : entities)
 	{
 		e->ProcessInput();

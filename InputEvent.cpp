@@ -4,17 +4,17 @@
 
 #include <memory>
 
-Event::Event()
+InputEvent::InputEvent()
 {
 	rendererEvent = std::make_unique<SDL_Event>();
 }
 
-SDL_Event* Event::GetRendererEvent()
+SDL_Event* InputEvent::GetRendererEvent()
 {
 	return rendererEvent.get();
 }
 
-int Event::GetType()
+int InputEvent::GetType()
 {
 	return rendererEvent->type;
 }

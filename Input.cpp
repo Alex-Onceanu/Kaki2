@@ -1,5 +1,5 @@
 #include "Input.h"
-#include "Event.h"
+#include "InputEvent.h"
 
 #include <SDL.h>
 
@@ -21,7 +21,7 @@ namespace Input
 
 	bool CheckEvent(GeneralEvent gE)
 	{
-		auto e = Event();
+		auto e = InputEvent();
 		while (SDL_PollEvent(e.GetRendererEvent()))
 		{
 			if (e.GetType() == gE)

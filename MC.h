@@ -3,6 +3,7 @@
 
 #include "WorldEntity.h"
 #include "Texture.h"
+#include "Event.h"
 
 #include <vector>
 #include <memory>
@@ -10,7 +11,8 @@
 using namespace std;
 
 class MC :
-    public WorldEntity
+    public WorldEntity,
+    public Listener
 {
 public:
     MC(TextureManager* tm_);
@@ -21,6 +23,9 @@ public:
     void ProcessInput() override;
     void Update() override;
     void Draw() override;
+
+    virtual bool CanProcess(Event* e) override;
+    virtual void Process(Event* e) override;
 
 private:
     void LoadAllImages();

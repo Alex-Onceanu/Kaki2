@@ -144,6 +144,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Event.cpp" />
+    <ClCompile Include="EventSystem.cpp" />
     <ClCompile Include="InputEvent.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -157,10 +159,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="Event.h" />
+    <ClInclude Include="EventEnum.h" />
+    <ClInclude Include="EventSystem.h" />
     <ClInclude Include="InputEvent.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="EventsEnum.h" />
+    <ClInclude Include="InputEventsEnum.h" />
     <ClInclude Include="MainWorld.h" />
     <ClInclude Include="MC.h" />
     <ClInclude Include="Position.h" />

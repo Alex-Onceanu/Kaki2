@@ -10,6 +10,7 @@
 
 MC::MC(TextureManager* tm_)
 	:WorldEntity(tm_),
+	Listener(),
 	frameCount(0),
 	animCount(0),
 	speed(5)
@@ -87,6 +88,7 @@ void MC::ProcessCollision()
 	return;
 }
 
+#if 0
 void MC::ProcessInput()
 {
 	if (Input::CheckKeyPress(K_DOWN) || Input::CheckKeyPress(K_s))
@@ -113,6 +115,28 @@ void MC::ProcessInput()
 		*currentAnimation = (*allAnimations)[INDEX_LEFT];
 		pos.x += speed;
 	}
+
+}
+
+#endif
+
+bool MC::CanProcess(Event* e)
+{
+	return (e->type == EventEnum::MOVE_UP);
+}
+
+void MC::Process(Event* e)
+{
+	if (e->type == EventEnum::MOVE_UP)
+	{
+		shouldMirrorBlit = false;
+		*currentAnimation = (*allAnimations)[INDEX_UP];
+		pos.y -= speed;
+	}
+}
+
+void MC::ProcessInput()
+{
 
 }
 

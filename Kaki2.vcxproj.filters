@@ -45,6 +45,12 @@
     <ClCompile Include="MC.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EventSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Event.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -86,10 +92,19 @@
     <ClInclude Include="InputEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EventsEnum.h">
+    <ClInclude Include="InputEventsEnum.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MC.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EventSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Event.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EventEnum.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

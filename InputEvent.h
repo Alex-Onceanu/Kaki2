@@ -4,10 +4,10 @@
 
 union SDL_Event;
 
-class Event
+class InputEvent
 {
 public:
-	Event();
+	InputEvent();
 	SDL_Event* GetRendererEvent();
 	int GetType();
 
