@@ -34,5 +34,7 @@ protected:
     Position pos;
 
     TextureManager* tm;
+
+    bool shouldMirrorBlit;
 };
 

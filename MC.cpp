@@ -38,9 +38,10 @@ void MC::UpdateRectCoordinates()
 	rect.y = pos.y;
 }
 
+#if 0
 void MC::LoadAllImages()
 {
-	std::vector<std::string> tab{ "up", "down", "right", "left" };
+	std::vector<std::string> tab{ "up", "down", "left" };
 
 	for (int j = 0; j < tab.size(); j++)
 	{
@@ -54,6 +55,32 @@ void MC::LoadAllImages()
 		}
 	}
 }
+#endif
+
+void MC::LoadAllImages()
+{
+	std::vector<std::string> tab{ "up", "down", "left" };
+
+	for (int j = 0; j < tab.size(); j++)
+	{
+		std::vector<shared_ptr<Texture>> v{};
+		allAnimations->push_back(v);
+		bool go = true;
+		for (int i = 1; go; i++)
+		{
+			try
+			{
+				std::ostringstream path;
+				path << "./Assets/MC/" << tab[j] << "/" << i << ".png";
+				(*allAnimations)[j].push_back(tm->GetTexture(path.str()));
+			}
+			catch (...)
+			{
+				go = false;
+			}
+		}
+	}
+}
 
 void MC::ProcessCollision()
 {
@@ -64,22 +91,26 @@ void MC::ProcessInput()
 {
 	if (Input::CheckKeyPress(K_DOWN) || Input::CheckKeyPress(K_s))
 	{
+		shouldMirrorBlit = false;
 		*currentAnimation = (*allAnimations)[INDEX_DOWN];
 		pos.y += speed;
 	}
 	else if (Input::CheckKeyPress(K_UP) || Input::CheckKeyPress(K_w))
 	{
+		shouldMirrorBlit = false;
 		*currentAnimation = (*allAnimations)[INDEX_UP];
 		pos.y -= speed;
 	}
 	else if (Input::CheckKeyPress(K_LEFT) || Input::CheckKeyPress(K_a))
 	{
+		shouldMirrorBlit = false;
 		*currentAnimation = (*allAnimations)[INDEX_LEFT];
 		pos.x -= speed;
 	}
 	else if (Input::CheckKeyPress(K_RIGHT) || Input::CheckKeyPress(K_d))
 	{
-		*currentAnimation = (*allAnimations)[INDEX_RIGHT];
+		shouldMirrorBlit = true;
+		*currentAnimation = (*allAnimations)[INDEX_LEFT];
 		pos.x += speed;
 	}
 

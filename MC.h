@@ -29,7 +29,7 @@ private:
 protected:
     enum animationsIndex
     {
-        INDEX_UP, INDEX_DOWN, INDEX_RIGHT, INDEX_LEFT
+        INDEX_UP, INDEX_DOWN, INDEX_LEFT
     };
     
     unique_ptr<vector<vector<shared_ptr<Texture>>>> allAnimations;

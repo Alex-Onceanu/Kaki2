@@ -1,4 +1,4 @@
-#include "Event.h"
+#include "InputEvent.h"
 
 #include <SDL.h>
 

@@ -39,7 +39,7 @@
     <ClCompile Include="Input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Event.cpp">
+    <ClCompile Include="InputEvent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MC.cpp">
@@ -83,7 +83,7 @@
     <ClInclude Include="Input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Event.h">
+    <ClInclude Include="InputEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="EventsEnum.h">
