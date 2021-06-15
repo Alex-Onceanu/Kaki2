@@ -29,7 +29,7 @@ bool Listener::CanProcess(Event* e)
 	return false;
 }
 
-void Listener::Process(Event* e)
+void Listener::OnEvent(Event* e)
 {
 	return;
 }

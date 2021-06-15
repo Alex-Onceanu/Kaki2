@@ -13,7 +13,7 @@ namespace EventSystem
 		{
 			if (l->CanProcess(ev))
 			{
-				l->Process(ev);
+				l->OnEvent(ev);
 			}
 		}
 	}

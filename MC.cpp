@@ -125,7 +125,7 @@ bool MC::CanProcess(Event* e)
 	return (e->type == EventEnum::MOVE_UP);
 }
 
-void MC::Process(Event* e)
+void MC::OnEvent(Event* e)
 {
 	if (e->type == EventEnum::MOVE_UP)
 	{

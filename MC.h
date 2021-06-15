@@ -25,7 +25,7 @@ public:
     void Draw() override;
 
     virtual bool CanProcess(Event* e) override;
-    virtual void Process(Event* e) override;
+    virtual void OnEvent(Event* e) override;
 
 private:
     void LoadAllImages();
