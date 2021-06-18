@@ -19,12 +19,12 @@ namespace Input
 		return (int)SDL_GetMouseState(&x, &y);
 	}
 
-	bool CheckEvent(GeneralEvent gE)
+	bool CheckEvent(GeneralInput gE)
 	{
 		auto e = InputEvent();
 		while (SDL_PollEvent(e.GetRendererEvent()))
 		{
-			if (e.GetType() == gE)
+			if (e.GetType() == static_cast<int>(gE))
 			{
 				return true;
 			}
@@ -32,10 +32,18 @@ namespace Input
 		return false;
 	}
 
+	bool GetEventQueue(KeyInput* src)
+	{
+		auto e = InputEvent();
+		bool res = SDL_PollEvent(e.GetRendererEvent());
+		*src = static_cast<KeyInput>(e.GetRendererEvent()->key.keysym.scancode);
+		return res;
+	}
+
 	
-	bool CheckKeyPress(KeyEvent k)
+	bool CheckKeyPress(KeyInput k)
 	{
 		UpdateKeyboardState();
-		return keyboard[k];
+		return keyboard[static_cast<int>(k)];
 	}
 }

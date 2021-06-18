@@ -10,6 +10,7 @@
 #include <vector>
 #include <algorithm>
 #include <cassert>
+#include <iostream>
 
 MainWorld::MainWorld(bool& running)
 	:World()
@@ -20,15 +21,17 @@ MainWorld::MainWorld(bool& running)
 	CreateWorld();
 }
 
+#if 0
+
 void MainWorld::InitKeyToEvent()
 {
 	//On attribue a chaque touche un evenement a lancer
 
-	std::vector<KeyEvent> keys{
-		K_w,
-		K_s,
-		K_d,
-		K_a };
+	std::vector<KeyInput> keys{
+		KeyInput::W,
+		KeyInput::S,
+		KeyInput::D,
+		KeyInput::A };
 	std::vector<EventEnum> events{
 		EventEnum::MOVE_UP,
 		EventEnum::MOVE_DOWN,
@@ -37,7 +40,7 @@ void MainWorld::InitKeyToEvent()
 
 	assert(keys.size() == events.size());
 
-	keyToEvent = make_unique<std::vector<std::pair<KeyEvent, EventEnum>>>();
+	keyToEvent = make_unique<std::vector<std::pair<KeyInput, EventEnum>>>();
 	
 	for (int i = 0; i < keys.size(); i++)
 	{
@@ -45,9 +48,34 @@ void MainWorld::InitKeyToEvent()
 	}
 
 	std::sort(keyToEvent->begin(), keyToEvent->end(),
-		[](std::pair<KeyEvent, EventEnum> a, std::pair<KeyEvent, EventEnum> b)
+		[](std::pair<KeyInput, EventEnum> a, std::pair<KeyInput, EventEnum> b)
 		{ return static_cast<int>(a.second) < static_cast<int>(b.second); }
 	);
+}
+
+#endif
+
+void MainWorld::InitKeyToEvent()
+{
+	std::vector<KeyInput> keys{
+		KeyInput::W,
+		KeyInput::S,
+		KeyInput::D,
+		KeyInput::A };
+	std::vector<EventEnum> events{
+		EventEnum::MOVE_UP,
+		EventEnum::MOVE_DOWN,
+		EventEnum::MOVE_RIGHT,
+		EventEnum::MOVE_LEFT };
+
+	assert(keys.size() == events.size());
+
+	keyToEvent = std::make_unique<std::unordered_map<KeyInput, EventEnum>>();
+
+	for (int i = 0; i < keys.size(); i++)
+	{
+		keyToEvent->insert({ keys[i],events[i] });
+	}
 }
 
 void MainWorld::CreateWorld()
@@ -60,16 +88,21 @@ MainWorld::~MainWorld()
 
 }
 
-void MainWorld::LaunchEventFromInput()
+void MainWorld::PostEventFromInput()
 {
 	//On lance les evenements attribues aux touches
 
-
+	KeyInput nextEvent;
+	while (Input::GetNextEvent(&nextEvent))
+	{
+		auto e = Event(keyToEvent->find(nextEvent)->second);
+		EventSystem::Post(&e);
+	}
 }
 
 void MainWorld::ProcessInput()
 {
-	
+	PostEventFromInput();
 
 	for (auto&& e : entities)
 	{

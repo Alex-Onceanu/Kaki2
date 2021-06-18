@@ -2,20 +2,20 @@
 
 #include <SDL.h>
 
-enum KeyEvent
+enum class KeyInput
 {
-	K_w = SDL_SCANCODE_W,
-	K_s = SDL_SCANCODE_S,
-	K_d = SDL_SCANCODE_D,
-	K_a = SDL_SCANCODE_A,
+	W = SDL_SCANCODE_W,
+	S = SDL_SCANCODE_S,
+	D = SDL_SCANCODE_D,
+	A = SDL_SCANCODE_A,
 
-	K_UP = SDL_SCANCODE_UP,
-	K_DOWN = SDL_SCANCODE_DOWN,
-	K_LEFT = SDL_SCANCODE_LEFT,
-	K_RIGHT = SDL_SCANCODE_RIGHT,
+	UP = SDL_SCANCODE_UP,
+	DOWN = SDL_SCANCODE_DOWN,
+	LEFT = SDL_SCANCODE_LEFT,
+	RIGHT = SDL_SCANCODE_RIGHT,
 };
 
-enum GeneralEvent
+enum class GeneralInput
 {
 	QUIT = SDL_QUIT,
 };
