@@ -122,7 +122,10 @@ void MC::ProcessInput()
 
 bool MC::CanProcess(Event* e)
 {
-	return (e->type == EventEnum::MOVE_UP);
+	return (e->type == EventEnum::MOVE_UP)
+		|| (e->type == EventEnum::MOVE_DOWN)
+		|| (e->type == EventEnum::MOVE_RIGHT)
+		|| (e->type == EventEnum::MOVE_LEFT);
 }
 
 void MC::OnEvent(Event* e)
