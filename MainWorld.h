@@ -19,7 +19,7 @@ public:
 
 private:
 	void CreateWorld();
-	void LaunchEventFromInput();
+	void PostEventFromInput();
 	void InitKeyToEvent();
 
 protected:

@@ -9,5 +9,5 @@ namespace Input
 
 	bool CheckEvent(GeneralInput gE);
 	bool CheckKeyPress(KeyInput k);
-	bool GetEventQueue();
+	bool GetNextEvent(KeyInput* src);
 }

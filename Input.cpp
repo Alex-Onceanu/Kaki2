@@ -32,7 +32,7 @@ namespace Input
 		return false;
 	}
 
-	bool GetEventQueue(KeyInput* src)
+	bool GetNextEvent(KeyInput* src)
 	{
 		auto e = InputEvent();
 		bool res = SDL_PollEvent(e.GetRendererEvent());
