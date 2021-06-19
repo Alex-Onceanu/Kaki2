@@ -1,14 +1,14 @@
 #pragma once
 
-#include <string>
 #include "EventEnum.h"
+
+#include <string>
+#include <memory>
 
 class Event
 {
 public:
 	Event(EventEnum type_);
-	void Post();
-	void Launch();
 
 	EventEnum type;
 };

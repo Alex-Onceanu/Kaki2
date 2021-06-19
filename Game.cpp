@@ -9,9 +9,11 @@
 #include "Input.h"
 #include "Renderer.h"
 #include "EventSystem.h"
+#include "Event.h"
 
 Game::Game()
-	:running(true)
+	:Listener(),
+	running(true)
 {
 	currentWorld = std::make_unique<MainWorld>(running);
 }
@@ -25,10 +27,23 @@ void Game::MainLoop()
 {
 	while (running)
 	{
-		running = !Input::CheckEvent(GeneralInput::QUIT);
 		Frame();
 	}
 }
+
+bool Game::CanProcess(Event* e)
+{
+	return e->type == EventEnum::QUIT_GAME;
+}
+
+void Game::OnEvent(Event* e)
+{
+	if (e->type == EventEnum::QUIT_GAME)
+	{
+		running = false;
+	}
+}
+
 
 void Game::Frame()
 {

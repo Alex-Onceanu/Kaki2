@@ -18,16 +18,16 @@ namespace EventSystem
 		}
 	}
 
-	void Post(Event* ev)
+	void Post(std::unique_ptr<Event> ev)
 	{
-		postEvents.push_back(ev);
+		postEvents.push_back(std::move(ev));
 	}
 
 	void Update()
 	{
 		for (auto&& pe : postEvents)
 		{
-			Launch(pe);
+			Launch(pe.get());
 		}
 		postEvents.clear();
 	}

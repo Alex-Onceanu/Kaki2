@@ -2,7 +2,7 @@
 
 #include <SDL.h>
 
-enum class KeyInput
+enum class InputEventEnum
 {
 	W = SDL_SCANCODE_W,
 	S = SDL_SCANCODE_S,
@@ -13,9 +13,7 @@ enum class KeyInput
 	DOWN = SDL_SCANCODE_DOWN,
 	LEFT = SDL_SCANCODE_LEFT,
 	RIGHT = SDL_SCANCODE_RIGHT,
-};
 
-enum class GeneralInput
-{
 	QUIT = SDL_QUIT,
+	KEYDOWN = SDL_KEYDOWN,
 };

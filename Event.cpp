@@ -8,16 +8,6 @@ Event::Event(EventEnum type_)
 	
 }
 
-void Event::Post()
-{
-	EventSystem::Post(this);
-}
-
-void Event::Launch()
-{
-	EventSystem::Launch(this);
-}
-
 
 Listener::Listener()
 {

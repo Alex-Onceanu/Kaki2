@@ -57,12 +57,14 @@ void MainWorld::InitKeyToEvent()
 
 void MainWorld::InitKeyToEvent()
 {
-	std::vector<KeyInput> keys{
-		KeyInput::W,
-		KeyInput::S,
-		KeyInput::D,
-		KeyInput::A };
+	std::vector<InputEventEnum> keys{
+		InputEventEnum::QUIT,
+		InputEventEnum::W,
+		InputEventEnum::S,
+		InputEventEnum::D,
+		InputEventEnum::A };
 	std::vector<EventEnum> events{
+		EventEnum::QUIT_GAME,
 		EventEnum::MOVE_UP,
 		EventEnum::MOVE_DOWN,
 		EventEnum::MOVE_RIGHT,
@@ -70,7 +72,7 @@ void MainWorld::InitKeyToEvent()
 
 	assert(keys.size() == events.size());
 
-	keyToEvent = std::make_unique<std::unordered_map<KeyInput, EventEnum>>();
+	keyToEvent = std::make_unique<std::unordered_map<InputEventEnum, EventEnum>>();
 
 	for (int i = 0; i < keys.size(); i++)
 	{
@@ -92,11 +94,16 @@ void MainWorld::PostEventFromInput()
 {
 	//On lance les evenements attribues aux touches
 
-	KeyInput nextEvent;
-	while (Input::GetNextEvent(&nextEvent))
+	InputEventEnum nextEvent;
+	while (Input::GetNextInputEvent(&nextEvent))
 	{
-		auto e = Event(keyToEvent->find(nextEvent)->second);
-		EventSystem::Post(&e);
+		std::cout << static_cast<int>(nextEvent) << std::endl;
+		auto key = keyToEvent->find(nextEvent);
+		if (key != keyToEvent->end())
+		{
+			auto e = std::make_unique<Event>(key->second);
+			EventSystem::Post(std::move(e));
+		}
 	}
 }
 
