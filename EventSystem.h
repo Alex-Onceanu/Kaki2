@@ -9,11 +9,11 @@
 namespace EventSystem
 {
 	static std::vector<Listener*> listeners;
-	static std::vector <std::unique_ptr<Event>> postEvents;
+	static std::vector <Event> postEvents;
 
 	void AddListener(Listener* l);
 	void Launch(Event* ev);
-	void Post(std::unique_ptr<Event> ev);
+	void Post(Event ev);
 	void Update();
 };
 

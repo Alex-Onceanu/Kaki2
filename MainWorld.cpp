@@ -101,8 +101,8 @@ void MainWorld::PostEventFromInput()
 		auto key = keyToEvent->find(nextEvent);
 		if (key != keyToEvent->end())
 		{
-			auto e = std::make_unique<Event>(key->second);
-			EventSystem::Post(std::move(e));
+			auto e = Event(key->second);
+			EventSystem::Post(e);
 		}
 	}
 }
