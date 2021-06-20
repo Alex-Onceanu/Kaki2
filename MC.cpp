@@ -213,7 +213,7 @@ void MC::OnEvent(Event* e)
 
 void MC::ProcessInput()
 {
-
+		
 }
 
 template <typename T>
@@ -225,8 +225,7 @@ void clamp(T& val, const T & min, const T & max)
 		val = max;
 }
 
-
-void MC::Update()
+void MC::UpdateAnimation()
 {
 	if (++frameCount > 3600) frameCount = 0;
 
@@ -234,6 +233,37 @@ void MC::Update()
 	{
 		if (++animCount > 3) animCount = 0;
 	}
+
+	if (speed.x > 0)
+	{
+		shouldMirrorBlit = true;
+		*currentAnimation = (*allAnimations)[INDEX_LEFT];
+	}
+	else if (speed.x < 0)
+	{
+		shouldMirrorBlit = false;
+		*currentAnimation = (*allAnimations)[INDEX_LEFT];
+	}
+	else if (speed.y > 0)
+	{
+		shouldMirrorBlit = false;
+		*currentAnimation = (*allAnimations)[INDEX_DOWN];
+	}
+	else if (speed.y < 0)
+	{
+		shouldMirrorBlit = false;
+		*currentAnimation = (*allAnimations)[INDEX_UP];
+	}
+	else
+	{
+		animCount = 0;
+	}
+}
+
+
+void MC::Update()
+{
+	UpdateAnimation();
 
 	if (move_direction.any()) {
 		pos.x += (int)speed.x;

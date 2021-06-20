@@ -43,6 +43,8 @@ public:
 private:
     void LoadAllImages();
     void UpdateRectCoordinates();
+    void UpdateAnimation();
+
     void InitEventToFunction();
     
     void MoveUp();
