@@ -8,9 +8,18 @@
 #include <vector>
 #include <memory>
 #include <unordered_map>
+#include <bitset>
 
 
 using namespace std;
+
+typedef Pos<double> Speed_t;
+
+constexpr auto MOVING_LEFT  = 1;
+constexpr auto MOVING_RIGHT = 2;
+constexpr auto MOVING_UP    = 3;
+constexpr auto MOVING_DOWN  = 4;
+
 
 class MC :
     public WorldEntity,
@@ -61,7 +70,9 @@ protected:
     int frameCount;
     int animCount;
 
-    const int SPEED_REF = 5;
-    Position speed;
+    const static int SPEED_REF = 5;
+    Speed_t speed;
+
+    std::bitset<5> move_direction = 0;
 };
 

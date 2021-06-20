@@ -76,54 +76,87 @@ void MC::InitEventToFunction()
 
 void MC::MoveUp()
 {
-	std::cout << "Up !" << std::endl;
-	shouldMirrorBlit = false;
-	*currentAnimation = (*allAnimations)[INDEX_UP];
-	speed = { 0,-SPEED_REF };
+	//std::cout << "Up !" << std::endl;
+	//shouldMirrorBlit = false;
+	//*currentAnimation = (*allAnimations)[INDEX_UP];
+	if (!move_direction.test(MOVING_UP))
+		speed.y -= SPEED_REF;
+
+	move_direction.set(MOVING_UP);
 }
 
 void MC::MoveDown()
 {
-	std::cout << "Down !" << std::endl;
-	shouldMirrorBlit = false;
-	*currentAnimation = (*allAnimations)[INDEX_DOWN];
-	speed = { 0, SPEED_REF };
+	//std::cout << "Down !" << std::endl;
+	//shouldMirrorBlit = false;
+	//*currentAnimation = (*allAnimations)[INDEX_DOWN];
+	if(!move_direction.test(MOVING_DOWN))
+		speed.y += SPEED_REF;
+
+	move_direction.set(MOVING_DOWN);
 }
 
 void MC::MoveLeft()
 {
-	std::cout << "Left !" << std::endl;
-	shouldMirrorBlit = false;
-	*currentAnimation = (*allAnimations)[INDEX_LEFT];
-	speed = { -SPEED_REF,0 };
+	//std::cout << "Left !" << std::endl;
+	//shouldMirrorBlit = false;
+	//*currentAnimation = (*allAnimations)[INDEX_LEFT];
+	if (!move_direction.test(MOVING_LEFT))
+		speed.x -= SPEED_REF;
+	move_direction.set(MOVING_LEFT);
 }
 
 void MC::MoveRight()
 {
-	std::cout << "Right !" << std::endl;
-	shouldMirrorBlit = true;
-	*currentAnimation = (*allAnimations)[INDEX_LEFT];
-	speed = { SPEED_REF,0 };
+	//std::cout << "Right !" << std::endl;
+	//shouldMirrorBlit = true;
+	//*currentAnimation = (*allAnimations)[INDEX_LEFT];
+	if (!move_direction.test(MOVING_RIGHT))
+		speed.x += SPEED_REF;
+
+	move_direction.set(MOVING_RIGHT);
 }
+
 
 void MC::StopUp()
 {
-	speed.y = 0;
+	//std::cout << "! UP" << std::endl;
+
+	if (move_direction[MOVING_UP])
+	{
+		speed.y += SPEED_REF;
+		move_direction[MOVING_UP] = 0;
+	}
 }
 
 void MC::StopDown()
 {
-	speed.y = 0;
+	//std::cout << "! DOWN" << std::endl;
+	if (move_direction[MOVING_DOWN])
+	{
+		speed.y -= SPEED_REF;
+		move_direction[MOVING_DOWN] = 0;
+	}
 }
 
 void MC::StopRight()
 {
-	speed.x = 0;
+	//std::cout << "! RIGHT" << std::endl;
+	if (move_direction[MOVING_RIGHT])
+	{
+		speed.x -= SPEED_REF;
+		move_direction[MOVING_RIGHT] = 0;
+	}
 }
 
 void MC::StopLeft()
 {
-	speed.x = 0;
+	//std::cout << "! LEFT" << std::endl;
+	if (move_direction[MOVING_LEFT])
+	{
+		speed.x += SPEED_REF;
+		move_direction[MOVING_LEFT] = 0;
+	}
 }
 
 void MC::UpdateRectCoordinates()
@@ -183,6 +216,16 @@ void MC::ProcessInput()
 
 }
 
+template <typename T>
+void clamp(T& val, const T & min, const T & max)
+{
+	if (val < min)
+		val = min;
+	else if (val > max)
+		val = max;
+}
+
+
 void MC::Update()
 {
 	if (++frameCount > 3600) frameCount = 0;
@@ -192,7 +235,10 @@ void MC::Update()
 		if (++animCount > 3) animCount = 0;
 	}
 
-	pos += speed;
+	if (move_direction.any()) {
+		pos.x += (int)speed.x;
+		pos.y += (int)speed.y;
+	}
 
 	UpdateRectCoordinates();
 }
