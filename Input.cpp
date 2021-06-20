@@ -43,6 +43,11 @@ namespace Input
 				*src = static_cast<InputEventEnum>(e.GetRendererEvent()->key.keysym.scancode);
 				return true;
 			}
+			if (e.GetType() == static_cast<int>(InputEventEnum::KEYUP))
+			{
+				*src = static_cast<InputEventEnum>(e.GetRendererEvent()->key.keysym.scancode - IS_KEY_UP_ENUM);
+				return true;
+			}
 			if (e.GetType() == static_cast<int>(InputEventEnum::QUIT))
 			{
 				*src = static_cast<InputEventEnum>(e.GetType());

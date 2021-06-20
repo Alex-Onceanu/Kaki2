@@ -24,7 +24,6 @@ private:
 
 protected:
 	std::unique_ptr<TextureManager> tm;
-	//std::unique_ptr<std::vector<std::pair<KeyInput, EventEnum>>> keyToEvent;
 	std::unique_ptr<std::unordered_map<InputEventEnum, EventEnum>> keyToEvent;
 };
 

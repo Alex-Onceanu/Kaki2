@@ -2,18 +2,22 @@
 #include "InputEventsEnum.h"
 #include "Input.h"
 
+#include <SDL.h>
+
 #include <sstream>
 #include <array>
 #include <string>
 #include <memory>
-#include <SDL.h>
+#include <unordered_map>
+#include <cassert>
+#include <iostream>
 
 MC::MC(TextureManager* tm_)
 	:WorldEntity(tm_),
 	Listener(),
 	frameCount(0),
 	animCount(0),
-	speed(5)
+	speed({0})
 {
 	allAnimations = std::make_unique<std::vector<std::vector<std::shared_ptr<Texture>>>>();
 	currentAnimation = std::make_unique<std::vector<shared_ptr<Texture>>>();
@@ -26,11 +30,100 @@ MC::MC(TextureManager* tm_)
 	pos = { 200,200 };
 	
 	UpdateRectCoordinates();
+
+	InitEventToFunction();
 }
 
 MC::~MC()
 {
 
+}
+
+void MC::InitEventToFunction()
+{
+	std::vector<EventEnum> events{
+		EventEnum::MOVE_UP,
+		EventEnum::MOVE_DOWN,
+		EventEnum::MOVE_LEFT,
+		EventEnum::MOVE_RIGHT,
+	
+		EventEnum::STOP_UP,
+		EventEnum::STOP_DOWN,
+		EventEnum::STOP_LEFT,
+		EventEnum::STOP_RIGHT, };
+
+	std::vector<void (MC::*)()> functions{
+		&MC::MoveUp,
+		&MC::MoveDown,
+		&MC::MoveLeft,
+		&MC::MoveRight,
+
+		& MC::StopUp,
+		& MC::StopDown,
+		& MC::StopLeft,
+		& MC::StopRight,
+	};
+
+	assert(events.size() == functions.size());
+
+	eventToFunction = std::make_unique<std::unordered_map<EventEnum, void(MC::*)()>>();
+
+	for (int i = 0; i < events.size(); i++)
+	{
+		eventToFunction->insert({ events[i],functions[i] });
+	}
+}
+
+void MC::MoveUp()
+{
+	std::cout << "Up !" << std::endl;
+	shouldMirrorBlit = false;
+	*currentAnimation = (*allAnimations)[INDEX_UP];
+	speed = { 0,-SPEED_REF };
+}
+
+void MC::MoveDown()
+{
+	std::cout << "Down !" << std::endl;
+	shouldMirrorBlit = false;
+	*currentAnimation = (*allAnimations)[INDEX_DOWN];
+	speed = { 0, SPEED_REF };
+}
+
+void MC::MoveLeft()
+{
+	std::cout << "Left !" << std::endl;
+	shouldMirrorBlit = false;
+	*currentAnimation = (*allAnimations)[INDEX_LEFT];
+	speed = { -SPEED_REF,0 };
+}
+
+void MC::MoveRight()
+{
+	std::cout << "Right !" << std::endl;
+	shouldMirrorBlit = true;
+	*currentAnimation = (*allAnimations)[INDEX_LEFT];
+	speed = { SPEED_REF,0 };
+}
+
+void MC::StopUp()
+{
+	speed.y = 0;
+}
+
+void MC::StopDown()
+{
+	speed.y = 0;
+}
+
+void MC::StopRight()
+{
+	speed.x = 0;
+}
+
+void MC::StopLeft()
+{
+	speed.x = 0;
 }
 
 void MC::UpdateRectCoordinates()
@@ -39,24 +132,6 @@ void MC::UpdateRectCoordinates()
 	rect.y = pos.y;
 }
 
-#if 0
-void MC::LoadAllImages()
-{
-	std::vector<std::string> tab{ "up", "down", "left" };
-
-	for (int j = 0; j < tab.size(); j++)
-	{
-		std::vector<shared_ptr<Texture>> v{};
-		allAnimations->push_back(v);
-		for (int i = 1; i < 5; i++)
-		{
-			std::ostringstream path;
-			path << "./Assets/MC/"<< tab[j] <<"/" << i << ".png";
-			(*allAnimations)[j].push_back(tm->GetTexture(path.str()));
-		}
-	}
-}
-#endif
 
 void MC::LoadAllImages()
 {
@@ -88,53 +163,18 @@ void MC::ProcessCollision()
 	return;
 }
 
-#if 0
-void MC::ProcessInput()
-{
-	if (Input::CheckKeyPress(K_DOWN) || Input::CheckKeyPress(K_s))
-	{
-		shouldMirrorBlit = false;
-		*currentAnimation = (*allAnimations)[INDEX_DOWN];
-		pos.y += speed;
-	}
-	else if (Input::CheckKeyPress(K_UP) || Input::CheckKeyPress(K_w))
-	{
-		shouldMirrorBlit = false;
-		*currentAnimation = (*allAnimations)[INDEX_UP];
-		pos.y -= speed;
-	}
-	else if (Input::CheckKeyPress(K_LEFT) || Input::CheckKeyPress(K_a))
-	{
-		shouldMirrorBlit = false;
-		*currentAnimation = (*allAnimations)[INDEX_LEFT];
-		pos.x -= speed;
-	}
-	else if (Input::CheckKeyPress(K_RIGHT) || Input::CheckKeyPress(K_d))
-	{
-		shouldMirrorBlit = true;
-		*currentAnimation = (*allAnimations)[INDEX_LEFT];
-		pos.x += speed;
-	}
-
-}
-
-#endif
-
 bool MC::CanProcess(Event* e)
 {
-	return (e->type == EventEnum::MOVE_UP)
-		|| (e->type == EventEnum::MOVE_DOWN)
-		|| (e->type == EventEnum::MOVE_RIGHT)
-		|| (e->type == EventEnum::MOVE_LEFT);
+	return (eventToFunction->find(e->type) != eventToFunction->end());
 }
 
 void MC::OnEvent(Event* e)
 {
-	if (e->type == EventEnum::MOVE_UP)
+	auto funcPtr = eventToFunction->find(e->type);
+	if (funcPtr != eventToFunction->end())
 	{
-		shouldMirrorBlit = false;
-		*currentAnimation = (*allAnimations)[INDEX_UP];
-		pos.y -= speed;
+		void (MC:: * f)() = funcPtr->second;
+		(this->*f)();
 	}
 }
 
@@ -151,6 +191,9 @@ void MC::Update()
 	{
 		if (++animCount > 3) animCount = 0;
 	}
+
+	pos += speed;
+
 	UpdateRectCoordinates();
 }
 

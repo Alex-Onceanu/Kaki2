@@ -59,16 +59,30 @@ void MainWorld::InitKeyToEvent()
 {
 	std::vector<InputEventEnum> keys{
 		InputEventEnum::QUIT,
-		InputEventEnum::W,
-		InputEventEnum::S,
-		InputEventEnum::D,
-		InputEventEnum::A };
+
+		InputEventEnum::W_down,
+		InputEventEnum::S_down,
+		InputEventEnum::D_down,
+		InputEventEnum::A_down,
+	
+		InputEventEnum::W_up,
+		InputEventEnum::S_up,
+		InputEventEnum::D_up,
+		InputEventEnum::A_up,
+	};
 	std::vector<EventEnum> events{
 		EventEnum::QUIT_GAME,
+
 		EventEnum::MOVE_UP,
 		EventEnum::MOVE_DOWN,
 		EventEnum::MOVE_RIGHT,
-		EventEnum::MOVE_LEFT };
+		EventEnum::MOVE_LEFT,
+	
+		EventEnum::STOP_UP,
+		EventEnum::STOP_DOWN,
+		EventEnum::STOP_RIGHT,
+		EventEnum::STOP_LEFT,
+	};
 
 	assert(keys.size() == events.size());
 
@@ -97,7 +111,6 @@ void MainWorld::PostEventFromInput()
 	InputEventEnum nextEvent;
 	while (Input::GetNextInputEvent(&nextEvent))
 	{
-		std::cout << static_cast<int>(nextEvent) << std::endl;
 		auto key = keyToEvent->find(nextEvent);
 		if (key != keyToEvent->end())
 		{
