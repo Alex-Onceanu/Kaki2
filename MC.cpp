@@ -76,9 +76,6 @@ void MC::InitEventToFunction()
 
 void MC::MoveUp()
 {
-	//std::cout << "Up !" << std::endl;
-	//shouldMirrorBlit = false;
-	//*currentAnimation = (*allAnimations)[INDEX_UP];
 	if (!move_direction.test(MOVING_UP))
 		speed.y -= SPEED_REF;
 
@@ -87,9 +84,6 @@ void MC::MoveUp()
 
 void MC::MoveDown()
 {
-	//std::cout << "Down !" << std::endl;
-	//shouldMirrorBlit = false;
-	//*currentAnimation = (*allAnimations)[INDEX_DOWN];
 	if(!move_direction.test(MOVING_DOWN))
 		speed.y += SPEED_REF;
 
@@ -98,9 +92,6 @@ void MC::MoveDown()
 
 void MC::MoveLeft()
 {
-	//std::cout << "Left !" << std::endl;
-	//shouldMirrorBlit = false;
-	//*currentAnimation = (*allAnimations)[INDEX_LEFT];
 	if (!move_direction.test(MOVING_LEFT))
 		speed.x -= SPEED_REF;
 	move_direction.set(MOVING_LEFT);
@@ -108,9 +99,6 @@ void MC::MoveLeft()
 
 void MC::MoveRight()
 {
-	//std::cout << "Right !" << std::endl;
-	//shouldMirrorBlit = true;
-	//*currentAnimation = (*allAnimations)[INDEX_LEFT];
 	if (!move_direction.test(MOVING_RIGHT))
 		speed.x += SPEED_REF;
 
@@ -120,8 +108,6 @@ void MC::MoveRight()
 
 void MC::StopUp()
 {
-	//std::cout << "! UP" << std::endl;
-
 	if (move_direction[MOVING_UP])
 	{
 		speed.y += SPEED_REF;
@@ -131,7 +117,6 @@ void MC::StopUp()
 
 void MC::StopDown()
 {
-	//std::cout << "! DOWN" << std::endl;
 	if (move_direction[MOVING_DOWN])
 	{
 		speed.y -= SPEED_REF;
@@ -141,7 +126,6 @@ void MC::StopDown()
 
 void MC::StopRight()
 {
-	//std::cout << "! RIGHT" << std::endl;
 	if (move_direction[MOVING_RIGHT])
 	{
 		speed.x -= SPEED_REF;
@@ -151,7 +135,6 @@ void MC::StopRight()
 
 void MC::StopLeft()
 {
-	//std::cout << "! LEFT" << std::endl;
 	if (move_direction[MOVING_LEFT])
 	{
 		speed.x += SPEED_REF;
@@ -164,7 +147,6 @@ void MC::UpdateRectCoordinates()
 	rect.x = pos.x;
 	rect.y = pos.y;
 }
-
 
 void MC::LoadAllImages()
 {
@@ -216,15 +198,6 @@ void MC::ProcessInput()
 		
 }
 
-template <typename T>
-void clamp(T& val, const T & min, const T & max)
-{
-	if (val < min)
-		val = min;
-	else if (val > max)
-		val = max;
-}
-
 void MC::UpdateAnimation()
 {
 	if (++frameCount > 3600) frameCount = 0;
@@ -259,7 +232,6 @@ void MC::UpdateAnimation()
 		animCount = 0;
 	}
 }
-
 
 void MC::Update()
 {
