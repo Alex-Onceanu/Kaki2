@@ -1,118 +1,122 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="Game">
+      <UniqueIdentifier>{9bec6264-cf3c-4a4e-b35c-6b15dca10a8a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    <Filter Include="Renderer">
+      <UniqueIdentifier>{68d1251a-3d2e-41f0-887a-c6dba8b19eb7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Input">
+      <UniqueIdentifier>{dfaeaf9a-7aa5-45f1-bf6b-d639984091d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EventSystem">
+      <UniqueIdentifier>{e082fd8e-d6ec-42f7-bbb8-69946233fe3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{7900ed8e-d469-4c92-a60b-451cc17c2f6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\MainWorld">
+      <UniqueIdentifier>{c21a03eb-958b-41a9-9ba7-a4ad10e00298}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MainWorld.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="WorldEntity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Input.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="InputEvent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MC.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Event.cpp">
+      <Filter>EventSystem</Filter>
     </ClCompile>
     <ClCompile Include="EventSystem.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>EventSystem</Filter>
     </ClCompile>
-    <ClCompile Include="Event.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Game.cpp">
+      <Filter>Game</Filter>
     </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="InputEvent.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="MainWorld.cpp">
+      <Filter>Game\MainWorld</Filter>
+    </ClCompile>
+    <ClCompile Include="MC.cpp">
+      <Filter>Game\MainWorld</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldEntity.cpp">
+      <Filter>Game\MainWorld</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MainWorld.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Position.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Rect.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Resolution.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="World.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WorldEntity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Input.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="InputEvent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="InputEventsEnum.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MC.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EventSystem.h">
-      <Filter>Header Files</Filter>
+      <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="Event.h">
-      <Filter>Header Files</Filter>
+      <Filter>EventSystem</Filter>
     </ClInclude>
     <ClInclude Include="EventEnum.h">
-      <Filter>Header Files</Filter>
+      <Filter>EventSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="EventSystem.h">
+      <Filter>EventSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="InputEvent.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="InputEventsEnum.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="MainWorld.h">
+      <Filter>Game\MainWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="MC.h">
+      <Filter>Game\MainWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="Position.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Rect.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Resolution.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="World.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldEntity.h">
+      <Filter>Game\MainWorld</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Readme.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include=".gitignore" />
     <None Include=".gitattributes" />
+    <None Include=".gitignore" />
   </ItemGroup>
 </Project>
