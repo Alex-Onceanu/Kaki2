@@ -4,6 +4,8 @@
 #include "TextureManager.h"
 #include "InputEventsEnum.h"
 #include "EventEnum.h"
+#include "Camera.h"
+#include "WorldEntity.h"
 
 #include <map>
 
@@ -23,6 +25,10 @@ private:
 	void InitKeyToEvent();
 
 protected:
+
+	std::vector<std::unique_ptr<WorldEntity>> entities;
+
+	std::unique_ptr<Camera> camera;
 	std::unique_ptr<TextureManager> tm;
 	std::unique_ptr<std::map<InputEventEnum, EventEnum>> keyToEvent;
 };

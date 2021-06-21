@@ -1,5 +1,5 @@
 #pragma once
-
+#include "Position.h"
 
 class Entity
 {
@@ -8,6 +8,6 @@ public:
 
 	virtual void ProcessInput() = 0;
 	virtual void Update() = 0;
-	virtual void Draw() = 0;
+	virtual void Draw(Position cameraPos) = 0;
 };
 

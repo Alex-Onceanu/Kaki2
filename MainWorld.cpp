@@ -5,6 +5,7 @@
 #include "InputEventsEnum.h"
 #include "EventSystem.h"
 #include "EventEnum.h"
+#include "Camera.h"
 
 #include <memory>
 #include <vector>
@@ -62,6 +63,8 @@ void MainWorld::InitKeyToEvent()
 
 void MainWorld::CreateWorld()
 {
+	Position p = { 200 - RES_X / 2,200 - RES_Y / 2 };
+	camera = std::make_unique<Camera>(p);
 	entities.push_back(std::make_unique<MC>(tm.get()));
 }
 
@@ -98,6 +101,15 @@ void MainWorld::ProcessInput()
 
 void MainWorld::Update()
 {
+#if 0
+	auto camp = entities[0]->GetPosition();
+	if (camp.x > -500 and camp.x < 3000
+		and camp.y > -300 and camp.y < 2000)
+	{
+	}
+#endif
+	camera->Update();
+	
 	for (auto&& e : entities)
 	{
 		e->Update();
@@ -108,8 +120,10 @@ void MainWorld::Draw()
 {
 	Renderer::Clear(50, 200, 80);
 
+	Position camPos = camera->GetPos();
+
 	for (auto&& e : entities)
 	{
-		e->Draw();
+		e->Draw(camPos);
 	}
 }

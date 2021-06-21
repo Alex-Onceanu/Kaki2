@@ -33,7 +33,7 @@ public:
 
     void ProcessInput() override;
     void Update() override;
-    void Draw() override;
+    void Draw(Position cameraPos) override;
 
     virtual bool CanProcess(Event* e) override;
     virtual void OnEvent(Event* e) override;
@@ -42,7 +42,6 @@ public:
 
 private:
     void LoadAllImages();
-    void UpdateRectCoordinates();
     void UpdateAnimation();
 
     void InitEventToFunction();

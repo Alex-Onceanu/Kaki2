@@ -20,6 +20,5 @@ public:
 	virtual void Draw() = 0;
 
 protected:
-	std::vector<std::unique_ptr<Entity>> entities;
 	std::unique_ptr<TextureManager> textureManager;
 };

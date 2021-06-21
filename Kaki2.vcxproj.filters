@@ -55,6 +55,9 @@
       <Filter>Game\MainWorld</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Camera.cpp">
+      <Filter>Game\MainWorld</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -109,6 +112,9 @@
       <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="WorldEntity.h">
+      <Filter>Game\MainWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
       <Filter>Game\MainWorld</Filter>
     </ClInclude>
   </ItemGroup>

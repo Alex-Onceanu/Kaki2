@@ -29,8 +29,6 @@ MC::MC(TextureManager* tm_)
 
 	pos = { 200,200 };
 	
-	UpdateRectCoordinates();
-
 	InitEventToFunction();
 }
 
@@ -142,12 +140,6 @@ void MC::StopLeft()
 	}
 }
 
-void MC::UpdateRectCoordinates()
-{
-	rect.x = pos.x;
-	rect.y = pos.y;
-}
-
 void MC::LoadAllImages()
 {
 	std::vector<std::string> tab{ "up", "down", "left" };
@@ -237,16 +229,18 @@ void MC::Update()
 {
 	UpdateAnimation();
 
-	if (move_direction.any()) {
+	if (move_direction.any())
+	{
 		pos.x += (int)speed.x;
 		pos.y += (int)speed.y;
 	}
-
-	UpdateRectCoordinates();
 }
 
-void MC::Draw()
+void MC::Draw(Position cameraPos)
 {
+	rect.x = pos.x - cameraPos.x;
+	rect.y = pos.y - cameraPos.y;
+
 	if (shouldMirrorBlit)
 	{
 		Renderer::FullBlitMirrorHorizontal((*currentAnimation)[animCount].get(), rect);

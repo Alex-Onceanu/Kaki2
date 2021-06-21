@@ -21,7 +21,7 @@ public:
 
     virtual void ProcessInput() override = 0;
     virtual void Update() override = 0;
-    virtual void Draw() override = 0;
+    virtual void Draw(Position cameraPos) override = 0;
 
     void SetPosition(Position dst);
     Position GetPosition();
