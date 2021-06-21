@@ -5,7 +5,7 @@
 #include "InputEventsEnum.h"
 #include "EventEnum.h"
 
-#include <unordered_map>
+#include <map>
 
 class MainWorld : public World
 {
@@ -24,6 +24,6 @@ private:
 
 protected:
 	std::unique_ptr<TextureManager> tm;
-	std::unique_ptr<std::unordered_map<InputEventEnum, EventEnum>> keyToEvent;
+	std::unique_ptr<std::map<InputEventEnum, EventEnum>> keyToEvent;
 };
 

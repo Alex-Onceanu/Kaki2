@@ -7,7 +7,7 @@
 
 #include <vector>
 #include <memory>
-#include <unordered_map>
+#include <map>
 #include <bitset>
 
 
@@ -64,7 +64,7 @@ protected:
         INDEX_UP, INDEX_DOWN, INDEX_LEFT
     };
 
-    unique_ptr<unordered_map<EventEnum, void (MC::*)()>> eventToFunction;
+    unique_ptr<map<EventEnum, void (MC::*)()>> eventToFunction;
 
     unique_ptr<vector<vector<shared_ptr<Texture>>>> allAnimations;
     unique_ptr<vector<shared_ptr<Texture>>> currentAnimation;

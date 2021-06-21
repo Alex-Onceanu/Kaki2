@@ -21,40 +21,6 @@ MainWorld::MainWorld(bool& running)
 	CreateWorld();
 }
 
-#if 0
-
-void MainWorld::InitKeyToEvent()
-{
-	//On attribue a chaque touche un evenement a lancer
-
-	std::vector<KeyInput> keys{
-		KeyInput::W,
-		KeyInput::S,
-		KeyInput::D,
-		KeyInput::A };
-	std::vector<EventEnum> events{
-		EventEnum::MOVE_UP,
-		EventEnum::MOVE_DOWN,
-		EventEnum::MOVE_RIGHT,
-		EventEnum::MOVE_LEFT };
-
-	assert(keys.size() == events.size());
-
-	keyToEvent = make_unique<std::vector<std::pair<KeyInput, EventEnum>>>();
-	
-	for (int i = 0; i < keys.size(); i++)
-	{
-		keyToEvent->push_back(std::make_pair(keys[i], events[i]));
-	}
-
-	std::sort(keyToEvent->begin(), keyToEvent->end(),
-		[](std::pair<KeyInput, EventEnum> a, std::pair<KeyInput, EventEnum> b)
-		{ return static_cast<int>(a.second) < static_cast<int>(b.second); }
-	);
-}
-
-#endif
-
 void MainWorld::InitKeyToEvent()
 {
 	std::vector<InputEventEnum> keys{
@@ -86,7 +52,7 @@ void MainWorld::InitKeyToEvent()
 
 	assert(keys.size() == events.size());
 
-	keyToEvent = std::make_unique<std::unordered_map<InputEventEnum, EventEnum>>();
+	keyToEvent = std::make_unique<std::map<InputEventEnum, EventEnum>>();
 
 	for (int i = 0; i < keys.size(); i++)
 	{

@@ -8,7 +8,7 @@
 #include <array>
 #include <string>
 #include <memory>
-#include <unordered_map>
+#include <map>
 #include <cassert>
 #include <iostream>
 
@@ -66,7 +66,7 @@ void MC::InitEventToFunction()
 
 	assert(events.size() == functions.size());
 
-	eventToFunction = std::make_unique<std::unordered_map<EventEnum, void(MC::*)()>>();
+	eventToFunction = std::make_unique<std::map<EventEnum, void(MC::*)()>>();
 
 	for (int i = 0; i < events.size(); i++)
 	{
