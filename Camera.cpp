@@ -2,10 +2,12 @@
 #include "Resolution.h"
 #include "Utility.h"
 
-Camera::Camera()
-	:rect({ 0,0,RES_X,RES_Y })
+Camera::Camera(const Position* mcPos, const int* mcW, const int* mcH)
+	: playerPos(mcPos),
+	playerW(mcW),
+	playerH(mcH)
 {
-	
+
 }
 
 Camera::~Camera()
@@ -48,9 +50,16 @@ void Camera::GetSize(int& w, int& h)
 	h = rect.h;
 }
 
-void Camera::UpdatePosition(const Position& MCpos, const int& clampX, const int& clampY)
+void Camera::UpdatePosition(const int& clampX, const int& clampY)
 {
-	SetPos(MCpos);
+	Position pr{ *playerPos };
+	Position add{
+		RES_X / 2 - *playerW / 2,
+		RES_Y / 2 - *playerH / 2 };
+
+	pr -= add;
+
+	SetPos(pr);
 	Clamp(rect.x, 0, clampX);
 	Clamp(rect.y, 0, clampY);
 }

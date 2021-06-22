@@ -23,7 +23,6 @@ private:
 	void CreateWorld();
 	void PostEventFromInput();
 	void InitKeyToEvent();
-	void UpdateCamera();
 
 protected:
 
@@ -31,6 +30,7 @@ protected:
 
 	std::unique_ptr<Camera> camera;
 	std::unique_ptr<TextureManager> tm;
+
 	std::unique_ptr<std::map<InputEventEnum, EventEnum>> keyToEvent;
 };
 

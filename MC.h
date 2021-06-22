@@ -38,7 +38,10 @@ public:
     virtual bool CanProcess(Event* e) override;
     virtual void OnEvent(Event* e) override;
 
-    
+
+    void GetSizePtr(const int** w, const int** h);
+    const Rect* GetRectPtr();
+    const Position* GetPositionPtr();
 
 private:
     void LoadAllImages();

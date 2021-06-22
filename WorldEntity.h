@@ -7,6 +7,7 @@
 #include "Texture.h"
 #include "TextureManager.h"
 #include "Position.h"
+#include "Rect.h"
 
 struct Rect;
 

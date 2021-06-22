@@ -27,7 +27,7 @@ MC::MC(TextureManager* tm_)
 	*currentAnimation = (*allAnimations)[INDEX_DOWN];
 	rect = Renderer::GetRect((*currentAnimation)[frameCount].get());
 
-	pos = { 1800,1500 };
+	pos = { 1800,1200 };
 	
 	InitEventToFunction();
 }
@@ -185,9 +185,20 @@ void MC::OnEvent(Event* e)
 	}
 }
 
-void MC::ProcessInput()
+const Position* MC::GetPositionPtr()
 {
-		
+	return &pos;
+}
+
+const Rect* MC::GetRectPtr()
+{
+	return &rect;
+}
+
+void MC::GetSizePtr(const int** w, const int** h)
+{
+	*w = &rect.w;
+	*h = &rect.h;
 }
 
 void MC::UpdateAnimation()
@@ -223,6 +234,11 @@ void MC::UpdateAnimation()
 	{
 		animCount = 0;
 	}
+}
+
+void MC::ProcessInput()
+{
+
 }
 
 void MC::Update()

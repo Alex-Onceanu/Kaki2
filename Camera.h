@@ -6,10 +6,10 @@
 class Camera
 {
 public:
-	Camera();
+	Camera(const Position* mcPos, const int* mcW, const int* mcH);
 	~Camera();
 
-	void UpdatePosition(const Position& MCpos, const int& clampX, const int& clampY);
+	void UpdatePosition(const int& clampX, const int& clampY);
 
 	Position GetPos();
 	void SetPos(const Position& p);
@@ -21,5 +21,9 @@ public:
 
 protected:
 	Rect rect;
+
+	const Position* playerPos;
+	const int* playerW;
+	const int* playerH;
 };
 

@@ -63,8 +63,12 @@ void MainWorld::InitKeyToEvent()
 
 void MainWorld::CreateWorld()
 {
-	camera = std::make_unique<Camera>();
-	entities.push_back(std::make_unique<MC>(tm.get()));
+	auto mc = std::make_unique<MC>(tm.get());
+	const int* w;
+	const int* h;
+	mc->GetSizePtr(&w, &h);
+	camera = std::make_unique<Camera>(mc->GetPositionPtr(), w, h);
+	entities.push_back(std::move(mc));
 }
 
 MainWorld::~MainWorld()
@@ -88,20 +92,6 @@ void MainWorld::PostEventFromInput()
 	}
 }
 
-void MainWorld::UpdateCamera()
-{
-	//La camera suit le joueur mais s'arrete aux bords de map
-
-	int w, h;
-	entities[0]->GetSize(w, h);
-
-	Position c = entities[0]->GetPosition();
-	Position add{ RES_X / 2 - w / 2, RES_Y / 2 - h / 2 };
-	
-	c -= add;
-	camera->UpdatePosition(c, 4300, 3000);
-}
-
 void MainWorld::ProcessInput()
 {
 	PostEventFromInput();
@@ -118,7 +108,12 @@ void MainWorld::Update()
 	{
 		e->Update();
 	}
-	UpdateCamera();
+
+	//La camera suit toujours le joueur, mais doit s'arreter
+	//Aux limites de la map : 0,0 et camLimit
+	constexpr int camLimitX = 1500;
+	constexpr int camLimitY = 2000;
+	camera->UpdatePosition(camLimitX, camLimitY);
 }
 
 void MainWorld::Draw()
