@@ -23,6 +23,7 @@ private:
 	void CreateWorld();
 	void PostEventFromInput();
 	void InitKeyToEvent();
+	void UpdateCamera();
 
 protected:
 

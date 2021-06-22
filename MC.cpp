@@ -27,7 +27,7 @@ MC::MC(TextureManager* tm_)
 	*currentAnimation = (*allAnimations)[INDEX_DOWN];
 	rect = Renderer::GetRect((*currentAnimation)[frameCount].get());
 
-	pos = { 200,200 };
+	pos = { 1800,1500 };
 	
 	InitEventToFunction();
 }

@@ -63,8 +63,7 @@ void MainWorld::InitKeyToEvent()
 
 void MainWorld::CreateWorld()
 {
-	Position p = { 200 - RES_X / 2,200 - RES_Y / 2 };
-	camera = std::make_unique<Camera>(p);
+	camera = std::make_unique<Camera>();
 	entities.push_back(std::make_unique<MC>(tm.get()));
 }
 
@@ -89,6 +88,20 @@ void MainWorld::PostEventFromInput()
 	}
 }
 
+void MainWorld::UpdateCamera()
+{
+	//La camera suit le joueur mais s'arrete aux bords de map
+
+	int w, h;
+	entities[0]->GetSize(w, h);
+
+	Position c = entities[0]->GetPosition();
+	Position add{ RES_X / 2 - w / 2, RES_Y / 2 - h / 2 };
+	
+	c -= add;
+	camera->UpdatePosition(c, 4300, 3000);
+}
+
 void MainWorld::ProcessInput()
 {
 	PostEventFromInput();
@@ -101,19 +114,11 @@ void MainWorld::ProcessInput()
 
 void MainWorld::Update()
 {
-#if 0
-	auto camp = entities[0]->GetPosition();
-	if (camp.x > -500 and camp.x < 3000
-		and camp.y > -300 and camp.y < 2000)
-	{
-	}
-#endif
-	camera->Update();
-	
 	for (auto&& e : entities)
 	{
 		e->Update();
 	}
+	UpdateCamera();
 }
 
 void MainWorld::Draw()

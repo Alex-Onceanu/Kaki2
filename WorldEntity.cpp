@@ -27,6 +27,12 @@ Position WorldEntity::GetPosition()
 	return pos;
 }
 
+void WorldEntity::GetSize(int& w, int& h)
+{
+	w = rect.w;
+	h = rect.h;
+}
+
 void WorldEntity::AddPosition(int x, int y)
 {
 	pos.x += x;

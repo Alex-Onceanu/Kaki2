@@ -25,6 +25,7 @@ public:
 
     void SetPosition(Position dst);
     Position GetPosition();
+    void GetSize(int& w, int& h);
 
     void AddPosition(int x, int y);
     void AddPosition(Position src);
