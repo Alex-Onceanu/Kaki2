@@ -1,13 +1,15 @@
 #pragma once
 
 
+#include "Surface.h"
+
 struct SDL_Texture;
-struct SDL_Surface;
 struct SDL_Renderer;
 
 class Texture
 {
 public:
+	Texture(SDL_Renderer* renderer, Surface* srcSurface);
 	Texture(SDL_Renderer* renderer, SDL_Surface* srcSurface);
 
 	~Texture();

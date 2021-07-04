@@ -3,6 +3,11 @@
 
 #include "Texture.h"
 
+Texture::Texture(SDL_Renderer* renderer, Surface* srcSurface)
+{
+	rendererTexture = SDL_CreateTextureFromSurface(renderer, *srcSurface->GetRendererSurface());
+}
+
 Texture::Texture(SDL_Renderer* renderer, SDL_Surface* srcSurface)
 {
 	rendererTexture = SDL_CreateTextureFromSurface(renderer, srcSurface);

@@ -6,6 +6,7 @@
 #include "EventSystem.h"
 #include "EventEnum.h"
 #include "Camera.h"
+#include "Resolution.h"
 
 #include <memory>
 #include <vector>
@@ -69,6 +70,30 @@ void MainWorld::CreateWorld()
 	mc->GetSizePtr(&w, &h);
 	camera = std::make_unique<Camera>(mc->GetPositionPtr(), w, h);
 	entities.push_back(std::move(mc));
+
+	LoadGround();
+}
+
+void MainWorld::LoadGround()
+{
+	auto sol = textureManager->GetSurface("./Assets/Sol/1.png");
+	int solW;
+	int solH;
+	sol->GetSize(solW, solH);
+
+	const int mapX = 1500 + RES_X;
+	const int mapY = 2000 + RES_Y;
+	auto gnd = Surface(mapX, mapY);
+	
+	for (int x = 0; x < mapX; x += solW)
+	{
+		for (int y = 0; y < mapY; y += solH)
+		{
+			Rect dst = { x,y,solW,solH };
+			Renderer::CopySurface(sol.get(), nullptr, &gnd, &dst);
+		}
+	}
+	ground = std::make_unique<Texture>(*Renderer::GetRenderer(), &gnd);
 }
 
 MainWorld::~MainWorld()
@@ -120,7 +145,11 @@ void MainWorld::Draw()
 {
 	Renderer::Clear(50, 200, 80);
 
+
 	Position camPos = camera->GetPos();
+
+	Rect groundRect = { -camPos.x, -camPos.y, 1500 + RES_X, 2000 + RES_Y };
+	Renderer::FullBlit(ground.get(), groundRect);
 
 	for (auto&& e : entities)
 	{

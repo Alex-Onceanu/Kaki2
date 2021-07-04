@@ -154,6 +154,7 @@
     <ClCompile Include="MainWorld.cpp" />
     <ClCompile Include="MC.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="Surface.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="WorldEntity.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Resolution.h" />
+    <ClInclude Include="Surface.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Utility.h" />

@@ -58,6 +58,9 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Game\MainWorld</Filter>
     </ClCompile>
+    <ClCompile Include="Surface.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -119,6 +122,9 @@
     </ClInclude>
     <ClInclude Include="Utility.h">
       <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Surface.h">
+      <Filter>Renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

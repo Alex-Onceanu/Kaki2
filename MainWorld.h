@@ -23,6 +23,7 @@ private:
 	void CreateWorld();
 	void PostEventFromInput();
 	void InitKeyToEvent();
+	void LoadGround();
 
 protected:
 
@@ -32,5 +33,6 @@ protected:
 	std::unique_ptr<TextureManager> tm;
 
 	std::unique_ptr<std::map<InputEventEnum, EventEnum>> keyToEvent;
+	std::unique_ptr<Texture> ground;
 };
 

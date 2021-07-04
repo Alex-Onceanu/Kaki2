@@ -6,9 +6,9 @@
 
 
 
-#include "Resolution.h"
 #include "Rect.h"
 #include "Texture.h"
+#include "Surface.h"
 
 
 struct SDL_Window;
@@ -25,6 +25,7 @@ namespace Renderer
 	void Init();
 	void Destroy();
 
+	SDL_Renderer** GetRenderer();
 	void Flip();
 
 	void FullBlit(Texture* texture, Rect& rect);
@@ -32,12 +33,15 @@ namespace Renderer
 	void Blit(Texture* texture, Rect& srcRect, Rect& dstRect);
 	
 	std::shared_ptr<Texture> LoadImage(const std::string_view path);
+	std::shared_ptr<Surface> SurfaceLoadImage(const std::string_view path);
 	Rect GetRect(Texture*);
 	void ChangeRectSize(Rect& rect, const int newW, const int newH);
 	void ChangeScaledRectSize(Rect& rect, const int newW);
 	void DrawRect(Rect& rect, int r, int g, int b);
 	void DrawFillRect(Rect& rect, int r, int g, int b);
 	void DrawFillRectAlpha(Rect& rect, int r, int g, int b, int a);
+	void CopySurface(Surface* src, Rect* srcRect, Surface* dst, Rect* dstRect);
+
 	void Clear(int r, int g, int b);
 
 };

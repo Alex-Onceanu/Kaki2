@@ -2,6 +2,8 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
+
+#include "Resolution.h"
 #include "Renderer.h"
 
 struct Position;
@@ -63,6 +65,11 @@ void Renderer::Destroy()
 	SDL_Quit();
 }
 
+SDL_Renderer** Renderer::GetRenderer()
+{
+	return &renderer;
+}
+
 void Renderer::Flip()
 {
 	SDL_RenderPresent(renderer);
@@ -118,6 +125,28 @@ std::shared_ptr<Texture> Renderer::LoadImage(const std::string_view path)
 	return nullptr;
 }
 
+std::shared_ptr<Surface> Renderer::SurfaceLoadImage(const std::string_view path)
+{
+	try {
+		SDL_Surface* surf = IMG_Load(path.data());
+
+		if (surf == NULL)
+		{
+			throw(std::string("Image could not be loaded at ") + path.data());
+		}
+
+		auto img = std::make_shared<Surface>(surf);
+		
+		return std::move(img);
+	}
+	catch (const char* e)
+	{
+		std::ofstream log("log.txt");
+		log << e << std::endl;
+	}
+	return nullptr;
+}
+
 Rect Renderer::GetRect(Texture* srcImg)
 {
 	int w, h;
@@ -155,6 +184,13 @@ void Renderer::DrawFillRectAlpha(Rect& rect, int r, int g, int b, int a)
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
 	SDL_RenderFillRect(renderer, (SDL_Rect*)&rect);
 }
+
+void Renderer::CopySurface(Surface* src, Rect* srcRect, Surface* dst, Rect* dstRect)
+{
+	SDL_BlitSurface(*src->GetRendererSurface(), (SDL_Rect*)srcRect,
+					*dst->GetRendererSurface(), (SDL_Rect*)dstRect);
+}
+
 
 void Renderer::Clear(int r, int g, int b)
 {
