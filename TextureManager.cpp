@@ -22,7 +22,8 @@ std::shared_ptr<Texture> TextureManager::GetTexture(const std::string &path)
 
 std::shared_ptr<Surface> TextureManager::GetSurface(const std::string& path)
 {
-	auto e{ std::find_if(surfaces.begin(), surfaces.end(), [&path](auto&& tm) {
+	auto e{ std::find_if(surfaces.begin(), surfaces.end(),
+		[&path](auto&& tm) {
 			return tm.path == path;
 		})
 	};

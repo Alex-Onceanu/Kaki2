@@ -81,3 +81,8 @@ Les maps seront définies dans un fichier .kaki dans les fichiers du jeu, et le 
     Par contre il faut que la map soit chargée, (pas comme le premier kaki project qui était "vide")
     Genre si tu regardes pokemon y'a des trucs partout, des arbres des chemins des barrières etc etc
     Donc y'aura un travail de level design à faire
+
+*** Idées de trucs à faire ***
+
+- Le perso est personnalisable
+- Squelette de dragon géant

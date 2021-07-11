@@ -13,11 +13,11 @@
     <Filter Include="EventSystem">
       <UniqueIdentifier>{e082fd8e-d6ec-42f7-bbb8-69946233fe3f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utility">
-      <UniqueIdentifier>{7900ed8e-d469-4c92-a60b-451cc17c2f6d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\MainWorld">
       <UniqueIdentifier>{c21a03eb-958b-41a9-9ba7-a4ad10e00298}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{8ec5fc94-564f-4bf2-9493-0a686194fd4a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -48,9 +48,6 @@
     <ClCompile Include="Texture.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="TextureManager.cpp">
-      <Filter>Utility</Filter>
-    </ClCompile>
     <ClCompile Include="WorldEntity.cpp">
       <Filter>Game\MainWorld</Filter>
     </ClCompile>
@@ -60,6 +57,9 @@
     </ClCompile>
     <ClCompile Include="Surface.cpp">
       <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>Utility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -93,23 +93,11 @@
     <ClInclude Include="MC.h">
       <Filter>Game\MainWorld</Filter>
     </ClInclude>
-    <ClInclude Include="Position.h">
-      <Filter>Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Rect.h">
-      <Filter>Utility</Filter>
-    </ClInclude>
     <ClInclude Include="Renderer.h">
       <Filter>Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Resolution.h">
-      <Filter>Utility</Filter>
-    </ClInclude>
     <ClInclude Include="Texture.h">
       <Filter>Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureManager.h">
-      <Filter>Utility</Filter>
     </ClInclude>
     <ClInclude Include="World.h">
       <Filter>Game</Filter>
@@ -120,11 +108,23 @@
     <ClInclude Include="Camera.h">
       <Filter>Game\MainWorld</Filter>
     </ClInclude>
-    <ClInclude Include="Utility.h">
-      <Filter>Utility</Filter>
-    </ClInclude>
     <ClInclude Include="Surface.h">
       <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Position.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Rect.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Resolution.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility.h">
+      <Filter>Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

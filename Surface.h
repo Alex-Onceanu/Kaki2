@@ -15,6 +15,7 @@ public:
 	SDL_Surface** GetRendererSurface();
 
 	void GetSize(int& w, int& h);
+	void ChangeSize(const int new_w, const int new_h);
 
 private:
 	SDL_Surface* rendererSurface;

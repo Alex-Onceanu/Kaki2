@@ -48,7 +48,7 @@ void Renderer::Init()
 	}
 	catch (const char* e)
 	{
-		std::ofstream log("log.txt");
+		std::ofstream log("log.txt", std::ios_base::app);
 		log << e << std::endl;
 	}
 
@@ -119,7 +119,7 @@ std::shared_ptr<Texture> Renderer::LoadImage(const std::string_view path)
 	}
 	catch (const char* e)
 	{
-		std::ofstream log("log.txt");
+		std::ofstream log("log.txt", std::ios_base::app);
 		log << e << std::endl;
 	}
 	return nullptr;
@@ -141,7 +141,7 @@ std::shared_ptr<Surface> Renderer::SurfaceLoadImage(const std::string_view path)
 	}
 	catch (const char* e)
 	{
-		std::ofstream log("log.txt");
+		std::ofstream log("log.txt", std::ios_base::app);
 		log << e << std::endl;
 	}
 	return nullptr;
@@ -191,6 +191,11 @@ void Renderer::CopySurface(Surface* src, Rect* srcRect, Surface* dst, Rect* dstR
 					*dst->GetRendererSurface(), (SDL_Rect*)dstRect);
 }
 
+void Renderer::CopySurfaceScaled(Surface* src, Rect* srcRect, Surface* dst, Rect* dstRect)
+{
+	SDL_BlitScaled(*src->GetRendererSurface(), (SDL_Rect*)srcRect,
+		*dst->GetRendererSurface(), (SDL_Rect*)dstRect);
+}
 
 void Renderer::Clear(int r, int g, int b)
 {

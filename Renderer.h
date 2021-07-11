@@ -40,7 +40,8 @@ namespace Renderer
 	void DrawRect(Rect& rect, int r, int g, int b);
 	void DrawFillRect(Rect& rect, int r, int g, int b);
 	void DrawFillRectAlpha(Rect& rect, int r, int g, int b, int a);
-	void CopySurface(Surface* src, Rect* srcRect, Surface* dst, Rect* dstRect);
+	void CopySurface(Surface* src, Rect* srcRect, Surface* dst, Rect* dstRect); //Privilegier plutot CopySurfaceScaled
+	void CopySurfaceScaled(Surface* src, Rect* srcRect, Surface* dst, Rect* dstRect);
 
 	void Clear(int r, int g, int b);
 
