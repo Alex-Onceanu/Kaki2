@@ -118,64 +118,6 @@ void MainWorld::LoadScene(int nb_)
 	}
 }
 
-//void MainWorld::LoadGround()
-//{
-//	auto sol = textureManager->GetSurface("./Assets/Sol/1.png");
-//	int solW;
-//	int solH;
-//	sol->GetSize(solW, solH);
-//
-//	const int mapX = scene->size_x + RES_X;
-//	const int mapY = scene->size_y + RES_Y;
-//	auto gnd = Surface(mapX, mapY);
-//	
-//	for (int x = 0; x < mapX; x += solW)
-//	{
-//		for (int y = 0; y < mapY; y += solH)
-//		{
-//			Rect dst = { x,y,solW,solH };
-//			Renderer::CopySurface(sol.get(), nullptr, &gnd, &dst);
-//		}
-//	}
-//	ground = std::make_unique<Texture>(*Renderer::GetRenderer(), &gnd);
-//}
-//
-//void MainWorld::LoadGround()
-//{
-//	std::string str;
-//	while (str != ";")
-//	{
-//		for (char c : str)
-//		{
-//			std::string path = "./Assets/Sol/" + c + (std::string)".png";
-//			auto bloc = textureManager->GetSurface(path);
-//		}
-//	}
-//}
-
-//void MainWorld::LoadGround()
-//{
-//	// Tant qu'on depasse pas la surface et qu'il reste des tiles a placer on lit le prochain bloc et on le place
-//
-//	const int map_w = scene->size_x;
-//	const int map_h = scene->size_y;
-//	auto gnd = Surface(map_w, map_h);
-//	Rect dst;
-//	
-//	for (int y = 0; y < map_h; y += scene->tile_h)
-//	{
-//		for (int x{ 0 }, c{ 0 }; (x < map_w) and (c < scene->tiles.length()); x += scene->tile_w, c++)
-//		{
-//			std::string path = std::string("./Assets/Sol/") + char(scene->tiles[c]) + std::string(".png");
-//			auto bloc = textureManager->GetSurface(path);
-//
-//			dst = { x,y,scene->tile_w,scene->tile_h };
-//			Renderer::CopySurface(bloc.get(), nullptr, &gnd, &dst);
-//		}
-//	}
-//	this->ground = std::make_unique<Texture>(*Renderer::GetRenderer(), &gnd);
-//}
-
 void MainWorld::LoadGround()
 {
 	// Tant qu'on depasse pas la surface et qu'il reste des tiles a placer on lit le prochain bloc et on le place
