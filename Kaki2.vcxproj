@@ -154,6 +154,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainWorld.cpp" />
     <ClCompile Include="MC.cpp" />
+    <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Surface.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="InputEventsEnum.h" />
     <ClInclude Include="MainWorld.h" />
     <ClInclude Include="MC.h" />
+    <ClInclude Include="Obstacle.h" />
     <ClInclude Include="Position.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Renderer.h" />

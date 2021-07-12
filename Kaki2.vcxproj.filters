@@ -61,6 +61,9 @@
     <ClCompile Include="TextureManager.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
+    <ClCompile Include="Obstacle.cpp">
+      <Filter>Game\MainWorld</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -125,6 +128,9 @@
     </ClInclude>
     <ClInclude Include="Utility.h">
       <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Obstacle.h">
+      <Filter>Game\MainWorld</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -26,8 +26,8 @@ MC::MC(TextureManager* tm_)
 
 	*currentAnimation = (*allAnimations)[INDEX_DOWN];
 	rect = Renderer::GetRect((*currentAnimation)[frameCount].get());
-	//rect.w *= 2;
-	//rect.h *= 2;
+	rect.w *= 1.5;
+	rect.h *= 1.5;
 
 	pos = { 1800,1200 };
 	
@@ -207,7 +207,7 @@ void MC::UpdateAnimation()
 {
 	if (++frameCount > 3600) frameCount = 0;
 
-	if (frameCount % 12 == 0)
+	if (frameCount % 11 == 0)
 	{
 		if (++animCount > 3) animCount = 0;
 	}
