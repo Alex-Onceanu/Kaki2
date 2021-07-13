@@ -40,6 +40,8 @@ void MainWorld::InitKeyToEvent()
 {
 	std::vector<InputEventEnum> keys{
 		InputEventEnum::QUIT,
+		InputEventEnum::Q_down,
+		InputEventEnum::ESC_down,
 
 		InputEventEnum::W_down,
 		InputEventEnum::S_down,
@@ -52,6 +54,8 @@ void MainWorld::InitKeyToEvent()
 		InputEventEnum::A_up,
 	};
 	std::vector<EventEnum> events{
+		EventEnum::QUIT_GAME,
+		EventEnum::QUIT_GAME,
 		EventEnum::QUIT_GAME,
 
 		EventEnum::MOVE_UP,
