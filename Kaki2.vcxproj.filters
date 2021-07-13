@@ -66,9 +66,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Entity.h">
-      <Filter>Game</Filter>
-    </ClInclude>
     <ClInclude Include="Event.h">
       <Filter>EventSystem</Filter>
     </ClInclude>
@@ -128,6 +125,9 @@
     </ClInclude>
     <ClInclude Include="Utility.h">
       <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="Obstacle.h">
       <Filter>Game\MainWorld</Filter>

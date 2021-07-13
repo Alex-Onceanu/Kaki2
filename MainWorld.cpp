@@ -8,6 +8,7 @@
 #include "Camera.h"
 #include "Resolution.h"
 #include "Utility.h"
+#include "Obstacle.h"
 
 #include <memory>
 #include <vector>
@@ -85,6 +86,13 @@ void MainWorld::CreateWorld()
 
 	LoadScene(1);
 	LoadGround();
+
+	srand(time(NULL));
+	for (int i = 0; i < 10; i++)
+	{
+		Position p{ rand() % (scene->size_x + RES_X),rand() % (scene->size_y + RES_Y) };
+		entities.push_back(std::make_unique<Obstacle>(tm.get(), "./Assets/Obstacles/arbre1/1.png", p));
+	}
 }
 
 void MainWorld::LoadScene(int nb_)
