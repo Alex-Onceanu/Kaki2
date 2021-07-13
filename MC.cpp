@@ -26,8 +26,8 @@ MC::MC(TextureManager* tm_)
 
 	*currentAnimation = (*allAnimations)[INDEX_DOWN];
 	rect = Renderer::GetRect((*currentAnimation)[frameCount].get());
-	rect.w *= 1.5;
-	rect.h *= 1.5;
+	rect.w = 60;
+	rect.h = rect.w * rect.h / 36;
 
 	pos = { 1800,1200 };
 	
