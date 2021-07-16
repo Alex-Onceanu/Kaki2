@@ -1,12 +1,9 @@
-
 #include <SDL.h>
 #include <SDL_image.h>
 
-
 #include "Resolution.h"
 #include "Renderer.h"
-
-struct Position;
+#include "Position.h"
 
 void Renderer::Init()
 {

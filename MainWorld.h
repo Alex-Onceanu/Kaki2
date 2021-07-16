@@ -5,7 +5,6 @@
 #include "InputEventsEnum.h"
 #include "EventEnum.h"
 #include "Camera.h"
-#include "WorldEntity.h"
 #include "Tools/Map.h"
 
 #include <map>
@@ -28,7 +27,7 @@ private:
 	void LoadScene(int nb);
 
 protected:
-	std::vector<std::unique_ptr<WorldEntity>> entities;
+	std::vector<std::unique_ptr<Entity>> entities;
 
 	std::unique_ptr<Camera> camera;
 	std::unique_ptr<TextureManager> tm;

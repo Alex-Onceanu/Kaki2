@@ -145,6 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AnimationController.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Event.cpp" />
     <ClCompile Include="EventSystem.cpp" />
@@ -153,17 +154,19 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainWorld.cpp" />
-    <ClCompile Include="MC.cpp" />
-    <ClCompile Include="Obstacle.cpp" />
+    <ClCompile Include="PlayerMovementController.cpp" />
+    <ClCompile Include="PositionController.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="StaticDrawController.cpp" />
     <ClCompile Include="Surface.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TextureManager.cpp" />
-    <ClCompile Include="WorldEntity.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="AnimationController.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="EntityController.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="EventEnum.h" />
     <ClInclude Include="EventSystem.h" />
@@ -172,18 +175,18 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="InputEventsEnum.h" />
     <ClInclude Include="MainWorld.h" />
-    <ClInclude Include="MC.h" />
-    <ClInclude Include="Obstacle.h" />
+    <ClInclude Include="PlayerMovementController.h" />
     <ClInclude Include="Position.h" />
+    <ClInclude Include="PositionController.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Resolution.h" />
+    <ClInclude Include="StaticDrawController.h" />
     <ClInclude Include="Surface.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="World.h" />
-    <ClInclude Include="WorldEntity.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Readme.txt" />

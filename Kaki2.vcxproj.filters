@@ -19,6 +19,9 @@
     <Filter Include="Utility">
       <UniqueIdentifier>{8ec5fc94-564f-4bf2-9493-0a686194fd4a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\MainWorld\EntityControllers">
+      <UniqueIdentifier>{01c5e88f-e85e-4653-a543-8543a35c4275}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Event.cpp">
@@ -39,17 +42,11 @@
     <ClCompile Include="MainWorld.cpp">
       <Filter>Game\MainWorld</Filter>
     </ClCompile>
-    <ClCompile Include="MC.cpp">
-      <Filter>Game\MainWorld</Filter>
-    </ClCompile>
     <ClCompile Include="Renderer.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Texture.cpp">
       <Filter>Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="WorldEntity.cpp">
-      <Filter>Game\MainWorld</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Camera.cpp">
@@ -61,8 +58,17 @@
     <ClCompile Include="TextureManager.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
-    <ClCompile Include="Obstacle.cpp">
-      <Filter>Game\MainWorld</Filter>
+    <ClCompile Include="AnimationController.cpp">
+      <Filter>Game\MainWorld\EntityControllers</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerMovementController.cpp">
+      <Filter>Game\MainWorld\EntityControllers</Filter>
+    </ClCompile>
+    <ClCompile Include="PositionController.cpp">
+      <Filter>Game\MainWorld\EntityControllers</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticDrawController.cpp">
+      <Filter>Game\MainWorld\EntityControllers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -90,9 +96,6 @@
     <ClInclude Include="MainWorld.h">
       <Filter>Game\MainWorld</Filter>
     </ClInclude>
-    <ClInclude Include="MC.h">
-      <Filter>Game\MainWorld</Filter>
-    </ClInclude>
     <ClInclude Include="Renderer.h">
       <Filter>Renderer</Filter>
     </ClInclude>
@@ -101,9 +104,6 @@
     </ClInclude>
     <ClInclude Include="World.h">
       <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="WorldEntity.h">
-      <Filter>Game\MainWorld</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Game\MainWorld</Filter>
@@ -126,10 +126,22 @@
     <ClInclude Include="Utility.h">
       <Filter>Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Entity.h">
-      <Filter>Game</Filter>
+    <ClInclude Include="EntityController.h">
+      <Filter>Game\MainWorld\EntityControllers</Filter>
     </ClInclude>
-    <ClInclude Include="Obstacle.h">
+    <ClInclude Include="AnimationController.h">
+      <Filter>Game\MainWorld\EntityControllers</Filter>
+    </ClInclude>
+    <ClInclude Include="PositionController.h">
+      <Filter>Game\MainWorld\EntityControllers</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticDrawController.h">
+      <Filter>Game\MainWorld\EntityControllers</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerMovementController.h">
+      <Filter>Game\MainWorld\EntityControllers</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
       <Filter>Game\MainWorld</Filter>
     </ClInclude>
   </ItemGroup>

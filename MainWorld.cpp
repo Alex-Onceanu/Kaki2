@@ -1,5 +1,4 @@
 #include "MainWorld.h"
-#include "MC.h"
 #include "TextureManager.h"
 #include "Input.h"
 #include "InputEventsEnum.h"
@@ -8,7 +7,12 @@
 #include "Camera.h"
 #include "Resolution.h"
 #include "Utility.h"
-#include "Obstacle.h"
+
+#include "EntityController.h"
+#include "AnimationController.h"
+#include "PositionController.h"
+#include "StaticDrawController.h"
+#include "PlayerMovementController.h"
 
 #include <memory>
 #include <vector>
@@ -30,7 +34,7 @@
 MainWorld::MainWorld(bool& running)
 	:World()
 {
-	tm = make_unique<TextureManager>();
+	tm = std::make_unique<TextureManager>();
 	InitKeyToEvent();
 
 	CreateWorld();
@@ -79,6 +83,7 @@ void MainWorld::InitKeyToEvent()
 	}
 }
 
+#if false
 void MainWorld::CreateWorld()
 {
 	auto mc = std::make_unique<MC>(tm.get());
@@ -98,7 +103,41 @@ void MainWorld::CreateWorld()
 		entities.push_back(std::make_unique<Obstacle>(tm.get(), "./Assets/Obstacles/arbre1/1.png", p));
 	}
 }
+#else
 
+void MainWorld::CreateWorld()
+{
+
+	std::vector<std::unique_ptr<EntityController>> v;
+	std::unique_ptr<Entity> mc = std::make_unique<Entity>();
+	v.push_back(std::make_unique<PlayerMovementController>(mc.get()));
+	v.push_back(std::make_unique<AnimationController>(mc.get(), tm.get(), "Assets/MC"));
+	mc->InitControllers(v);
+
+	const int* w;
+	const int* h;
+	mc->GetSizePtr(&w, &h);
+	camera = std::make_unique<Camera>(mc->GetPositionPtr(), w, h);
+
+	entities.push_back(std::move(mc));
+
+	LoadScene(1);
+	LoadGround();
+
+	std::srand(static_cast<int>(time(NULL)));
+	for (int i = 0; i < 10; i++)
+	{
+		Position p{ std::rand() % (scene->size_x + RES_X),rand() % (scene->size_y + RES_Y) };
+		v.clear();
+		std::unique_ptr<Entity> e = std::make_unique<Entity>();
+		v.push_back(std::make_unique<StaticDrawController>(e.get(), tm.get(), "./Assets/Obstacles/arbre1/1.png"));
+		v.push_back(std::make_unique<PositionController>(e.get(), p));
+		e->InitControllers(v);
+		entities.push_back(std::move(e));
+	}
+}
+
+#endif
 void MainWorld::LoadScene(int nb_)
 {
 	scene = std::make_unique<Map>();
@@ -140,8 +179,14 @@ void MainWorld::LoadGround()
 	Rect dst;
 	std::vector<std::shared_ptr<Surface>> blocs;
 
-	bool go = true;
-	for (int i = 1; go; i++)
+	
+	for (int i = 1; i < 10; i++)
+	{
+		std::ostringstream path;
+		path << "./Assets/Sol/" << i << ".png";
+		blocs.push_back(textureManager->GetSurface(path.str()));
+	}
+	for (char i = 'a'; true; i++)
 	{
 		try
 		{
@@ -151,7 +196,7 @@ void MainWorld::LoadGround()
 		}
 		catch (...)
 		{
-			go = false;
+			break;
 		}
 	}
 
@@ -161,7 +206,17 @@ void MainWorld::LoadGround()
 		for (int x{ 0 }; (x < map_w) and (c < scene->tiles.length()); x += scene->tile_w)
 		{
 			dst = { x,y,scene->tile_w,scene->tile_h };
-			Renderer::CopySurfaceScaled(blocs[scene->tiles[c++] - 49].get(), nullptr, &gnd, &dst);
+			auto blocIndex = scene->tiles[c];
+			if (blocIndex > '9')
+			{
+				blocIndex -= 88;
+			}
+			else
+			{
+				blocIndex -= 49;
+			}
+			Renderer::CopySurfaceScaled(blocs[blocIndex].get(), nullptr, &gnd, &dst);
+			c++;
 		}
 	}
 	this->ground = std::make_unique<Texture>(*Renderer::GetRenderer(), &gnd);

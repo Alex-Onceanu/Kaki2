@@ -1,10 +1,8 @@
 #pragma once
 
-#include "Entity.h"
-#include "Event.h"
-
-#include <memory>
 #include <vector>
+
+#include "Event.h"
 
 namespace EventSystem
 {

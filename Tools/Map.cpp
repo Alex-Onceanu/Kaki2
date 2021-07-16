@@ -1,4 +1,5 @@
 #include <fstream>
+#include <vector>
 
 #include "pch.h"
 #include "Map.h"
@@ -68,6 +69,7 @@ MapFile& operator >> (MapFile& o, Map& m)
 	{
 		try
 		{
+			std::ofstream log("log.txt");
 			o >> m.size_x >> m.size_y;
 
  			unsigned x{ 0 }, y{ 0 };
@@ -89,16 +91,17 @@ MapFile& operator >> (MapFile& o, Map& m)
 						ss >> c;
 						
 						if (c == 0) continue;
-						if (c != '1' and c != '2')
+						
+						if (c < '1' or c > '9')
 						{
-							std::ofstream log("log.txt", std::ios_base::app);
-							log << "Bloc inconnu : " << c << std::endl;
+							if (c < 'a' or c > 'z')
+							{
+								log << "Bloc inconnu : " << c << std::endl;
+								continue;
+							}
 						}
-						else
-						{
-							m.tiles += c;
-							x++;
-						}
+						m.tiles += c;
+						x++;
 					}
 				}
 			}
