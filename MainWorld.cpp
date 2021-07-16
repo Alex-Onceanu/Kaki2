@@ -83,28 +83,6 @@ void MainWorld::InitKeyToEvent()
 	}
 }
 
-#if false
-void MainWorld::CreateWorld()
-{
-	auto mc = std::make_unique<MC>(tm.get());
-	const int* w;
-	const int* h;
-	mc->GetSizePtr(&w, &h);
-	camera = std::make_unique<Camera>(mc->GetPositionPtr(), w, h);
-	entities.push_back(std::move(mc));
-
-	LoadScene(1);
-	LoadGround();
-	
-	std::srand(static_cast<int>(time(NULL)));
-	for (int i = 0; i < 10; i++)
-	{
-		Position p{ std::rand() % (scene->size_x + RES_X),rand() % (scene->size_y + RES_Y) };
-		entities.push_back(std::make_unique<Obstacle>(tm.get(), "./Assets/Obstacles/arbre1/1.png", p));
-	}
-}
-#else
-
 void MainWorld::CreateWorld()
 {
 
@@ -137,7 +115,6 @@ void MainWorld::CreateWorld()
 	}
 }
 
-#endif
 void MainWorld::LoadScene(int nb_)
 {
 	scene = std::make_unique<Map>();
