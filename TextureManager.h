@@ -8,14 +8,11 @@
 #include "Renderer.h"
 #include "Surface.h"
 
-class TextureManager
+namespace TextureManager
 {
-	
-public:
-	std::shared_ptr<Texture> GetTexture(const std::string &path);
+	std::shared_ptr<Texture> GetTexture(const std::string& path);
 	std::shared_ptr<Surface> GetSurface(const std::string& path);
 
-private:
 	struct TextureMeta
 	{
 		std::string path;
@@ -28,7 +25,7 @@ private:
 		std::weak_ptr<Surface> surface;
 	};
 
-private:
-	std::vector<TextureMeta> textures;
-	std::vector<SurfaceMeta> surfaces;
-};
+	static std::vector<TextureMeta> textures;
+	static std::vector<SurfaceMeta> surfaces;
+
+}

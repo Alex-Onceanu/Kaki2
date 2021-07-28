@@ -8,6 +8,7 @@
 #include "Resolution.h"
 #include "Utility.h"
 
+#include "ControllerFactory.h"
 #include "EntityController.h"
 #include "AnimationController.h"
 #include "PositionController.h"
@@ -22,19 +23,13 @@
 #include <fstream>
 #include <sstream>
 
-
 #include "Tools/Map.h"
-
-#define PEEK()\
-		Rect groundRect = { 0, 0, scene->size_x + RES_X, scene->size_y + RES_Y };\
-		this->ground = std::make_unique<Texture>(*Renderer::GetRenderer(), &gnd);\
-		Renderer::FullBlit(ground.get(), groundRect);\
-		Renderer::Flip();
 
 MainWorld::MainWorld(bool& running)
 	:World()
 {
-	tm = std::make_unique<TextureManager>();
+	cf = std::make_unique<ControllerFactory>();
+
 	InitKeyToEvent();
 
 	CreateWorld();
@@ -86,10 +81,10 @@ void MainWorld::InitKeyToEvent()
 void MainWorld::CreateWorld()
 {
 
-	std::vector<std::unique_ptr<EntityController>> v;
+	/*std::vector<std::unique_ptr<EntityController>> v;
 	std::unique_ptr<Entity> mc = std::make_unique<Entity>();
 	v.push_back(std::make_unique<PlayerMovementController>(mc.get()));
-	v.push_back(std::make_unique<AnimationController>(mc.get(), tm.get(), "Assets/MC"));
+	v.push_back(std::make_unique<AnimationController>(mc.get(), "Assets/MC"));
 	mc->InitControllers(v);
 
 	const int* w;
@@ -97,22 +92,22 @@ void MainWorld::CreateWorld()
 	mc->GetSizePtr(&w, &h);
 	camera = std::make_unique<Camera>(mc->GetPositionPtr(), w, h);
 
-	entities.push_back(std::move(mc));
+	entities.push_back(std::move(mc));*/
 
 	LoadScene(1);
 	LoadGround();
 
-	std::srand(static_cast<int>(time(NULL)));
+	/*std::srand(static_cast<int>(time(NULL)));
 	for (int i = 0; i < 10; i++)
 	{
 		Position p{ std::rand() % (scene->size_x + RES_X),rand() % (scene->size_y + RES_Y) };
 		v.clear();
 		std::unique_ptr<Entity> e = std::make_unique<Entity>();
-		v.push_back(std::make_unique<StaticDrawController>(e.get(), tm.get(), "./Assets/Obstacles/arbre1/1.png"));
+		v.push_back(std::make_unique<StaticDrawController>(e.get(), "./Assets/Obstacles/arbre1/1.png"));
 		v.push_back(std::make_unique<PositionController>(e.get(), p));
 		e->InitControllers(v);
 		entities.push_back(std::move(e));
-	}
+	}*/
 }
 
 void MainWorld::LoadScene(int nb_)
@@ -161,7 +156,7 @@ void MainWorld::LoadGround()
 	{
 		std::ostringstream path;
 		path << "./Assets/Sol/" << i << ".png";
-		blocs.push_back(textureManager->GetSurface(path.str()));
+		blocs.push_back(TextureManager::GetSurface(path.str()));
 	}
 	for (char i = 'a'; true; i++)
 	{
@@ -169,7 +164,7 @@ void MainWorld::LoadGround()
 		{
 			std::ostringstream path;
 			path << "./Assets/Sol/" << i << ".png";
-			blocs.push_back(textureManager->GetSurface(path.str()));
+			blocs.push_back(TextureManager::GetSurface(path.str()));
 		}
 		catch (...)
 		{

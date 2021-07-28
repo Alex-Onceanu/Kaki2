@@ -3,24 +3,29 @@
 #include <sstream>
 
 #include "AnimationController.h"
+#include "EntityController.h"
 #include "Entity.h"
 #include "Renderer.h"
 #include "Texture.h"
+#include "TextureManager.h"
 
-AnimationController::AnimationController(Entity* const o, TextureManager* tm_, const std::string folderPath_)
+
+AnimationController::AnimationController(Entity* const o)
 	: EntityController(o)
-	, folderPath(folderPath_)
-	, tm(tm_)
 {
 	allAnimations = std::make_unique<std::vector<std::vector<std::shared_ptr<Texture>>>>();
 	currentAnimation = std::make_unique<std::vector<std::shared_ptr<Texture>>>();
 
+	owner_pos = owner->GetPositionPtr();
+	owner->GetSizePtr(&owner_w, &owner_h);
+}
+
+void AnimationController::SetPath(const std::string path)
+{
+	folderPath = path;
 	LoadAllImages();
 
 	*currentAnimation = (*allAnimations)[INDEX_DOWN];
-
-	owner_pos = owner->GetPositionPtr();
-	owner->GetSizePtr(&owner_w, &owner_h);
 
 	auto r = Renderer::GetRect((*currentAnimation)[0].get());
 
@@ -44,7 +49,7 @@ void AnimationController::LoadAllImages()
 			{
 				std::ostringstream path;
 				path << folderPath << "/" << tab[j] << "/" << i << ".png";
-				(*allAnimations)[j].push_back(tm->GetTexture(path.str()));
+				(*allAnimations)[j].push_back(TextureManager::GetTexture(path.str()));
 			}
 			catch (...)
 			{
@@ -103,4 +108,9 @@ void AnimationController::Draw(const Position &cameraPos)
 	{
 		Renderer::FullBlit((*currentAnimation)[animCount].get(), rect);
 	}
+}
+
+std::unique_ptr<EntityController> AnimationControllerCreator::operator()(Entity* owner)
+{
+	return std::move(std::make_unique<AnimationController>(owner));
 }

@@ -1,16 +1,20 @@
 #pragma once
+
+#include "Texture.h"
 #include "EntityController.h"
 #include "Position.h"
-#include "TextureManager.h"
 
-#include <string>
+#include <vector>
 #include <memory>
+#include <string>
 
 class AnimationController : public EntityController
 {
 public:
-	AnimationController(Entity* const o, TextureManager* tm_, const std::string folderPath_);
+	AnimationController(Entity* const o);
 	
+	void SetPath(const std::string path);
+
 	void Update() override;
 	void Draw(const Position &cameraPos) override;
 
@@ -26,8 +30,7 @@ private:
 
 	std::unique_ptr<std::vector<std::vector<std::shared_ptr<Texture>>>> allAnimations;
 	std::unique_ptr<std::vector<std::shared_ptr<Texture>>> currentAnimation;
-
-	TextureManager* tm;
+	
 	std::string folderPath;
 
 	Position oldPosition;
@@ -39,4 +42,10 @@ private:
 	bool shouldMirrorBlit = false;
 	int frameCount = 0;
 	int animCount = 0;
+};
+
+class AnimationControllerCreator : public EntityControllerCreator
+{
+public:
+	std::unique_ptr<EntityController> operator()(Entity* owner) override;
 };

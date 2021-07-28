@@ -30,7 +30,7 @@ protected:
 	std::vector<std::unique_ptr<Entity>> entities;
 
 	std::unique_ptr<Camera> camera;
-	std::unique_ptr<TextureManager> tm;
+	std::unique_ptr<ControllerFactory> cf;
 
 	std::unique_ptr<std::map<InputEventEnum, EventEnum>> keyToEvent;
 	std::unique_ptr<Texture> ground;

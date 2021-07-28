@@ -1,18 +1,22 @@
 #include "StaticDrawController.h"
 #include "Entity.h"
+#include "Renderer.h"
+#include "TextureManager.h"
 
-StaticDrawController::StaticDrawController(Entity* o, TextureManager* tm_, const std::string path)
+StaticDrawController::StaticDrawController(Entity* o)
 	: EntityController(o)
-	, tm(tm_)
 {
-	image = tm->GetTexture(path);
-	
 	owner_pos = owner->GetPositionPtr();
 
 	owner->GetSizePtr(&owner_w, &owner_h);
 	auto r = Renderer::GetRect(image.get());
 	*owner_w = r.w;
 	*owner_h = r.h;
+}
+
+void StaticDrawController::SetPath(const std::string& path)
+{
+	image = TextureManager::GetTexture(path);
 }
 
 void StaticDrawController::Draw(const Position &cameraPos)
@@ -25,4 +29,9 @@ void StaticDrawController::Draw(const Position &cameraPos)
 	};
 
 	Renderer::FullBlit(image.get(), rect);
+}
+
+std::unique_ptr<EntityController> StaticDrawControllerCreator::operator()(Entity* owner)
+{
+	return std::move(std::make_unique<StaticDrawController>(owner));
 }

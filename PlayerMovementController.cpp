@@ -1,7 +1,12 @@
 #include <cassert>
+#include <sstream>
+#include <vector>
 
 #include "PlayerMovementController.h"
 #include "Entity.h"
+#include "EntityController.h"
+#include "Position.h"
+#include "EventEnum.h"
 
 PlayerMovementController::PlayerMovementController(Entity* o)
 	:EntityController(o)
@@ -132,4 +137,18 @@ void PlayerMovementController::Update()
 		ownerPositionPtr->x += int(speed.x);
 		ownerPositionPtr->y += int(speed.y);
 	}
+}
+
+void PlayerMovementController::LoadInitialData(std::map<std::string, std::string>& ini)
+{
+	std::stringstream sx (ini["speed_x"]),
+		sy (ini["speed_y"]);
+
+	sx >> speed.x;
+	sy >> speed.y;
+}
+
+std::unique_ptr<EntityController> PlayerMovementControllerCreator::operator()(Entity* owner)
+{
+	return std::move(std::make_unique<PlayerMovementController>(owner));
 }

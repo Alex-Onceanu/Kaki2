@@ -1,7 +1,7 @@
 #pragma once
 
 #include <bitset>
-#include <memory>
+#include <string>
 #include <map>
 
 #include "EntityController.h"
@@ -15,6 +15,7 @@ constexpr auto MOVING_RIGHT = 2;
 constexpr auto MOVING_UP = 3;
 constexpr auto MOVING_DOWN = 4;
 
+
 class PlayerMovementController :
     public EntityController,
     public Listener
@@ -26,6 +27,8 @@ public:
 
     bool CanProcess(Event* e) override;
     void OnEvent(Event* e) override;
+
+    void LoadInitialData(std::map<std::string, std::string>& ini) override;
 
 private:
     void MoveUp();
@@ -39,7 +42,6 @@ private:
     void StopLeft();
 
 private:
-
     Position* ownerPositionPtr;
 
     std::unique_ptr<std::map<EventEnum, void (PlayerMovementController::*)()>> eventToFunction;
@@ -51,3 +53,8 @@ private:
     std::bitset<5> move_direction = 0;
 };
 
+class PlayerMovementControllerCreator : public EntityControllerCreator
+{
+public:
+    std::unique_ptr<EntityController> operator()(Entity* owner) override;
+};
