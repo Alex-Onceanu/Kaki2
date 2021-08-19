@@ -13,6 +13,7 @@
 #include "PositionController.h"
 #include "StaticDrawController.h"
 #include "PlayerMovementController.h"
+#include "CollisionController.h"
 
 #include <memory>
 #include <vector>
@@ -89,6 +90,7 @@ void MainWorld::CreateWorld()
 	std::vector<std::unique_ptr<EntityController>> v;
 	std::unique_ptr<Entity> mc = std::make_unique<Entity>();
 	v.push_back(std::make_unique<PlayerMovementController>(mc.get()));
+	v.push_back(std::make_unique<CollisionController>(mc.get(), true));
 	v.push_back(std::make_unique<AnimationController>(mc.get(), tm.get(), "Assets/MC"));
 	mc->InitControllers(v);
 
@@ -110,6 +112,7 @@ void MainWorld::CreateWorld()
 		std::unique_ptr<Entity> e = std::make_unique<Entity>();
 		v.push_back(std::make_unique<StaticDrawController>(e.get(), tm.get(), "./Assets/Obstacles/arbre1/1.png"));
 		v.push_back(std::make_unique<PositionController>(e.get(), p));
+		v.push_back(std::make_unique<CollisionController>(e.get(), false));
 		e->InitControllers(v);
 		entities.push_back(std::move(e));
 	}
@@ -220,6 +223,18 @@ void MainWorld::PostEventFromInput()
 	}
 }
 
+void MainWorld::DetectCollisions()
+{
+	for (int i = 1; i < entities.size(); i++)
+	{
+		if (Collision(entities[0]->GetPosition(), *entities[0]->GetRectPtr(), entities[i]->GetPosition(), *entities[i]->GetRectPtr()))
+		{
+			Event e = Event(EventEnum::COLLISION, static_cast<void*>(entities[0].get()));
+			EventSystem::Launch(&e);
+		}
+	}
+}
+
 void MainWorld::ProcessInput()
 {
 	PostEventFromInput();
@@ -232,11 +247,14 @@ void MainWorld::ProcessInput()
 
 void MainWorld::Update()
 {
+	
+
+
 	for (auto&& e : entities)
 	{
 		e->Update();
 	}
-
+	DetectCollisions();
 	//La camera suit toujours le joueur, mais doit s'arreter
 	//Aux limites de la map : 0,0 et camLimit
 	camera->UpdatePosition(scene->size_x, scene->size_y);

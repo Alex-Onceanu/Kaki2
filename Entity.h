@@ -56,6 +56,7 @@ public:
 	};
 
 	Position GetPosition() { return position; };
+	void SetPosition(Position p) { position = p; };
 	Position* GetPositionPtr() { return &position; };
 
 	Rect* GetRectPtr() { return &rect; };
@@ -70,8 +71,17 @@ public:
 		*w = &rect.w;
 		*h = &rect.h;
 	};
+
+	bool IsSolid() { return solid; };
+	void SetSolid(bool solid_) { solid = solid_; };
+	bool IsMovible() { return movible; };
+	void SetMovible(bool movible_) { movible = movible_; };
 	 
 protected:
+
+	bool solid;
+	bool movible;
+
 	Position position;
 	Rect rect;
 

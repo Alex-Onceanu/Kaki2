@@ -25,6 +25,7 @@ private:
 	void InitKeyToEvent();
 	void LoadGround();
 	void LoadScene(int nb);
+	void DetectCollisions();
 
 protected:
 	std::vector<std::unique_ptr<Entity>> entities;

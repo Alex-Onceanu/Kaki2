@@ -133,3 +133,8 @@ void PlayerMovementController::Update()
 		ownerPositionPtr->y += int(speed.y);
 	}
 }
+
+void PlayerMovementController::Draw(const Position& cameraPos)
+{
+	*owner->GetRectPtr() = *ownerPositionPtr - cameraPos;
+}

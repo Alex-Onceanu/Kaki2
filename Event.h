@@ -9,8 +9,10 @@ class Event
 {
 public:
 	Event(EventEnum type_);
+	Event(EventEnum type_, void* args_);
 
 	EventEnum type;
+	void* args;
 };
 
 class Listener

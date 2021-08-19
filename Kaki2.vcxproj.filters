@@ -70,6 +70,9 @@
     <ClCompile Include="StaticDrawController.cpp">
       <Filter>Game\MainWorld\EntityControllers</Filter>
     </ClCompile>
+    <ClCompile Include="CollisionController.cpp">
+      <Filter>Game\MainWorld\EntityControllers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Event.h">
@@ -143,6 +146,9 @@
     </ClInclude>
     <ClInclude Include="Entity.h">
       <Filter>Game\MainWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionController.h">
+      <Filter>Game\MainWorld\EntityControllers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

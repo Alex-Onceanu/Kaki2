@@ -2,17 +2,23 @@
 #include "EntityController.h"
 #include "Position.h"
 #include "TextureManager.h"
+#include "Event.h"
 
 #include <string>
 #include <memory>
 
-class AnimationController : public EntityController
+class AnimationController
+	: public EntityController
+	, public Listener
 {
 public:
 	AnimationController(Entity* const o, TextureManager* tm_, const std::string folderPath_);
 	
 	void Update() override;
 	void Draw(const Position &cameraPos) override;
+
+	bool CanProcess(Event* e) override;
+	void OnEvent(Event* e) override;
 
 private:
 	void LoadAllImages();
