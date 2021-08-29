@@ -47,7 +47,8 @@ private:
     std::unique_ptr<std::map<EventEnum, void (PlayerMovementController::*)()>> eventToFunction;
 
 
-    const static int SPEED_REF = 5;
+    //const static int SPEED_REF = 5;
+    Speed_t SPEED_REF;
     Speed_t speed = { 0,0 };
 
     std::bitset<5> move_direction = 0;

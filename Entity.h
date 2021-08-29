@@ -23,6 +23,7 @@ public:
 	virtual void Draw(Position cameraPos);
 
 	Position GetPosition();
+	void SetPosition(Position p) { position = p; };
 	Position* GetPositionPtr();
 
 	Rect* GetRectPtr() { return &rect; };

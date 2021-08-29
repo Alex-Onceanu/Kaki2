@@ -18,5 +18,5 @@ public:
 	void Read(ControllerFactory* cf, std::ifstream& iniFile, Entity& e);
 
 private:
-	void ParseIni(std::ifstream& file, std::map<std::string, std::string>& ini);
+	void ParseIni(std::ifstream& file, std::map<std::string, std::map<std::string, std::string>>& ini);
 };

@@ -9,14 +9,19 @@ StaticDrawController::StaticDrawController(Entity* o)
 	owner_pos = owner->GetPositionPtr();
 
 	owner->GetSizePtr(&owner_w, &owner_h);
-	auto r = Renderer::GetRect(image.get());
-	*owner_w = r.w;
-	*owner_h = r.h;
 }
 
 void StaticDrawController::SetPath(const std::string& path)
 {
 	image = TextureManager::GetTexture(path);
+	auto r = Renderer::GetRect(image.get());
+	*owner_w = r.w;
+	*owner_h = r.h;
+}
+
+void StaticDrawController::LoadInitialData(std::map<std::string, std::string>& ini)
+{
+	SetPath(ini["path"]);
 }
 
 void StaticDrawController::Draw(const Position &cameraPos)

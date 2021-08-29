@@ -11,7 +11,7 @@ class PositionController : public EntityController
 public:
 	PositionController(Entity* o);
 
-	void SetInitialPos(Position initialPos) { *ownerPositionPtr = initialPos; }
+	//void SetInitialPos(Position initialPos) { *ownerPositionPtr = initialPos; }
 
 	void Draw(const Position& cameraPos) override;
 

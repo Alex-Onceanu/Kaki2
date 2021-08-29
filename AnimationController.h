@@ -12,7 +12,8 @@ class AnimationController : public EntityController
 {
 public:
 	AnimationController(Entity* const o);
-	
+	void LoadInitialData(std::map<std::string, std::string>& ini) override;
+
 	void SetPath(const std::string path);
 
 	void Update() override;

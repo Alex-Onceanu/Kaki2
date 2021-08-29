@@ -35,6 +35,11 @@ void AnimationController::SetPath(const std::string path)
 	*owner_h = (*owner_w * r.h) / r.w;
 }
 
+void AnimationController::LoadInitialData(std::map<std::string, std::string>& ini)
+{
+	SetPath(ini["path"]);
+}
+
 void AnimationController::LoadAllImages()
 {
 	std::vector<std::string> tab{ "up", "down", "left" };

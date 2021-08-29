@@ -73,11 +73,11 @@
     <ClCompile Include="IniReader.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
-    <ClCompile Include="Entity.cpp">
-      <Filter>Game\MainWorld\EntityControllers</Filter>
-    </ClCompile>
     <ClCompile Include="ControllerFactory.cpp">
       <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Game\MainWorld</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

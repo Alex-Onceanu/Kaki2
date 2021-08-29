@@ -29,7 +29,7 @@ MainWorld::MainWorld(bool& running)
 	:World()
 {
 	cf = std::make_unique<ControllerFactory>();
-
+	iniReader = std::make_unique<IniReader>();
 	InitKeyToEvent();
 
 	CreateWorld();
@@ -80,34 +80,32 @@ void MainWorld::InitKeyToEvent()
 
 void MainWorld::CreateWorld()
 {
+	std::ifstream mc_ini("./Content/Entities/mc.ini");
+	if (not mc_ini.is_open()) throw("Cannot open mc.ini");
 
-	/*std::vector<std::unique_ptr<EntityController>> v;
 	std::unique_ptr<Entity> mc = std::make_unique<Entity>();
-	v.push_back(std::make_unique<PlayerMovementController>(mc.get()));
-	v.push_back(std::make_unique<AnimationController>(mc.get(), "Assets/MC"));
-	mc->InitControllers(v);
-
+	iniReader->Read(cf.get(), mc_ini, *mc);
 	const int* w;
 	const int* h;
 	mc->GetSizePtr(&w, &h);
 	camera = std::make_unique<Camera>(mc->GetPositionPtr(), w, h);
-
-	entities.push_back(std::move(mc));*/
+	entities.push_back(std::move(mc));
 
 	LoadScene(1);
 	LoadGround();
 
-	/*std::srand(static_cast<int>(time(NULL)));
+	std::srand(static_cast<int>(time(NULL)));
 	for (int i = 0; i < 10; i++)
 	{
+		std::ifstream tree_ini("./Content/Entities/tree.ini");
+		if (not tree_ini.is_open()) throw("Cannot open tree.ini");
+
 		Position p{ std::rand() % (scene->size_x + RES_X),rand() % (scene->size_y + RES_Y) };
-		v.clear();
 		std::unique_ptr<Entity> e = std::make_unique<Entity>();
-		v.push_back(std::make_unique<StaticDrawController>(e.get(), "./Assets/Obstacles/arbre1/1.png"));
-		v.push_back(std::make_unique<PositionController>(e.get(), p));
-		e->InitControllers(v);
+		iniReader->Read(cf.get(), tree_ini, *e);
+		e->SetPosition(p);
 		entities.push_back(std::move(e));
-	}*/
+	}
 }
 
 void MainWorld::LoadScene(int nb_)

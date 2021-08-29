@@ -6,6 +6,7 @@
 #include "EventEnum.h"
 #include "Camera.h"
 #include "Tools/Map.h"
+#include "IniReader.h"
 
 #include <map>
 
@@ -31,6 +32,7 @@ protected:
 
 	std::unique_ptr<Camera> camera;
 	std::unique_ptr<ControllerFactory> cf;
+	std::unique_ptr<IniReader> iniReader;
 
 	std::unique_ptr<std::map<InputEventEnum, EventEnum>> keyToEvent;
 	std::unique_ptr<Texture> ground;

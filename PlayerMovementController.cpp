@@ -66,7 +66,7 @@ void PlayerMovementController::OnEvent(Event* e)
 void PlayerMovementController::MoveUp()
 {
 	if (!move_direction.test(MOVING_UP))
-		speed.y -= SPEED_REF;
+		speed.y -= SPEED_REF.y;
 
 	move_direction.set(MOVING_UP);
 }
@@ -74,7 +74,7 @@ void PlayerMovementController::MoveUp()
 void PlayerMovementController::MoveDown()
 {
 	if (!move_direction.test(MOVING_DOWN))
-		speed.y += SPEED_REF;
+		speed.y += SPEED_REF.y;
 
 	move_direction.set(MOVING_DOWN);
 }
@@ -82,7 +82,7 @@ void PlayerMovementController::MoveDown()
 void PlayerMovementController::MoveRight()
 {
 	if (!move_direction.test(MOVING_RIGHT))
-		speed.x += SPEED_REF;
+		speed.x += SPEED_REF.x;
 
 	move_direction.set(MOVING_RIGHT);
 }
@@ -90,7 +90,7 @@ void PlayerMovementController::MoveRight()
 void PlayerMovementController::MoveLeft()
 {
 	if (!move_direction.test(MOVING_LEFT))
-		speed.x -= SPEED_REF;
+		speed.x -= SPEED_REF.x;
 	move_direction.set(MOVING_LEFT);
 }
 
@@ -98,7 +98,7 @@ void PlayerMovementController::StopUp()
 {
 	if (move_direction[MOVING_UP])
 	{
-		speed.y += SPEED_REF;
+		speed.y += SPEED_REF.y;
 		move_direction[MOVING_UP] = 0;
 	}
 }
@@ -107,7 +107,7 @@ void PlayerMovementController::StopDown()
 {
 	if (move_direction[MOVING_DOWN])
 	{
-		speed.y -= SPEED_REF;
+		speed.y -= SPEED_REF.y;
 		move_direction[MOVING_DOWN] = 0;
 	}
 }
@@ -116,7 +116,7 @@ void PlayerMovementController::StopRight()
 {
 	if (move_direction[MOVING_RIGHT])
 	{
-		speed.x -= SPEED_REF;
+		speed.x -= SPEED_REF.x;
 		move_direction[MOVING_RIGHT] = 0;
 	}
 }
@@ -125,7 +125,7 @@ void PlayerMovementController::StopLeft()
 {
 	if (move_direction[MOVING_LEFT])
 	{
-		speed.x += SPEED_REF;
+		speed.x += SPEED_REF.x;
 		move_direction[MOVING_LEFT] = 0;
 	}
 }
@@ -144,8 +144,8 @@ void PlayerMovementController::LoadInitialData(std::map<std::string, std::string
 	std::stringstream sx (ini["speed_x"]),
 		sy (ini["speed_y"]);
 
-	sx >> speed.x;
-	sy >> speed.y;
+	sx >> SPEED_REF.x;
+	sy >> SPEED_REF.y;
 }
 
 std::unique_ptr<EntityController> PlayerMovementControllerCreator::operator()(Entity* owner)

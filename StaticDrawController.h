@@ -9,6 +9,7 @@ class StaticDrawController : public EntityController
 {
 public:
 	StaticDrawController(Entity* o);
+	void LoadInitialData(std::map<std::string, std::string>& ini) override;
 	
 	void SetPath(const std::string& path);
 
