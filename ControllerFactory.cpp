@@ -5,6 +5,7 @@
 #include "PlayerMovementController.h"
 #include "PositionController.h"
 #include "StaticDrawController.h"
+#include "CollisionController.h"
 
 
 #include <cassert>
@@ -18,6 +19,7 @@ ControllerFactory::ControllerFactory()
 		"PlayerMovement",
 		"Position",
 		"StaticDraw",
+		"Collision",
 	};
 
 	std::vector<EntityControllerCreator*> creators
@@ -26,6 +28,7 @@ ControllerFactory::ControllerFactory()
 		new PlayerMovementControllerCreator(),
 		new PositionControllerCreator(),
 		new StaticDrawControllerCreator(),
+		new CollisionControllerCreator(),
 	};
 
 	assert(strings.size() == creators.size());

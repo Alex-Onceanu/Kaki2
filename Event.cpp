@@ -2,10 +2,18 @@
 
 #include "EventSystem.h"
 
-Event::Event(EventEnum type_)
-	:type(type_)
+Event::Event(EventEnum type_, void* args_)
+	: type(type_)
+	, args(args_)
 {
 	
+}
+
+Event::Event(EventEnum type_)
+	: type(type_)
+	, args(nullptr)
+{
+
 }
 
 

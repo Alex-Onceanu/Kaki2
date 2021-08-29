@@ -22,15 +22,33 @@ public:
 	virtual void Update();
 	virtual void Draw(Position cameraPos);
 
-	Position GetPosition();
+	Position GetPosition() { return position; };
 	void SetPosition(Position p) { position = p; };
-	Position* GetPositionPtr();
+	Position* GetPositionPtr() { return &position; };
 
 	Rect* GetRectPtr() { return &rect; };
-	void GetSizePtr(int** w, int** h);
-	void GetSizePtr(const int** w, const int** h);
+	void GetSizePtr(int** w, int** h)
+	{
+		*w = &rect.w;
+		*h = &rect.h;
+	};
+
+	void GetSizePtr(const int** w, const int** h)
+	{
+		*w = &rect.w;
+		*h = &rect.h;
+	};
+
+	bool IsSolid() { return solid; };
+	void SetSolid(bool solid_) { solid = solid_; };
+	bool IsMovible() { return movible; };
+	void SetMovible(bool movible_) { movible = movible_; };
 	 
 protected:
+
+	bool solid;
+	bool movible;
+
 	Position position;
 	Rect rect;
 

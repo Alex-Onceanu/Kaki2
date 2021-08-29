@@ -4,6 +4,7 @@ enum class EventEnum
 {
 	QUIT_GAME,
 
+
 	MOVE_UP,
 	STOP_UP,
 
@@ -14,5 +15,8 @@ enum class EventEnum
 	STOP_RIGHT,
 
 	MOVE_LEFT,
-	STOP_LEFT
+	STOP_LEFT,
+
+
+	COLLISION,
 };

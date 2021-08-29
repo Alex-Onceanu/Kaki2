@@ -14,6 +14,7 @@
 #include "PositionController.h"
 #include "StaticDrawController.h"
 #include "PlayerMovementController.h"
+#include "CollisionController.h"
 
 #include <memory>
 #include <vector>
@@ -213,6 +214,18 @@ void MainWorld::PostEventFromInput()
 	}
 }
 
+void MainWorld::DetectCollisions()
+{
+	for (int i = 1; i < entities.size(); i++)
+	{
+		if (Collision(entities[0]->GetPosition(), *entities[0]->GetRectPtr(), entities[i]->GetPosition(), *entities[i]->GetRectPtr()))
+		{
+			Event e = Event(EventEnum::COLLISION, static_cast<void*>(entities[0].get()));
+			EventSystem::Launch(&e);
+		}
+	}
+}
+
 void MainWorld::ProcessInput()
 {
 	PostEventFromInput();
@@ -225,11 +238,14 @@ void MainWorld::ProcessInput()
 
 void MainWorld::Update()
 {
+	
+
+
 	for (auto&& e : entities)
 	{
 		e->Update();
 	}
-
+	DetectCollisions();
 	//La camera suit toujours le joueur, mais doit s'arreter
 	//Aux limites de la map : 0,0 et camLimit
 	camera->UpdatePosition(scene->size_x, scene->size_y);

@@ -29,28 +29,6 @@ void Entity::LoadInitialData(ControllerFactory* cf, InitialData& ini)
 	}
 }
 
-Position Entity::GetPosition()
-{ 
-	return position; 
-};
-
-Position* Entity::GetPositionPtr() 
-{ 
-	return &position; 
-};
-
-void Entity::GetSizePtr(int** w, int** h)
-{
-	*w = &rect.w;
-	*h = &rect.h;
-};
-
-void Entity::GetSizePtr(const int** w, const int** h)
-{
-	*w = &rect.w;
-	*h = &rect.h;
-};
-
 void Entity::ProcessInput()
 {
 	for (auto&& c : controllers)

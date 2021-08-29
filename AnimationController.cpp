@@ -64,6 +64,17 @@ void AnimationController::LoadAllImages()
 	}
 }
 
+bool AnimationController::CanProcess(Event* e)
+{
+	return((e->type == EventEnum::COLLISION)
+		and (static_cast<Entity*>(e->args) == owner));
+}
+
+void AnimationController::OnEvent(Event* e)
+{
+	animCount = 0;
+}
+
 void AnimationController::Update()
 {
 	if (++frameCount > 3600) frameCount = 0;

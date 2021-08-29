@@ -148,6 +148,11 @@ void PlayerMovementController::LoadInitialData(std::map<std::string, std::string
 	sy >> SPEED_REF.y;
 }
 
+void PlayerMovementController::Draw(const Position& cameraPos)
+{
+	*owner->GetRectPtr() = *ownerPositionPtr - cameraPos;
+}
+
 std::unique_ptr<EntityController> PlayerMovementControllerCreator::operator()(Entity* owner)
 {
 	return std::move(std::make_unique<PlayerMovementController>(owner));

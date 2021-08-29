@@ -70,13 +70,12 @@
     <ClCompile Include="StaticDrawController.cpp">
       <Filter>Game\MainWorld\EntityControllers</Filter>
     </ClCompile>
-    <ClCompile Include="IniReader.cpp">
-      <Filter>Utility</Filter>
+    <ClCompile Include="CollisionController.cpp">
+      <Filter>Game\MainWorld\EntityControllers</Filter>
     </ClCompile>
+    <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="IniReader.cpp" />
     <ClCompile Include="ControllerFactory.cpp">
-      <Filter>Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="Entity.cpp">
       <Filter>Game\MainWorld</Filter>
     </ClCompile>
   </ItemGroup>
@@ -153,11 +152,12 @@
     <ClInclude Include="Entity.h">
       <Filter>Game\MainWorld</Filter>
     </ClInclude>
-    <ClInclude Include="IniReader.h">
-      <Filter>Utility</Filter>
+    <ClInclude Include="CollisionController.h">
+      <Filter>Game\MainWorld\EntityControllers</Filter>
     </ClInclude>
+    <ClInclude Include="IniReader.h" />
     <ClInclude Include="ControllerFactory.h">
-      <Filter>Utility</Filter>
+      <Filter>Game\MainWorld</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

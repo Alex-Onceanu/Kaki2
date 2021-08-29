@@ -3,12 +3,16 @@
 #include "Texture.h"
 #include "EntityController.h"
 #include "Position.h"
+#include "TextureManager.h"
+#include "Event.h"
 
 #include <vector>
 #include <memory>
 #include <string>
 
-class AnimationController : public EntityController
+class AnimationController
+	: public EntityController
+	, public Listener
 {
 public:
 	AnimationController(Entity* const o);
@@ -18,6 +22,9 @@ public:
 
 	void Update() override;
 	void Draw(const Position &cameraPos) override;
+
+	bool CanProcess(Event* e) override;
+	void OnEvent(Event* e) override;
 
 private:
 	void LoadAllImages();

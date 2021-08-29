@@ -24,6 +24,7 @@ public:
     PlayerMovementController(Entity* o);
 
     void Update() override;
+    void Draw(const Position& cameraPos) override;
 
     bool CanProcess(Event* e) override;
     void OnEvent(Event* e) override;
