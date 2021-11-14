@@ -26,6 +26,7 @@ private:
 	void InitKeyToEvent();
 	void LoadGround();
 	void LoadScene(int nb);
+	void LoadEntities();
 	void DetectCollisions();
 
 protected:

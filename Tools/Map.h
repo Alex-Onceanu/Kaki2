@@ -3,6 +3,9 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <map>
+#include <vector>
+#include<tuple>
 
 class MapFile : public std::ifstream {
 public:
@@ -27,3 +30,5 @@ MapFile& operator >> (MapFile& o, Map& m);
 std::ostream& operator << (std::ostream& o, const Map& m);
 std::ofstream& operator << (std::ofstream& o, const Map& m);
 
+std::ofstream& operator << (std::ofstream& o, const std::map<std::string, std::vector<std::pair<int, int>>>& m);
+MapFile& operator >> (MapFile& o, std::map<std::string, std::vector<std::pair<int, int>>>& m);

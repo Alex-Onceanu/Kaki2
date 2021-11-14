@@ -42,6 +42,8 @@ private:
     void StopRight();
     void StopLeft();
 
+    void Teleport();
+
 private:
     Position* ownerPositionPtr;
 

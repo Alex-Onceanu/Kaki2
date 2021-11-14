@@ -2,6 +2,7 @@
 #include <sstream>
 #include <vector>
 
+#include "Input.h"
 #include "PlayerMovementController.h"
 #include "Entity.h"
 #include "EntityController.h"
@@ -12,8 +13,8 @@ PlayerMovementController::PlayerMovementController(Entity* o)
 	:EntityController(o)
 {
 	ownerPositionPtr = owner->GetPositionPtr();
-	ownerPositionPtr->x = 1800;
-	ownerPositionPtr->y = 1200;
+	ownerPositionPtr->x = 600;
+	ownerPositionPtr->y = 300;
 
 	std::vector<EventEnum> events{
 		EventEnum::MOVE_UP,
@@ -24,7 +25,11 @@ PlayerMovementController::PlayerMovementController(Entity* o)
 		EventEnum::STOP_UP,
 		EventEnum::STOP_DOWN,
 		EventEnum::STOP_LEFT,
-		EventEnum::STOP_RIGHT, };
+		EventEnum::STOP_RIGHT,
+
+		EventEnum::MC_TELEPORT,
+	
+	};
 
 	std::vector<void (PlayerMovementController::*)()> functions{
 		&PlayerMovementController::MoveUp,
@@ -36,6 +41,8 @@ PlayerMovementController::PlayerMovementController(Entity* o)
 		&PlayerMovementController::StopDown,
 		&PlayerMovementController::StopLeft,
 		&PlayerMovementController::StopRight,
+
+		&PlayerMovementController::Teleport,
 	};
 
 	assert(events.size() == functions.size());
@@ -128,6 +135,20 @@ void PlayerMovementController::StopLeft()
 		speed.x += SPEED_REF.x;
 		move_direction[MOVING_LEFT] = 0;
 	}
+}
+
+void PlayerMovementController::Teleport()
+//Pour aller plus vite pour les tests
+{
+	std::pair<int,int> pair = Input::GetMousePos();
+	int* rect_x = &owner->GetRectPtr()->x;
+	int* rect_y = &owner->GetRectPtr()->y;
+	Position cameraPos = *ownerPositionPtr - Position({ *rect_x, *rect_y });
+
+	*rect_x = pair.first;
+	*rect_y = pair.second;
+
+	*ownerPositionPtr = Position({ *rect_x,*rect_y }) + cameraPos;
 }
 
 void PlayerMovementController::Update()

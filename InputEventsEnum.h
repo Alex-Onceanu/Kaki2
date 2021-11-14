@@ -11,6 +11,8 @@ enum class InputEventEnum
 	D_down = SDL_SCANCODE_D,
 	A_down = SDL_SCANCODE_A,
 
+	E_down = SDL_SCANCODE_E,
+
 	Q_down = SDL_SCANCODE_Q,
 	ESC_down = SDL_SCANCODE_ESCAPE,
 

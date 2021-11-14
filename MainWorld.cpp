@@ -52,6 +52,8 @@ void MainWorld::InitKeyToEvent()
 		InputEventEnum::S_up,
 		InputEventEnum::D_up,
 		InputEventEnum::A_up,
+
+		InputEventEnum::E_down,
 	};
 	std::vector<EventEnum> events{
 		EventEnum::QUIT_GAME,
@@ -67,6 +69,8 @@ void MainWorld::InitKeyToEvent()
 		EventEnum::STOP_DOWN,
 		EventEnum::STOP_RIGHT,
 		EventEnum::STOP_LEFT,
+
+		EventEnum::MC_TELEPORT,
 	};
 
 	assert(keys.size() == events.size());
@@ -94,8 +98,9 @@ void MainWorld::CreateWorld()
 
 	LoadScene(1);
 	LoadGround();
+	LoadEntities();
 
-	std::srand(static_cast<int>(time(NULL)));
+	/*std::srand(static_cast<int>(time(NULL)));
 	for (int i = 0; i < 10; i++)
 	{
 		std::ifstream tree_ini("./Content/Entities/tree.ini");
@@ -106,7 +111,7 @@ void MainWorld::CreateWorld()
 		iniReader->Read(cf.get(), tree_ini, *e);
 		e->SetPosition(p);
 		entities.push_back(std::move(e));
-	}
+	}*/
 }
 
 void MainWorld::LoadScene(int nb_)
@@ -191,6 +196,62 @@ void MainWorld::LoadGround()
 		}
 	}
 	this->ground = std::make_unique<Texture>(*Renderer::GetRenderer(), &gnd);
+}
+
+void MainWorld::LoadEntities()
+{
+	const int map_w = scene->size_x;
+	const int map_h = scene->size_y;
+
+	std::ifstream fichier("./Content/Maps/e1.ini");
+	if (not fichier.is_open()) throw("Cannot open e1.ini");
+
+	std::map<std::string, std::map<std::string, std::string>> ini;
+	iniReader->ParseIni(fichier, ini);
+
+	const auto& map = ini["map"]["obstacles"];
+	assert(map.length() != 0);
+
+	//On fait un dictionnaire de tous les dictionnaires d'entities pour pas avoir a relire chaque fichier a chaque copie
+	// <nom du fichier, fichier ini lu>
+	//Utiliser des pointeurs plutot ?
+	std::map<std::string, std::map<std::string, std::map<std::string, std::string>>> inis_dict;
+	
+	int c = 0;
+	for (int y = 0; y < map_h *2; y += scene->tile_h*2)
+	{
+		for (int x{ 0 }; (x < map_w*2) and (c < map.length()); x += scene->tile_w*2)
+		{
+			auto iss = IntToStr(map[c]);
+			if (map[c] >= 'a')
+			{
+				//ini["entities"][iss] est le path de l'ini decrivant l'entity qu'on charge
+
+				auto fichier_entity = inis_dict.find(ini["entities"][iss]);
+
+				//Si le fichier n'a pas encore été lu on le lit et on le place dans la map
+				if (not (fichier_entity != inis_dict.end()))
+				{
+					std::ifstream obst_file(ini["entities"][iss]);
+					if (not obst_file.is_open()) throw(std::string("Cannot open ") + ini["entities"][iss]);
+
+					iniReader->ParseIni(obst_file, inis_dict[ini["entities"][iss]]);
+
+					fichier_entity = inis_dict.find(ini["entities"][iss]);
+				}
+
+				//On crée l'Entity a partir de la map qu'on a
+				Position p{ x,y };
+				std::unique_ptr<Entity> e = std::make_unique<Entity>();
+				
+				iniReader->Read(cf.get(), fichier_entity->second, *e);
+
+				e->SetPosition(p);
+				entities.push_back(std::move(e));
+			}
+			c++;
+		}
+	}
 }
 
 MainWorld::~MainWorld()

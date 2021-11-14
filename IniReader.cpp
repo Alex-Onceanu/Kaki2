@@ -6,8 +6,8 @@
 #include <map>
 #include <string>
 #include <regex>
-//line regex n'est pas bon
-constexpr auto ini_line{ "([A-Za-z_]+[A-Za-z0-9_-]*)\\s*=\\s*\"?'?([A-Za-z0-9/]+\\.*[A-Za-z0-9]*)'?\"?" };
+
+constexpr auto ini_line{ "([A-Za-z_]+[A-Za-z0-9_-]*)\\s*=\\s*\"?'?([A-Za-z0-9\\/.]+\\.*[A-Za-z0-9]*)'?\"?" };
 constexpr auto group_line{ "\\[([A-Za-z_]+)\\]" };
 
 
@@ -16,6 +16,13 @@ void IniReader::Read(ControllerFactory* cf, std::ifstream& iniFile, Entity& e)
 	std::map<std::string, std::map<std::string, std::string>> ini;
 	ParseIni(iniFile, ini);
 
+	InitialData id;
+	id.data = ini;
+	e.LoadInitialData(cf, id);
+}
+
+void IniReader::Read(ControllerFactory* cf, std::map<std::string, std::map<std::string, std::string>>& ini, Entity& e)
+{
 	InitialData id;
 	id.data = ini;
 	e.LoadInitialData(cf, id);
@@ -45,6 +52,7 @@ void IniReader::ParseIni(std::ifstream& file, std::map<std::string, std::map<std
 			{
 				enters = false;
 				ini[gm][lineMatch[1].str()] = lineMatch[2].str();
+				if (file.eof()) break;
 				std::getline(file, line);
 			}
 			if (enters)

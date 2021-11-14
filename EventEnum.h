@@ -19,4 +19,6 @@ enum class EventEnum
 
 
 	COLLISION,
+
+	MC_TELEPORT,
 };

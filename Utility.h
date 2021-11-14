@@ -26,6 +26,13 @@ inline int StrToInt(std::string str)
 	return num;
 }
 
+inline std::string IntToStr(int num)
+{
+	std::stringstream ss;
+	ss << char(num);
+	return ss.str();
+}
+
 inline void RemoveZerosStr(std::string& str)
 {
 	str = str.erase(0, str.find_first_not_of('\0'));

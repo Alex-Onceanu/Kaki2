@@ -63,3 +63,11 @@ namespace Input
 		return keyboard[static_cast<int>(k)];
 	}
 }
+
+std::pair<int, int> Input::GetMousePos()
+{
+	int x;
+	int y;
+	SDL_GetMouseState(&x, &y);
+	return std::make_pair(x,y);
+}

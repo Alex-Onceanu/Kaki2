@@ -16,7 +16,7 @@ class IniReader
 {
 public:
 	void Read(ControllerFactory* cf, std::ifstream& iniFile, Entity& e);
+	void Read(ControllerFactory* cf, std::map<std::string, std::map<std::string, std::string>>& ini, Entity& e);
 
-private:
 	void ParseIni(std::ifstream& file, std::map<std::string, std::map<std::string, std::string>>& ini);
 };

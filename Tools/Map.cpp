@@ -1,5 +1,7 @@
 #include <fstream>
 #include <vector>
+#include <iostream>
+#include <memory>
 
 #include "pch.h"
 #include "Map.h"
@@ -117,5 +119,60 @@ MapFile& operator >> (MapFile& o, Map& m)
 	return o;
 }
 
+std::ofstream& operator << (std::ofstream& file, const std::map<std::string, std::vector<std::pair<int, int>>>& resultat)
+{
+	try
+	{
+		for (auto it = resultat.begin(); it != resultat.end(); it++)
+		{
+			int len = 1 + static_cast<int>(it->first.length());
+			file.write((char*)&len, sizeof(len));
+			file.write(it->first.c_str(), len);
+
+			int s = static_cast<int>(it->second.size() * sizeof(std::pair<int,int>));
+			file.write((char*)&s, sizeof(s));
+			file.write(reinterpret_cast<const char*>(&(it->second[0])), s);
+
+			file.flush();
+		}
+	}
+	catch (std::exception& e)
+	{
+		std::ofstream log("log.txt", std::ios_base::app);
+		log << e.what() << std::endl;
+	}
+	return file;
+}
+
+MapFile& operator >> (MapFile& file, std::map<std::string, std::vector<std::pair<int, int>>>& resultat)
+{
+	if (file.is_binary)
+	{
+		try
+		{
+			while (not file.eof())
+			{
+				int len;
+				file.read((char*)&len, sizeof(len));
+				
+				auto string_lu = std::make_unique<char[]>(static_cast<unsigned __int64>(len) + 1);
+				file.read(string_lu.get(), len);
+				string_lu.get()[len] = '\0';
+
+				auto first = std::string(string_lu.get());
 
 
+				int size_vector;
+				file.read((char*)&size_vector, sizeof(size_vector));
+
+				std::vector<std::pair<int, int>> second(size_vector / sizeof(std::pair<int, int>));
+				file.read(reinterpret_cast<char*>(&second[0]), size_vector);
+				
+				resultat.insert(std::make_pair(first, second));
+			}
+		}
+		catch (...) { return file; } 
+		//Ce try-catch se declenche si le fichier se termine par un string (entite definie mais sans positions)
+	}
+	return file;
+}

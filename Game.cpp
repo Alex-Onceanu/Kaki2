@@ -15,7 +15,15 @@ Game::Game()
 	:Listener(),
 	running(true)
 {
-	currentWorld = std::make_unique<MainWorld>(running);
+	try
+	{
+		currentWorld = std::make_unique<MainWorld>(running);
+	}
+	catch (const char* e)
+	{
+		std::ofstream log("log.txt", std::ios_base::app);
+		log << e << std::endl;
+	}
 }
 
 Game::~Game()
