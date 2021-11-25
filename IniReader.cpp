@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "IniReader.h"
 #include "Entity.h"
 #include "ControllerFactory.h"

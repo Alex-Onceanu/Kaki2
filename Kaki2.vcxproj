@@ -120,7 +120,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -136,7 +136,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -152,22 +152,13 @@
     <ClCompile Include="CollisionController.cpp" />
     <ClCompile Include="ControllerFactory.cpp" />
     <ClCompile Include="Entity.cpp" />
-    <ClCompile Include="Event.cpp" />
-    <ClCompile Include="EventSystem.cpp" />
     <ClCompile Include="Fader.cpp" />
-    <ClCompile Include="IniReader.cpp" />
-    <ClCompile Include="InputEvent.cpp" />
-    <ClCompile Include="Input.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainWorld.cpp" />
     <ClCompile Include="PlayerMovementController.cpp" />
     <ClCompile Include="PositionController.cpp" />
-    <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="StaticDrawController.cpp" />
-    <ClCompile Include="Surface.cpp" />
-    <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -176,27 +167,12 @@
     <ClInclude Include="CollisionController.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityController.h" />
-    <ClInclude Include="Event.h" />
-    <ClInclude Include="EventEnum.h" />
-    <ClInclude Include="EventSystem.h" />
     <ClInclude Include="Fader.h" />
-    <ClInclude Include="IniReader.h" />
-    <ClInclude Include="InputEvent.h" />
-    <ClInclude Include="Input.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="InputEventsEnum.h" />
     <ClInclude Include="MainWorld.h" />
     <ClInclude Include="PlayerMovementController.h" />
-    <ClInclude Include="Position.h" />
     <ClInclude Include="PositionController.h" />
-    <ClInclude Include="Rect.h" />
-    <ClInclude Include="Renderer.h" />
-    <ClInclude Include="Resolution.h" />
     <ClInclude Include="StaticDrawController.h" />
-    <ClInclude Include="Surface.h" />
-    <ClInclude Include="Texture.h" />
-    <ClInclude Include="TextureManager.h" />
-    <ClInclude Include="Utility.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>

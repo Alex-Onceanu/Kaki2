@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "InputEvent.h"
 
 #include <SDL.h>

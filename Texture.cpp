@@ -1,4 +1,4 @@
-
+#include "pch.h"
 #include <SDL.h>
 
 #include "Texture.h"

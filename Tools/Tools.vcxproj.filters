@@ -9,6 +9,21 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
+    <Filter Include="Renderer">
+      <UniqueIdentifier>{86927569-d155-4331-a978-5ce037a93cf6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{7f46f745-6f3a-4a15-b2c1-5e1fa3baf6db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{8171202c-880a-46d0-9015-28546b9251d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EventSystem">
+      <UniqueIdentifier>{c551c49a-963a-4457-8a77-8151011743a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Small structs">
+      <UniqueIdentifier>{bc5d4f53-719f-4977-880f-14dda1d49a2e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -17,19 +32,91 @@
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\Renderer.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Surface.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Texture.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\InputEvent.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Input.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\InputEventsEnum.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Event.h">
+      <Filter>EventSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\EventEnum.h">
+      <Filter>EventSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\EventSystem.h">
+      <Filter>EventSystem</Filter>
+    </ClInclude>
     <ClInclude Include="Map.h">
-      <Filter>Header Files</Filter>
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\TextureManager.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IniReader.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Position.h">
+      <Filter>Small structs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Rect.h">
+      <Filter>Small structs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Resolution.h">
+      <Filter>Small structs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Utility.h">
+      <Filter>Small structs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Tools.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\Renderer.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Surface.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Texture.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\InputEvent.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Input.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Event.cpp">
+      <Filter>EventSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\EventSystem.cpp">
+      <Filter>EventSystem</Filter>
+    </ClCompile>
     <ClCompile Include="Map.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Tools.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\TextureManager.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IniReader.cpp">
+      <Filter>Utility</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
