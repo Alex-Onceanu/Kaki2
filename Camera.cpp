@@ -60,6 +60,7 @@ void Camera::UpdatePosition(const int& clampX, const int& clampY)
 	pr -= add;
 
 	SetPos(pr);
-	Clamp(rect.x, 0, clampX);
-	Clamp(rect.y, 0, clampY);
+	bool is_stopped_x = Clamp(rect.x, 0, clampX);
+	bool is_stopped_y = Clamp(rect.y, 0, clampY);
+	this->is_stopped = is_stopped_x or is_stopped_y;
 }

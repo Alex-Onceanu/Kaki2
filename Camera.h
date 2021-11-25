@@ -18,6 +18,7 @@ public:
 	void AddPos(const int& x, const int& y);
 
 	void GetSize(int& w, int& h);
+	bool IsStopped() { return is_stopped; };
 
 protected:
 	Rect rect;
@@ -25,5 +26,6 @@ protected:
 	const Position* playerPos;
 	const int* playerW;
 	const int* playerH;
+	bool is_stopped;
 };
 

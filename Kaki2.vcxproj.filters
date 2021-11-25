@@ -78,6 +78,9 @@
     <ClCompile Include="ControllerFactory.cpp">
       <Filter>Game\MainWorld</Filter>
     </ClCompile>
+    <ClCompile Include="Fader.cpp">
+      <Filter>Game\MainWorld</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Event.h">
@@ -157,6 +160,9 @@
     </ClInclude>
     <ClInclude Include="IniReader.h" />
     <ClInclude Include="ControllerFactory.h">
+      <Filter>Game\MainWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="Fader.h">
       <Filter>Game\MainWorld</Filter>
     </ClInclude>
   </ItemGroup>

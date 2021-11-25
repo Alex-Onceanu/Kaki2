@@ -4,17 +4,19 @@
 #include <sstream>
 
 template <typename T>
-inline void Clamp(T& src, const T& min, const T& max)
+inline bool Clamp(T& src, const T& min, const T& max)
 {
 	if (src < min)
 	{
 		src = min;
-		return;
+		return true;
 	}
 	if (src > max)
 	{
 		src = max;
+		return true;
 	}
+	return false;
 }
 
 inline int StrToInt(std::string str)

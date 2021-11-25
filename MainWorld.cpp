@@ -7,6 +7,7 @@
 #include "Camera.h"
 #include "Resolution.h"
 #include "Utility.h"
+#include "Fader.h"
 
 #include "ControllerFactory.h"
 #include "EntityController.h"
@@ -93,12 +94,75 @@ void MainWorld::CreateWorld()
 	const int* w;
 	const int* h;
 	mc->GetSizePtr(&w, &h);
-	camera = std::make_unique<Camera>(mc->GetPositionPtr(), w, h);
+	this->player = mc.get();
+	this->camera = std::make_unique<Camera>(mc->GetPositionPtr(), w, h);
 	entities.push_back(std::move(mc));
+
 
 	LoadScene(1);
 	LoadGround();
-	LoadEntities();
+	LoadEntities("./Content/Maps/test1.bin");
+
+#if 0
+	std::map<std::string, std::vector<std::pair<int, int>>> m;
+	std::vector<std::pair<int, int>> v;
+#define p(x,y) v.push_back(std::make_pair(x,y))
+
+	p(0, 0);
+	p(208 * 1, 0);
+	p(208 * 2, 0);
+	p(208 * 3, 0);
+	p(208 * 4, 0);
+	p(208 * 5, 0);
+	p(208 * 6, 0);
+	p(208 * 7, 0);
+	p(208 * 9, 0);
+	p(208 * 10, 0);
+	p(208 * 11, 0);
+
+	p(208 * 1, 1840);
+	p(208 * 2, 1840);
+	p(208 * 3, 1840);
+	p(208 * 4, 1840);
+	p(208 * 5, 1840);
+	p(208 * 6, 1840);
+	p(208 * 7, 1840);
+	p(208 * 8, 1840);
+	p(208 * 9, 1840);
+	p(208 * 10, 1840);
+	p(208 * 11, 1840);
+
+	p(0, 208 * 1);
+	p(0, 208 * 2);
+	p(0, 208 * 3);
+	p(0, 208 * 4);
+	p(0, 208 * 5);
+	p(0, 208 * 6);
+	p(0, 208 * 7);
+	p(0, 208 * 8);
+	p(0, 208 * 9);
+
+	p(2300, 208 * 1);
+	p(2300, 208 * 2);
+	p(2300, 208 * 3);
+	p(2300, 208 * 4);
+	p(2300, 208 * 5);
+	p(2300, 208 * 6);
+	p(2300, 208 * 7);
+	p(2300, 208 * 8);
+	p(2300, 208 * 9);
+	p(2300, 208 * 10);
+
+	m.emplace("./Content/Entities/tree.ini", v);
+	std::ofstream fichier("./Content/Maps/test1.bin");
+	fichier << m;
+	fichier.close();
+	throw;
+#endif
+
+	auto fader_tmp = std::make_unique<Fader>();
+	this->fader = fader_tmp.get();
+	entities.push_back(std::move(fader_tmp));
 
 	/*std::srand(static_cast<int>(time(NULL)));
 	for (int i = 0; i < 10; i++)
@@ -113,6 +177,100 @@ void MainWorld::CreateWorld()
 		entities.push_back(std::move(e));
 	}*/
 }
+
+void MainWorld::LoadEntities(std::string bin_map_file_path)
+{
+	MapFile fichier_bin(bin_map_file_path.c_str(), std::ios::binary);
+	if (not fichier_bin.is_open()) throw("Cannot open " + bin_map_file_path);
+
+	//Associe a chaque type d'obstacle l'ensemble de ses positions sur la carte
+	//map de <"nom_du_fichier .ini", liste des positions de cet obstacle>
+	//Exemple : <"Arbre.ini", {(x1, y1), (x2,y2), (x3,y3)...}
+	std::map<std::string, std::vector<std::pair<int, int>>> entity_to_pos;
+
+	fichier_bin >> entity_to_pos;
+
+	//Pour chaque obstacle
+	for (auto it = entity_to_pos.begin(); it != entity_to_pos.end(); it++)
+	{
+		if (it->first == "") continue;
+		std::ifstream fichier_ini_enitity_actuel(it->first);
+		if (not fichier_ini_enitity_actuel.is_open()) throw("Cannot open " + it->first);
+
+		//Pour chaque position d'un obstacle
+		for (auto jt : it->second)
+		{
+			std::unique_ptr<Entity> e = std::make_unique<Entity>();
+
+			iniReader->Read(cf.get(), fichier_ini_enitity_actuel, *e);
+			e->SetPosition(Position({ jt.first,jt.second }));
+
+			entities.push_back(std::move(e));
+
+			//On revient au debut du fichier sinon reste bloque au EOF
+			fichier_ini_enitity_actuel.clear();
+			fichier_ini_enitity_actuel.seekg(0,std::ios::beg);
+		}
+	}
+}
+
+#if 0
+void MainWorld::LoadEntities()
+{
+	const int map_w = scene->size_x;
+	const int map_h = scene->size_y;
+
+	std::ifstream fichier("./Content/Maps/e1.ini");
+	if (not fichier.is_open()) throw("Cannot open e1.ini");
+
+	std::map<std::string, std::map<std::string, std::string>> ini;
+	iniReader->ParseIni(fichier, ini);
+
+	const auto& map = ini["map"]["obstacles"];
+	assert(map.length() != 0);
+
+	//On fait un dictionnaire de tous les dictionnaires d'entities pour pas avoir a relire chaque fichier a chaque copie
+	// <nom du fichier, fichier ini lu>
+	//Utiliser des pointeurs plutot ?
+	std::map<std::string, std::map<std::string, std::map<std::string, std::string>>> inis_dict;
+
+	int c = 0;
+	for (int y = 0; y < map_h * 2; y += scene->tile_h * 2)
+	{
+		for (int x{ 0 }; (x < map_w * 2) and (c < map.length()); x += scene->tile_w * 2)
+		{
+			auto iss = IntToStr(map[c]);
+			if (map[c] >= 'a')
+			{
+				//ini["entities"][iss] est le path de l'ini decrivant l'entity qu'on charge
+
+				auto fichier_entity = inis_dict.find(ini["entities"][iss]);
+
+				//Si le fichier n'a pas encore été lu on le lit et on le place dans la map
+				if (not (fichier_entity != inis_dict.end()))
+				{
+					std::ifstream obst_file(ini["entities"][iss]);
+					if (not obst_file.is_open()) throw(std::string("Cannot open ") + ini["entities"][iss]);
+
+					iniReader->ParseIni(obst_file, inis_dict[ini["entities"][iss]]);
+
+					fichier_entity = inis_dict.find(ini["entities"][iss]);
+				}
+
+				//On crée l'Entity a partir de la map qu'on a
+				Position p{ x,y };
+				std::unique_ptr<Entity> e = std::make_unique<Entity>();
+
+				iniReader->Read(cf.get(), fichier_entity->second, *e);
+
+				e->SetPosition(p);
+				entities.push_back(std::move(e));
+			}
+			c++;
+		}
+	}
+}
+#endif
 
 void MainWorld::LoadScene(int nb_)
 {
@@ -198,62 +356,6 @@ void MainWorld::LoadGround()
 	this->ground = std::make_unique<Texture>(*Renderer::GetRenderer(), &gnd);
 }
 
-void MainWorld::LoadEntities()
-{
-	const int map_w = scene->size_x;
-	const int map_h = scene->size_y;
-
-	std::ifstream fichier("./Content/Maps/e1.ini");
-	if (not fichier.is_open()) throw("Cannot open e1.ini");
-
-	std::map<std::string, std::map<std::string, std::string>> ini;
-	iniReader->ParseIni(fichier, ini);
-
-	const auto& map = ini["map"]["obstacles"];
-	assert(map.length() != 0);
-
-	//On fait un dictionnaire de tous les dictionnaires d'entities pour pas avoir a relire chaque fichier a chaque copie
-	// <nom du fichier, fichier ini lu>
-	//Utiliser des pointeurs plutot ?
-	std::map<std::string, std::map<std::string, std::map<std::string, std::string>>> inis_dict;
-	
-	int c = 0;
-	for (int y = 0; y < map_h *2; y += scene->tile_h*2)
-	{
-		for (int x{ 0 }; (x < map_w*2) and (c < map.length()); x += scene->tile_w*2)
-		{
-			auto iss = IntToStr(map[c]);
-			if (map[c] >= 'a')
-			{
-				//ini["entities"][iss] est le path de l'ini decrivant l'entity qu'on charge
-
-				auto fichier_entity = inis_dict.find(ini["entities"][iss]);
-
-				//Si le fichier n'a pas encore été lu on le lit et on le place dans la map
-				if (not (fichier_entity != inis_dict.end()))
-				{
-					std::ifstream obst_file(ini["entities"][iss]);
-					if (not obst_file.is_open()) throw(std::string("Cannot open ") + ini["entities"][iss]);
-
-					iniReader->ParseIni(obst_file, inis_dict[ini["entities"][iss]]);
-
-					fichier_entity = inis_dict.find(ini["entities"][iss]);
-				}
-
-				//On crée l'Entity a partir de la map qu'on a
-				Position p{ x,y };
-				std::unique_ptr<Entity> e = std::make_unique<Entity>();
-				
-				iniReader->Read(cf.get(), fichier_entity->second, *e);
-
-				e->SetPosition(p);
-				entities.push_back(std::move(e));
-			}
-			c++;
-		}
-	}
-}
-
 MainWorld::~MainWorld()
 {
 
@@ -287,6 +389,36 @@ void MainWorld::DetectCollisions()
 	}
 }
 
+void MainWorld::CheckIfShouldFade()
+{
+	const int map_x = scene->size_x + RES_X;
+	const int map_y = scene->size_y + RES_Y;
+	const Position player_pos = player->GetPosition();
+
+	//Decalage entre la limite de la map et la ou commence le fade
+	const int fade_limit_starts_where = 200;
+
+	const int min_dist_x = std::min(player_pos.x, map_x - player_pos.x);
+	const int min_dist_y = std::min(player_pos.y, map_y - player_pos.y);
+
+	const int min_dist = std::min(min_dist_x, min_dist_y);
+
+	if (min_dist > fade_limit_starts_where)
+	{
+		fader->SetAlpha(0);
+		return;
+	}
+
+	if (min_dist <= 20)
+	{
+		fader->SetAlpha(255);
+		return;
+	}
+
+	const int proportion_255 = min_dist * 255 / fade_limit_starts_where;
+	fader->SetAlpha(255 - proportion_255);
+}
+
 void MainWorld::ProcessInput()
 {
 	PostEventFromInput();
@@ -299,9 +431,6 @@ void MainWorld::ProcessInput()
 
 void MainWorld::Update()
 {
-	
-
-
 	for (auto&& e : entities)
 	{
 		e->Update();
@@ -310,6 +439,7 @@ void MainWorld::Update()
 	//La camera suit toujours le joueur, mais doit s'arreter
 	//Aux limites de la map : 0,0 et camLimit
 	camera->UpdatePosition(scene->size_x, scene->size_y);
+	CheckIfShouldFade();
 }
 
 void MainWorld::Draw()
