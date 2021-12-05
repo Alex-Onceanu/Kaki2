@@ -1,10 +1,16 @@
+#include "Tools/pch.h"
 #include "pch.h"
 #include "Input.h"
 #include "InputEvent.h"
+#include "Position.h"
 
 #include <SDL.h>
 
+#include <vector>
 #include <iostream>
+#include <fstream>
+
+
 namespace Input
 {
 	auto keyboard = SDL_GetKeyboardState(NULL);
@@ -12,12 +18,6 @@ namespace Input
 	void UpdateKeyboardState()
 	{
 		SDL_PumpEvents();
-	}
-
-	int GetMouseInput(int& x, int& y)
-	{
-		SDL_PumpEvents();
-		return (int)SDL_GetMouseState(&x, &y);
 	}
 
 	bool CheckEvent(InputEventEnum* i)
@@ -36,7 +36,6 @@ namespace Input
 	bool GetNextInputEvent(InputEventEnum* src)
 	{
 		auto e = InputEvent();
-
 		while (SDL_PollEvent(e.GetRendererEvent()))
 		{
 			if (e.GetType() == static_cast<int>(InputEventEnum::KEYDOWN))
@@ -48,6 +47,19 @@ namespace Input
 			{
 				*src = static_cast<InputEventEnum>(e.GetRendererEvent()->key.keysym.scancode - IS_KEY_UP_ENUM);
 				return true;
+			}
+			if (e.GetType() == static_cast<int>(InputEventEnum::SCROLL))
+			{
+				if (e.GetRendererEvent()->wheel.y > 0)
+				{
+					*src = InputEventEnum::SCROLL_UP;
+					return true;
+				}
+				if (e.GetRendererEvent()->wheel.y < 0)
+				{
+					*src = InputEventEnum::SCROLL_DOWN;
+					return true;
+				}
 			}
 			if (e.GetType() == static_cast<int>(InputEventEnum::QUIT))
 			{
@@ -65,10 +77,18 @@ namespace Input
 	}
 }
 
-std::pair<int, int> Input::GetMousePos()
+std::pair<bool, bool> Input::GetMouseState(int* x, int* y)
+{
+	auto e = SDL_GetMouseState(x, y);
+	bool gauche = (e & SDL_BUTTON_LMASK) != 0;
+	bool droite = (e & SDL_BUTTON_RMASK) != 0;
+	return std::make_pair(gauche, droite);
+}
+
+Position Input::GetMousePos()
 {
 	int x;
 	int y;
 	SDL_GetMouseState(&x, &y);
-	return std::make_pair(x,y);
+	return Position({ x, y });
 }

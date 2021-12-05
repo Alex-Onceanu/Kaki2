@@ -396,7 +396,7 @@ void MainWorld::CheckIfShouldFade()
 	const Position player_pos = player->GetPosition();
 
 	//Decalage entre la limite de la map et la ou commence le fade
-	const int fade_limit_starts_where = 200;
+	const int fade_limit_starts_where = 150;
 
 	const int min_dist_x = std::min(player_pos.x, map_x - player_pos.x);
 	const int min_dist_y = std::min(player_pos.y, map_y - player_pos.y);

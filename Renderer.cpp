@@ -1,3 +1,4 @@
+#include "Tools/pch.h"
 #include "pch.h"
 #include <SDL.h>
 #include <SDL_image.h>
@@ -5,6 +6,7 @@
 #include "Resolution.h"
 #include "Renderer.h"
 #include "Position.h"
+
 
 void Renderer::Init()
 {
@@ -16,6 +18,52 @@ void Renderer::Init()
 		}
 
 		window = SDL_CreateWindow("Kaki 2",
+			SDL_WINDOWPOS_UNDEFINED,
+			SDL_WINDOWPOS_UNDEFINED,
+			RES_X, RES_Y,
+			NULL);
+
+		/*
+		auto icon = IMG_Load("./Assets/icon.png");
+		if (!icon)
+			throw (SDL_GetError());
+		else
+			SDL_SetWindowIcon(window, icon);
+		SDL_FreeSurface(icon);
+		*/
+
+		if (window == NULL)
+		{
+			throw("Window could not be created.");
+		}
+
+		renderer = SDL_CreateRenderer(window,
+			-1,
+			SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+		if (renderer == NULL)
+		{
+			throw("Renderer could not be created.");
+		}
+	}
+	catch (const char* e)
+	{
+		std::ofstream log("log.txt", std::ios_base::app);
+		log << e << std::endl;
+	}
+
+}
+
+void Renderer::Init(std::string windowName)
+{
+	try
+	{
+		if (SDL_Init(SDL_INIT_VIDEO) != 0)
+		{
+			throw("SDL could not be loaded.");
+		}
+
+		window = SDL_CreateWindow(windowName.c_str(),
 			SDL_WINDOWPOS_UNDEFINED,
 			SDL_WINDOWPOS_UNDEFINED,
 			RES_X, RES_Y,
@@ -164,6 +212,21 @@ void Renderer::ChangeScaledRectSize(Rect& rect, const int newW)
 	rect.w = newW;
 }
 
+void Renderer::ClearSurface(Surface* dst, int r, int g, int b)
+{
+	SDL_FillRect(*dst->GetRendererSurface(), NULL, SDL_MapRGB((*dst->GetRendererSurface())->format, r, g, b));
+}
+
+void Renderer::DrawFilledRectOnSurface(Rect& src, Surface* dst, int r, int g, int b)
+{
+	SDL_FillRect(*dst->GetRendererSurface(), (SDL_Rect*)&src, SDL_MapRGB((*dst->GetRendererSurface())->format,r,g,b));
+}
+
+void Renderer::DrawMoreFilledRectsOnSurface(const Rect* src, int count, Surface* dst, int r, int g, int b)
+{
+	SDL_FillRect(*dst->GetRendererSurface(), (SDL_Rect*)src, SDL_MapRGB((*dst->GetRendererSurface())->format, r, g, b));
+}
+
 void Renderer::DrawRect(Rect& rect, int r, int g, int b)
 {
 	SDL_SetRenderDrawColor(renderer, r, g, b, SDL_ALPHA_OPAQUE);
@@ -199,4 +262,32 @@ void Renderer::Clear(int r, int g, int b)
 {
 	SDL_SetRenderDrawColor(renderer, r, g, b, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(renderer);
+}
+
+void Renderer::DrawPoints(std::vector<Position> pts, int r, int g, int b, int a)
+{
+	Uint8 oldr, oldg, oldb, olda;
+	SDL_GetRenderDrawColor(renderer, &oldr, &oldg, &oldb, &olda);
+	SDL_SetRenderDrawColor(renderer, r, g, b, a);
+	SDL_RenderDrawPoints(renderer, reinterpret_cast<SDL_Point*>(&pts[0]), int(pts.size()));
+	SDL_SetRenderDrawColor(renderer, oldr, oldg, oldb, olda);
+}
+
+void Renderer::DrawLines(std::vector<Position> pts, int r, int g, int b, int a)
+{
+	Uint8 oldr, oldg, oldb, olda;
+	SDL_GetRenderDrawColor(renderer, &oldr, &oldg, &oldb, &olda);
+	SDL_SetRenderDrawColor(renderer, r, g, b, a);
+	SDL_RenderDrawLines(renderer, reinterpret_cast<SDL_Point *>(&pts[0]), int(pts.size()));
+	SDL_SetRenderDrawColor(renderer, oldr, oldg, oldb, olda);
+}
+
+void Renderer::SetScale(double s)
+{
+	SDL_RenderSetScale(renderer, float(s), float(s));
+}
+
+void Renderer::ShowCursor(bool yes)
+{
+	SDL_ShowCursor(int(yes));
 }

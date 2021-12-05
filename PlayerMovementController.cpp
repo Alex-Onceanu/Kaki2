@@ -140,13 +140,13 @@ void PlayerMovementController::StopLeft()
 void PlayerMovementController::Teleport()
 //Pour aller plus vite pour les tests
 {
-	std::pair<int,int> pair = Input::GetMousePos();
+	Position pair = Input::GetMousePos();
 	int* rect_x = &owner->GetRectPtr()->x;
 	int* rect_y = &owner->GetRectPtr()->y;
 	Position cameraPos = *ownerPositionPtr - Position({ *rect_x, *rect_y });
 
-	*rect_x = pair.first;
-	*rect_y = pair.second;
+	*rect_x = pair.x;
+	*rect_y = pair.y;
 
 	*ownerPositionPtr = Position({ *rect_x,*rect_y }) + cameraPos;
 }

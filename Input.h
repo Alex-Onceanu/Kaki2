@@ -2,6 +2,7 @@
 
 #include <tuple>
 
+#include "Position.h"
 #include "InputEventsEnum.h"
 #include "InputEvent.h"
 
@@ -13,5 +14,9 @@ namespace Input
 	bool CheckKeyPress(InputEventEnum k);
 	bool GetNextInputEvent(InputEventEnum* src);
 
-	std::pair<int, int> GetMousePos();
+	//Renvoie les coordonnées x,y de la souris
+	Position GetMousePos();
+
+	//Renvoie l'etat des boutons gauche et droite, et les coordonnées de la souris
+	std::pair<bool, bool> GetMouseState(int* x, int* y);
 }

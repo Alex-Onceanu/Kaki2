@@ -5,7 +5,7 @@
 #include <string>
 #include <map>
 #include <vector>
-#include<tuple>
+#include <tuple>
 
 class MapFile : public std::ifstream {
 public:
@@ -21,9 +21,11 @@ public:
 class Map
 {
 public:
+	Map(int mapW, int mapH, int tileW, int tileH, int tilesLength);
+public:
 	int size_x = 0, size_y = 0;
 	int tile_w = 1, tile_h = 1;
-	std::string tiles;
+	std::string tiles = "";
 };
 
 MapFile& operator >> (MapFile& o, Map& m);

@@ -21,11 +21,7 @@ inline bool Clamp(T& src, const T& min, const T& max)
 
 inline int StrToInt(std::string str)
 {
-	std::stringstream ss;
-	int num;
-	ss << str;
-	ss >> num;
-	return num;
+	return std::atoi(str.c_str());
 }
 
 inline std::string IntToStr(int num)

@@ -97,9 +97,6 @@
     <ClCompile Include="..\InputEvent.cpp">
       <Filter>Input</Filter>
     </ClCompile>
-    <ClCompile Include="..\Input.cpp">
-      <Filter>Input</Filter>
-    </ClCompile>
     <ClCompile Include="..\Event.cpp">
       <Filter>EventSystem</Filter>
     </ClCompile>
@@ -117,6 +114,9 @@
     </ClCompile>
     <ClCompile Include="..\IniReader.cpp">
       <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Input.cpp">
+      <Filter>Input</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

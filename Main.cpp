@@ -7,7 +7,7 @@
 int main(int argc, char** argv)
 {
 
-	Renderer::Init();
+	Renderer::Init("Kaki 2");
 	
 	try
 	{

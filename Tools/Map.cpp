@@ -2,9 +2,19 @@
 #include <vector>
 #include <iostream>
 #include <memory>
+#include <string>
 
 #include "pch.h"
 #include "Map.h"
+
+Map::Map(int mapW, int mapH, int tileW, int tileH, int tilesLength)
+	: size_x(mapW)
+	, size_y(mapH)
+	, tile_w(tileW)
+	, tile_h(tileH)
+{
+	tiles.append(tilesLength, '.');
+}
 
 std::ostream& operator << (std::ostream& o, const Map& m)
 {

@@ -12,4 +12,12 @@ struct Rect
 		y = b.y;
 		return *this;
 	}
+
+	template<typename T>
+	Rect& operator*(const T& c)
+	{
+		Rect tmp = { int(x * c), int(y * c),int(w * c),int(h * c) };
+		return tmp;
+	}
+
 };
