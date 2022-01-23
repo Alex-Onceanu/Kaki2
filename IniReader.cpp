@@ -1,13 +1,7 @@
 #include "Tools/pch.h"
-#include "pch.h"
 #include "IniReader.h"
 #include "Entity.h"
 #include "ControllerFactory.h"
-
-#include <fstream>
-#include <map>
-#include <string>
-#include <regex>
 
 constexpr auto ini_line{ "([A-Za-z_]+[A-Za-z0-9_-]*)\\s*=\\s*\"?'?([A-Za-z0-9\\/.]+\\.*[A-Za-z0-9]*)'?\"?" };
 constexpr auto group_line{ "\\[([A-Za-z_]+)\\]" };

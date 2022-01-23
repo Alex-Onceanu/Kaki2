@@ -149,9 +149,11 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapEditor.cpp" />
+    <ClCompile Include="SearchBar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MapEditor.h" />
+    <ClInclude Include="SearchBar.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

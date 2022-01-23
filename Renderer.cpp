@@ -1,11 +1,12 @@
 #include "Tools/pch.h"
-#include "pch.h"
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 
 #include "Resolution.h"
 #include "Renderer.h"
 #include "Position.h"
+#include "Tools/Font.h"
 
 
 void Renderer::Init()
@@ -90,6 +91,11 @@ void Renderer::Init(std::string windowName)
 		if (renderer == NULL)
 		{
 			throw("Renderer could not be created.");
+		}
+
+		if (TTF_Init() != 0)
+		{
+			throw("TTF could not be started.");
 		}
 	}
 	catch (const char* e)
@@ -192,6 +198,30 @@ std::shared_ptr<Surface> Renderer::SurfaceLoadImage(const std::string_view path)
 	}
 	return nullptr;
 }
+
+std::shared_ptr<Texture> Renderer::LoadTextTexture(const std::string text, Font* f, int r, int g, int b, int size)
+{
+	try {
+		SDL_Surface* surf = TTF_RenderText_Blended_Wrapped(*(f->GetRendererFont()), text.c_str(), SDL_Color(r, g, b, 255), size);
+
+		if (surf == NULL)
+		{
+			throw(text + std::string(" could not be loaded."));
+		}
+
+		std::shared_ptr<Texture> img = std::make_shared<Texture>(renderer, surf);
+		SDL_FreeSurface(surf);
+
+		return std::move(img);
+	}
+	catch (const char* e)
+	{
+		std::ofstream log("log.txt", std::ios_base::app);
+		log << e << std::endl;
+	}
+	return nullptr;
+}
+
 
 Rect Renderer::GetRect(Texture* srcImg)
 {

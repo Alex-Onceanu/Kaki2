@@ -2,6 +2,7 @@
 #include "Entity.h"
 #include "Renderer.h"
 #include "TextureManager.h"
+#include "Utility.h"
 
 StaticDrawController::StaticDrawController(Entity* o)
 	: EntityController(o)
@@ -14,14 +15,13 @@ StaticDrawController::StaticDrawController(Entity* o)
 void StaticDrawController::SetPath(const std::string& path)
 {
 	image = TextureManager::GetTexture(path);
-	auto r = Renderer::GetRect(image.get());
-	*owner_w = r.w;
-	*owner_h = r.h;
 }
 
 void StaticDrawController::LoadInitialData(std::map<std::string, std::string>& ini)
 {
 	SetPath(ini["path"]);
+	*owner_w = StrToInt(ini["width"]);
+	*owner_h = StrToInt(ini["height"]);
 }
 
 void StaticDrawController::Draw(const Position &cameraPos)

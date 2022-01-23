@@ -1,5 +1,4 @@
 #include "Tools/pch.h"
-#include "pch.h"
 #include <SDL.h>
 
 #include "Texture.h"
@@ -16,7 +15,10 @@ Texture::Texture(SDL_Renderer* renderer, SDL_Surface* srcSurface)
 
 Texture::~Texture()
 {
-	SDL_DestroyTexture(rendererTexture);
+	if (rendererTexture)
+	{
+		SDL_DestroyTexture(rendererTexture);
+	}
 }
 
 SDL_Texture* Texture::GetRendererTexture() const

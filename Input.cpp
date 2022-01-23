@@ -1,5 +1,4 @@
 #include "Tools/pch.h"
-#include "pch.h"
 #include "Input.h"
 #include "InputEvent.h"
 #include "Position.h"

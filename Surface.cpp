@@ -1,5 +1,4 @@
 #include "Tools/pch.h"
-#include "pch.h"
 #include <SDL.h>
 
 #include "Surface.h"
@@ -17,7 +16,10 @@ Surface::Surface(int width, int height)
 
 Surface::~Surface()
 {
-	SDL_FreeSurface(rendererSurface);
+	if (rendererSurface)
+	{
+		SDL_FreeSurface(rendererSurface);
+	}
 }
 
 SDL_Surface** Surface::GetRendererSurface()

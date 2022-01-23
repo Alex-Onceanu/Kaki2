@@ -1,10 +1,4 @@
-#include <fstream>
-#include <vector>
-#include <iostream>
-#include <memory>
-#include <string>
-
-#include "pch.h"
+#include "Tools/pch.h"
 #include "Map.h"
 
 Map::Map(int mapW, int mapH, int tileW, int tileH, int tilesLength)

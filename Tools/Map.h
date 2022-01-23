@@ -7,6 +7,8 @@
 #include <vector>
 #include <tuple>
 
+#include "Map.h"
+
 class MapFile : public std::ifstream {
 public:
 	MapFile(const char* path, std::ios_base::openmode mode = 1)
@@ -21,6 +23,7 @@ public:
 class Map
 {
 public:
+	Map() {};
 	Map(int mapW, int mapH, int tileW, int tileH, int tilesLength);
 public:
 	int size_x = 0, size_y = 0;

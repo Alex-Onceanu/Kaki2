@@ -1,5 +1,4 @@
 #include "Tools/pch.h"
-#include "pch.h"
 #include "TextureManager.h"
 
 std::shared_ptr<Texture> TextureManager::GetTexture(const std::string &path)

@@ -50,3 +50,15 @@ void operator *= (Pos<T>& a, Pos<T> b)
 {
 	a = a * b;
 }
+
+template <typename T>
+bool operator==(Pos<T> a, Pos<T> b)
+{
+	return (a.x == b.x) and (a.y == b.y);
+}
+
+template <typename T>
+bool operator<(Pos<T> a, Pos<T> b)
+{
+	return (a.x < b.x) or (a.y < b.y);
+}

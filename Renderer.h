@@ -10,6 +10,7 @@
 #include "Rect.h"
 #include "Texture.h"
 #include "Surface.h"
+#include "Tools/Font.h"
 
 
 struct SDL_Window;
@@ -45,7 +46,8 @@ namespace Renderer
 	std::shared_ptr<Texture> LoadImage(const std::string_view path);
 	//Charge une image dans une Surface
 	std::shared_ptr<Surface> SurfaceLoadImage(const std::string_view path);
-
+	//Charge une texture de texte TTF
+	std::shared_ptr<Texture> LoadTextTexture(const std::string text, Font* f, int r, int g, int b, int size);
 
 	//Renvoie un Rect collé aux bords d'une Texture (collision box)
 	Rect GetRect(Texture*);

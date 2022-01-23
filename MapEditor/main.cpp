@@ -65,6 +65,30 @@ unsigned int GetMapTileSize()
 	return unsigned(std::abs(resultat));
 }
 
+string GetOutputPath()
+{
+	string resultat;
+	cout << "Nom du fichier a ouvrir/creer ?" << endl;
+	cin >> resultat;
+	FlushCin();
+
+	if (cin.fail())
+	{
+		cout << "Merci d'entrer quelque chose de coherent\n" << endl;
+		return GetOutputPath();
+	}
+
+	auto path = std::string("../MapEditor-output/") + resultat + std::string(".bin");
+	ifstream test(path);
+	if (not test.is_open())
+	{
+		cout << "Le fichier \"" << resultat << "\" est introuvable. Creation d'une nouvelle map..." << endl;
+		return "";
+	}
+
+	return resultat;
+}
+
 void Frame(MapEditor* m)
 {
 	m->ProcessInput();
@@ -74,27 +98,51 @@ void Frame(MapEditor* m)
 }
 
 
+
 int main()
 {
-	const unsigned int map_w = GetMapWidth();
-	const unsigned int map_h = GetMapHeight();
-	const unsigned int tile_size = GetMapTileSize();
-	
-	try
+	const string outputPath = GetOutputPath();
+	if (outputPath != "")
 	{
-		unique_ptr<MapEditor> app = make_unique<MapEditor>(map_w, map_h, tile_size);
-
-		while (app->running)
+		try
 		{
-			Frame(app.get());
+			unique_ptr<MapEditor> app = make_unique<MapEditor>(outputPath);
+
+			while (app->running)
+			{
+				Frame(app.get());
+			}
+		}
+		catch (const exception e)
+		{
+			ofstream log("log.txt", ios_base::app);
+			log << e.what() << endl;
+			return -1;
 		}
 	}
-	catch (const exception e)
+	else
 	{
-		ofstream log("log.txt", ios_base::app);
-		log << e.what() << endl;
-		return -1;
+		const unsigned int map_w = GetMapWidth();
+		const unsigned int map_h = GetMapHeight();
+		const unsigned int tile_size = GetMapTileSize();
+
+		try
+		{
+			unique_ptr<MapEditor> app = make_unique<MapEditor>(map_w, map_h, tile_size, outputPath);
+
+			while (app->running)
+			{
+				Frame(app.get());
+			}
+		}
+		catch (const exception e)
+		{
+			ofstream log("log.txt", ios_base::app);
+			log << e.what() << endl;
+			return -1;
+		}
 	}
+	
 
 	return 0;
 }

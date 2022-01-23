@@ -8,6 +8,7 @@ struct SDL_Renderer;
 class Surface
 {
 public:
+	Surface() { rendererSurface = nullptr; };
 	Surface(SDL_Surface* srcSurface);
 	Surface(int width, int height);
 	~Surface();

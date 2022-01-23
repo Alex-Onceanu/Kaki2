@@ -1,5 +1,4 @@
 #include "Tools/pch.h"
-#include "pch.h"
 
 #include "Event.h"
 
