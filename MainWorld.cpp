@@ -17,6 +17,7 @@
 #include "PlayerMovementController.h"
 #include "CollisionController.h"
 
+#include <algorithm>
 #include <memory>
 #include <vector>
 #include <algorithm>
@@ -86,22 +87,22 @@ void MainWorld::InitKeyToEvent()
 
 void MainWorld::CreateWorld()
 {
+	LoadScene(1);
+
 	std::ifstream mc_ini("./Content/Entities/mc.ini");
-	if (not mc_ini.is_open()) throw("Cannot open mc.ini");
 
 	std::unique_ptr<Entity> mc = std::make_unique<Entity>();
 	iniReader->Read(cf.get(), mc_ini, *mc);
 	const int* w;
 	const int* h;
 	mc->GetSizePtr(&w, &h);
-	this->player = mc.get();
-	this->camera = std::make_unique<Camera>(mc->GetPositionPtr(), w, h);
+	camera = std::make_unique<Camera>(mc->GetPositionPtr(), w, h, scene->size_x, scene->size_y);
+	mc->SetPosition(Position(scene->player_spawn_x, scene->player_spawn_y));
+	player = mc.get();
 	entities.push_back(std::move(mc));
 
-
-	LoadScene(1);
 	LoadGround();
-	LoadEntities("./Content/Maps/test1.bin");
+	LoadEntities("./Content/Maps/1.kaki");
 
 #if 0
 	std::map<std::string, std::vector<std::pair<int, int>>> m;
@@ -194,6 +195,7 @@ void MainWorld::LoadEntities(std::string bin_map_file_path)
 	for (auto it = entity_to_pos.begin(); it != entity_to_pos.end(); it++)
 	{
 		if (it->first == "") continue;
+		
 		std::ifstream fichier_ini_enitity_actuel(it->first);
 		if (not fichier_ini_enitity_actuel.is_open()) throw("Cannot open " + it->first);
 
@@ -212,6 +214,7 @@ void MainWorld::LoadEntities(std::string bin_map_file_path)
 			fichier_ini_enitity_actuel.seekg(0,std::ios::beg);
 		}
 	}
+	std::sort(entities.begin()+1, entities.end(), [](std::unique_ptr<Entity>& a, std::unique_ptr<Entity>& b) { return a->GetPosition().y < b->GetPosition().y; });
 }
 
 #if 0
@@ -281,20 +284,10 @@ void MainWorld::LoadScene(int nb_)
 	try
 	{
 		MapFile fichier(path.str().c_str(), std::ios::binary);
-
-		const char* password{ "KAKI2" };
-		char* pass = (char *)alloca(strlen(password) + 1);
-		std::memset(pass, '\0', strlen(password) + 1);
-		fichier.read(pass, strlen(password));
-
-		int key;
-		fichier.read((char *)&key, sizeof(key));
-
-		if (strstr(pass, password) && key == 2)
-		{
-			fichier >> *scene;
-			RemoveZerosStr(scene->tiles);
-		}
+		
+		fichier >> *scene;
+		RemoveZerosStr(scene->tiles);
+		
 	}
 	catch (std::exception e)
 	{
@@ -381,9 +374,9 @@ void MainWorld::DetectCollisions()
 {
 	for (int i = 1; i < entities.size(); i++)
 	{
-		if (Collision(entities[0]->GetPosition(), *entities[0]->GetRectPtr(), entities[i]->GetPosition(), *entities[i]->GetRectPtr()))
+		if (Collision(player->GetPosition(), *player->GetRectPtr(), entities[i]->GetPosition(), *entities[i]->GetRectPtr()))
 		{
-			Event e = Event(EventEnum::COLLISION, static_cast<void*>(entities[0].get()));
+			Event e = Event(EventEnum::COLLISION, static_cast<void*>(player));
 			EventSystem::Launch(&e);
 		}
 	}
@@ -391,15 +384,13 @@ void MainWorld::DetectCollisions()
 
 void MainWorld::CheckIfShouldFade()
 {
-	const int map_x = scene->size_x + RES_X;
-	const int map_y = scene->size_y + RES_Y;
 	const Position player_pos = player->GetPosition();
 
 	//Decalage entre la limite de la map et la ou commence le fade
 	const int fade_limit_starts_where = 150;
 
-	const int min_dist_x = std::min(player_pos.x, map_x - player_pos.x);
-	const int min_dist_y = std::min(player_pos.y, map_y - player_pos.y);
+	const int min_dist_x = std::min(player_pos.x, scene->size_x - player_pos.x);
+	const int min_dist_y = std::min(player_pos.y, scene->size_y - player_pos.y);
 
 	const int min_dist = std::min(min_dist_x, min_dist_y);
 
@@ -436,20 +427,29 @@ void MainWorld::Update()
 		e->Update();
 	}
 	DetectCollisions();
-	//La camera suit toujours le joueur, mais doit s'arreter
-	//Aux limites de la map : 0,0 et camLimit
-	camera->UpdatePosition(scene->size_x, scene->size_y);
+	//La camera suit toujours le joueur, mais doit s'arreter aux limites de la map
+	camera->UpdatePosition(MinClamp(scene->size_x - RES_X, -1), MinClamp(scene->size_y - RES_Y, -1));
+	
+	//Fait en sorte que le joueur ne sorte pas de la map
+	int* w;
+	int* h;
+	player->GetSizePtr(&w, &h);
+	Clamp(player->GetPositionPtr()->x, 0, scene->size_x - *w);
+	Clamp(player->GetPositionPtr()->y, 0, scene->size_y - *h);
+
 	CheckIfShouldFade();
 }
 
 void MainWorld::Draw()
 {
-	Renderer::Clear(50, 200, 80);
+	//Pour du bleu marine :
+	//Renderer::Clear(9, 11, 51);
+	Renderer::Clear(0, 0, 0);
 
 
 	Position camPos = camera->GetPos();
 
-	Rect groundRect = { -camPos.x, -camPos.y, scene->size_x + RES_X, scene->size_y + RES_Y };
+	Rect groundRect = { -camPos.x, -camPos.y, scene->size_x, scene->size_y };
 	Renderer::FullBlit(ground.get(), groundRect);
 
 	for (auto&& e : entities)

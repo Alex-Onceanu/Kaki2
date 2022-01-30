@@ -48,7 +48,7 @@ void SearchBar::Update()
 		return;
 	}
 	textImage.reset();
-	textImage = Renderer::LoadTextTexture(barContent, usedFont, 255, 255, 255, 64 * barContent.length());
+	textImage = Renderer::LoadTextTexture(barContent, usedFont, 255, 255, 255, int(64 * barContent.length()));
 	textRect = Renderer::GetRect(textImage.get());
 	textRect.x = RES_X - 280;
 	textRect.y = RES_Y - 90;

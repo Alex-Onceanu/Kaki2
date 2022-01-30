@@ -6,7 +6,7 @@
 class Camera
 {
 public:
-	Camera(const Position* mcPos, const int* mcW, const int* mcH);
+	Camera(const Position* mcPos, const int* mcW, const int* mcH, const int __map_W, const int __map_H);
 	~Camera();
 
 	void UpdatePosition(const int& clampX, const int& clampY);
@@ -26,6 +26,8 @@ protected:
 	const Position* playerPos;
 	const int* playerW;
 	const int* playerH;
+	const int map_W;
+	const int map_H;
 	bool is_stopped;
 };
 

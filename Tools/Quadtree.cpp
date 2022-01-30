@@ -3,18 +3,39 @@
 #include "Quadtree.h"
 #include "../Utility.h"
 
-Direction PositionnementRelatifDiag(TextureRectMeta a, TextureRectMeta b)
-{
-	Direction tt[2][2] = { { Direction::NORD_OUEST, Direction::SUD_OUEST },{ Direction::NORD_EST,Direction::SUD_EST } };
-	return tt[int(a.get_x() < b.get_x())][int(a.get_y() > b.get_y())];
-}
 
 Direction PositionnementRelatifDiag(TextureRectMeta a, Position& b)
 {
 	Direction tt[2][2] = { { Direction::NORD_OUEST, Direction::SUD_OUEST },{ Direction::NORD_EST,Direction::SUD_EST } };
-	return tt[int(a.get_x() < b.x)][int(a.get_y() > b.y)];
+	return tt[int(a.get_x() > b.x)][int(a.get_y() > b.y)];
 }
 
+Direction PositionnementRelatifDiag(Position& a, Position& b)
+{
+	Direction tt[2][2] = { { Direction::NORD_OUEST, Direction::SUD_OUEST },{ Direction::NORD_EST,Direction::SUD_EST } };
+	return tt[int(a.x > b.x)][int(a.y > b.y)];
+}
+
+Quadtree_node::Quadtree_node(std::shared_ptr<TextureRectMeta> __val, Rect __zone)
+{
+	val = std::move(__val);
+	zone = __zone;
+}
+
+bool Quadtree_node::is_leaf()
+{
+	return (std::count(children.begin(), children.end(), nullptr) == 4) and (val != nullptr);
+}
+
+bool Quadtree_node::is_empty_but_not_leaf()
+{
+	return (val == nullptr) and (std::count(children.begin(), children.end(), nullptr) != 4);
+}
+
+bool Quadtree_node::is_empty()
+{
+	return (val == nullptr) and (std::count(children.begin(), children.end(), nullptr) == 4);
+}
 
 //____________________________________________________________________________TextureRectMeta____________________________________________________
 
@@ -70,6 +91,207 @@ bool operator==(TextureRectMeta& one, Position& other)
 	//Ne compare pas les textures ! verifie uniquement si les positions sont identiques
 	return (one.get_x() == other.x) and (one.get_y() == other.y);
 }
+
+Quadtree_node* find(Quadtree_node* root, Position& pos)
+{
+	if (root->is_empty()) return nullptr;
+	if (root->is_leaf())
+	{
+		if (*root->val == pos)
+			return root;
+	}
+	else if (root->is_empty_but_not_leaf())
+	{
+		//On trouve dans quelle sous-branche on s'enfonce en comparant le centre de la zone a la position de l'element
+		Position centre_zone = Position(root->zone.x + root->zone.w / 2, root->zone.y + root->zone.h / 2);
+		Quadtree_node* enfant_choisi = root->children[int(PositionnementRelatifDiag(pos, centre_zone))];
+
+		return find(enfant_choisi, pos);
+	}
+	return nullptr;
+}
+
+Quadtree_node* push(Quadtree_node* root, std::shared_ptr<TextureRectMeta> elem)
+{
+	//Racine non nulle
+	if (root->is_empty()) return nullptr;
+
+	else if (root->is_empty_but_not_leaf())
+	{
+		//Si la racine a des sous-branches et aucun contenu, on s'enfonce dans l'arbre
+
+		//On trouve dans quelle sous-branche on s'enfonce en comparant le centre de la zone a la position de l'element
+		Position centre_zone = Position(root->zone.x + root->zone.w / 2, root->zone.y + root->zone.h / 2);
+		Quadtree_node* enfant_choisi = root->children[int(PositionnementRelatifDiag(*elem, centre_zone))];
+
+		//Si l'enfant choisi est vide, on y ajoute elem
+		if (enfant_choisi->is_empty())
+		{
+			enfant_choisi->val = std::move(elem);
+			return enfant_choisi;
+		}
+		//Sinon on recommence
+		return push(enfant_choisi, elem);
+	}
+
+	else if (root->is_leaf())
+	{
+		//Si la racine est deja pleine, diviser la zone en 4
+
+		Rect r = root->zone;
+
+		root->children = {
+			new Quadtree_node(nullptr,Rect(r.x, r.y, r.w / 2, r.h / 2)),
+			new Quadtree_node(nullptr,Rect(r.x + r.w / 2, r.y, r.w / 2, r.h / 2)),
+			new Quadtree_node(nullptr,Rect(r.x, r.y + r.h / 2, r.w / 2, r.h / 2)),
+			new Quadtree_node(nullptr,Rect(r.x + r.w / 2, r.y + r.h / 2, r.w / 2, r.h / 2))
+		};
+
+		//Deplacer l'ancien contenu dans le sous-arbre
+		auto ancien_contenu = std::move(root->val);
+		root->val = nullptr;
+		push(root, std::move(ancien_contenu));
+
+		//S'enfoncer dans l'arbre pour ajouter elem
+		return push(root, elem);
+	}
+	return nullptr;
+}
+
+void remove_node(Quadtree_node* root, Quadtree_node* node)
+{
+	if (root == nullptr) return;
+
+	//On cherche le noeud parmi les 4 sous-branches de la racine
+	auto f = std::find(root->children.begin(), root->children.end(), node);
+
+	if (f == root->children.end())
+	{
+		//Si ce n'est pas une des sous-branches, on continue de s'enfoncer dans l'arbre
+
+		Position centre_zone_root = Position(root->zone.x + root->zone.w / 2, root->zone.y + root->zone.h / 2);
+		Position centre_zone_node = Position(node->zone.x + node->zone.w / 2, node->zone.y + node->zone.h / 2);
+		auto comparaison = PositionnementRelatifDiag(centre_zone_node, centre_zone_root);
+		return remove_node(root->children[int(comparaison)], node);
+	}
+
+	//Si root pointe vers le noeud qu'on cherche on fait d'abord en sorte qu'il l'oublie avant, puis on delete le noeud
+	root->children[f - root->children.begin()] = new Quadtree_node(nullptr, node->zone);
+	delete node;
+}
+
+void parcours_postfixe(Quadtree_node* root, std::function<void(Quadtree_node*)> lambda)
+{
+	if (root == nullptr) return;
+
+	for (auto&& c : root->children)
+	{
+		parcours_postfixe(c, lambda);
+	}
+	if (root->is_leaf()) lambda(root);
+}
+
+void parcours_infixe(Quadtree_node* root, std::function<void(Quadtree_node*)> lambda)
+{
+	if (root == nullptr) return;
+
+	parcours_infixe(root->children[int(Direction::NORD_OUEST)], lambda);
+	parcours_infixe(root->children[int(Direction::NORD_EST)], lambda);
+
+	if(root->is_leaf()) lambda(root);
+
+	parcours_infixe(root->children[int(Direction::SUD_OUEST)], lambda);
+	parcours_infixe(root->children[int(Direction::SUD_EST)], lambda);
+}
+
+void parcours_infixe_collision(Quadtree_node* root, Rect ecran, std::function<void(Quadtree_node*)> lambda)
+{
+	if (root == nullptr) return;
+
+	if (not Collision(root->zone, ecran)) return;
+
+	parcours_infixe_collision(root->children[int(Direction::NORD_OUEST)], ecran, lambda);
+	parcours_infixe_collision(root->children[int(Direction::NORD_EST)], ecran, lambda);
+
+	if (root->is_leaf())
+	{
+		if (Collision(root->val->get_rect(), ecran))
+			lambda(root);
+	}
+
+	parcours_infixe_collision(root->children[int(Direction::SUD_OUEST)], ecran, lambda);
+	parcours_infixe_collision(root->children[int(Direction::SUD_EST)], ecran, lambda);
+}
+
+Quadtree_node* create_root(std::shared_ptr<TextureRectMeta> elem, Rect __zone)
+{
+	return new Quadtree_node(std::move(elem), __zone);
+}
+
+//___________________________________________________tree____________________________________________________________________
+
+
+Quadtree::Quadtree(Rect ecran)
+{
+	root = new Quadtree_node(nullptr, ecran);
+	root->children = {
+			new Quadtree_node(nullptr,Rect(ecran.x, ecran.y, ecran.w / 2, ecran.h / 2)),
+			new Quadtree_node(nullptr,Rect(ecran.x + ecran.w / 2, ecran.y, ecran.w / 2, ecran.h / 2)),
+			new Quadtree_node(nullptr,Rect(ecran.x, ecran.y + ecran.h / 2, ecran.w / 2, ecran.h / 2)),
+			new Quadtree_node(nullptr,Rect(ecran.x + ecran.w / 2, ecran.y + ecran.h / 2, ecran.w / 2, ecran.h / 2))
+	};
+}
+
+Quadtree::~Quadtree()
+{
+	parcours_postfixe(root, [](Quadtree_node* n) { if (n) delete n; });
+}
+
+Quadtree_node* Quadtree::Push(std::shared_ptr<TextureRectMeta> elem)
+{
+	return push(root, elem);
+}
+
+Quadtree_node* Quadtree::Find(Position& pos)
+{
+	return find(root, pos);
+}
+
+void Quadtree::Remove(Quadtree_node* node)
+{
+	remove_node(root, node);
+}
+
+void Quadtree::Parcours_Postfixe(std::function<void(Quadtree_node*)> lambda)
+{
+	parcours_postfixe(root, lambda);
+}
+
+void Quadtree::Parcours_Infixe(std::function<void(Quadtree_node*)> lambda)
+{
+	parcours_infixe(root, lambda);
+}
+
+void Quadtree::Parcours_Infixe_Collision(Rect ecran, std::function<void(Quadtree_node*)> lambda)
+{
+	parcours_infixe_collision(root, ecran, lambda);
+}
+
+
+#if 0
+
+Direction PositionnementRelatifDiag(TextureRectMeta a, TextureRectMeta b)
+{
+	Direction tt[2][2] = { { Direction::NORD_OUEST, Direction::SUD_OUEST },{ Direction::NORD_EST,Direction::SUD_EST } };
+	return tt[int(a.get_x() < b.get_x())][int(a.get_y() > b.get_y())];
+}
+
+Direction PositionnementRelatifDiag(TextureRectMeta a, Position& b)
+{
+	Direction tt[2][2] = { { Direction::NORD_OUEST, Direction::SUD_OUEST },{ Direction::NORD_EST,Direction::SUD_EST } };
+	return tt[int(a.get_x() < b.x)][int(a.get_y() > b.y)];
+}
+
 
 //__________________________________________________________________________Node_____________________________________________________________
 
@@ -237,3 +459,5 @@ void Quadtree::Parcours_Inverse(std::function<void(Quadtree_node*)> lambda)
 {
 	parcours_inverse(root, lambda);
 }
+
+#endif

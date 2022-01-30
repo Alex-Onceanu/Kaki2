@@ -2,6 +2,7 @@
 #include <vector>
 #include <sstream>
 
+#include "Utility.h"
 #include "AnimationController.h"
 #include "EntityController.h"
 #include "Entity.h"
@@ -27,17 +28,15 @@ void AnimationController::SetPath(const std::string path)
 
 	*currentAnimation = (*allAnimations)[INDEX_DOWN];
 
-	auto r = Renderer::GetRect((*currentAnimation)[0].get());
-
-	/*owner_w = r.w;
-	*owner_h = r.h;*/
-	*owner_w = 50;
-	*owner_h = (*owner_w * r.h) / r.w;
+	//auto r = Renderer::GetRect((*currentAnimation)[0].get());
 }
 
 void AnimationController::LoadInitialData(std::map<std::string, std::string>& ini)
 {
 	SetPath(ini["path"]);
+
+	*owner_w = StrToInt(ini["width"]);
+	*owner_h = StrToInt(ini["height"]);
 }
 
 void AnimationController::LoadAllImages()

@@ -9,9 +9,13 @@
 #include <fstream>
 #include <vector>
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <memory>
 #include <string>
-
+#include <functional>
+#include <array>
+#include <tuple>
 #include <map>
 #include <regex>
 

@@ -25,9 +25,11 @@ class Map
 public:
 	Map() {};
 	Map(int mapW, int mapH, int tileW, int tileH, int tilesLength);
+	Map(int mapW, int mapH, int tileW, int tileH, int playerX, int playerY, int tilesLength);
 public:
 	int size_x = 0, size_y = 0;
 	int tile_w = 1, tile_h = 1;
+	int player_spawn_x = 0, player_spawn_y = 0;
 	std::string tiles = "";
 };
 

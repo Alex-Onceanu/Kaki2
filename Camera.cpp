@@ -2,10 +2,12 @@
 #include "Resolution.h"
 #include "Utility.h"
 
-Camera::Camera(const Position* mcPos, const int* mcW, const int* mcH)
+Camera::Camera(const Position* mcPos, const int* mcW, const int* mcH, const int __map_W, const int __map_H)
 	: playerPos(mcPos),
 	playerW(mcW),
-	playerH(mcH)
+	playerH(mcH),
+	map_W(__map_W),
+	map_H(__map_H)
 {
 
 }
@@ -63,4 +65,7 @@ void Camera::UpdatePosition(const int& clampX, const int& clampY)
 	bool is_stopped_x = Clamp(rect.x, 0, clampX);
 	bool is_stopped_y = Clamp(rect.y, 0, clampY);
 	this->is_stopped = is_stopped_x or is_stopped_y;
+
+	if (clampX < 0) SetPos(int(-RES_X / 2 + map_W / 2), rect.y);
+	if (clampY < 0) SetPos(rect.x, int(-RES_Y / 2 + map_H / 2));
 }

@@ -1,4 +1,4 @@
-#include "Tools/pch.h"
+#include "pch.h"
 #include "Map.h"
 
 Map::Map(int mapW, int mapH, int tileW, int tileH, int tilesLength)
@@ -10,12 +10,24 @@ Map::Map(int mapW, int mapH, int tileW, int tileH, int tilesLength)
 	tiles.append(tilesLength, '.');
 }
 
+Map::Map(int mapW, int mapH, int tileW, int tileH, int playerX, int playerY, int tilesLength)
+	: size_x(mapW)
+	, size_y(mapH)
+	, tile_w(tileW)
+	, tile_h(tileH)
+	, player_spawn_x(playerX)
+	, player_spawn_y(playerY)
+{
+	tiles.append(tilesLength, '.');
+}
+
 std::ostream& operator << (std::ostream& o, const Map& m)
 {
 	o << "Size x : " << m.size_x << "; "
 		<< "Size y :" << m.size_y << "; "
 		<< "Tile x : " << m.tile_w << "; "
 		<< "Tile y : " << m.tile_h << ";\n"
+		<< "Player spawning : " << m.player_spawn_x << " ; " << m.player_spawn_y << ";\n"
 		<< "Tiles : " << m.tiles << std::endl;
 	return o;
 }
@@ -71,8 +83,11 @@ MapFile& operator >> (MapFile& o, Map& m)
 		o.read(tiles.get(), l);
 		m.tiles = std::string(tiles.get(), l);
 	}
+//else :
+#if 0
 	else
 	{
+		//Ici c'est jamais utilise normalement du coup
 		try
 		{
 			std::ofstream log("log.txt");
@@ -120,6 +135,7 @@ MapFile& operator >> (MapFile& o, Map& m)
 			log << e << std::endl;
 		}
 	}
+#endif
 	return o;
 }
 

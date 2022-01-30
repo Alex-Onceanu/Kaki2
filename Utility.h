@@ -1,7 +1,10 @@
 #pragma once
-
 #include <string>
 #include <sstream>
+
+#include "Rect.h"
+#include "Position.h" 
+
 
 template <typename T>
 inline bool Clamp(T& src, const T& min, const T& max)
@@ -17,6 +20,16 @@ inline bool Clamp(T& src, const T& min, const T& max)
 		return true;
 	}
 	return false;
+}
+
+template<typename T>
+inline T MinClamp(T src, T min)
+{
+	if (src < min)
+	{
+		src = min;
+	}
+	return src;
 }
 
 inline int StrToInt(std::string str)

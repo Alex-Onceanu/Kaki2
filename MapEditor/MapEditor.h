@@ -31,6 +31,11 @@ public:
 	void Update();
 	void Draw();
 
+	void FillMap();
+	void Place4Tiles(int, int);
+
+	bool running = true;
+
 private:
 	void InitKeyToFunction();
 	void QuitApp();
@@ -47,12 +52,8 @@ private:
 	void LoadGround();
 	void LoadThisObstacle(const std::string& searched_content);
 	void PlaceEntity(const Position& worldPos);
-
-public:
-	void FillMap();
-	void Place4Tiles(int, int);
-
-	bool running = true;
+	void LoadAllObstacles();
+	void SetPlayerSpawnPos(const Position& worldPos);
 
 private:
 	std::unique_ptr<IniReader> ini_reader = std::make_unique<IniReader>();
@@ -101,8 +102,12 @@ private:
 
 	Quadtree entities;
 	std::string selectedEntityPath;
+	std::stack<std::string> oldSelectedEntityPaths;
 	std::string selectedEntityImgPath;
 	std::shared_ptr<Surface> selectedEntityImg = std::make_shared<Surface>();
+
+	std::shared_ptr<Texture> playerImg;
+	Rect playerSpawnPos = Rect(0, 0, 0, 0);
 
 	std::shared_ptr<Texture> cursorImage;
 	Rect cursor_rect = Rect(0, 0, 0, 0);

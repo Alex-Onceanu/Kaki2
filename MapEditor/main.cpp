@@ -65,6 +65,8 @@ unsigned int GetMapTileSize()
 	return unsigned(std::abs(resultat));
 }
 
+static bool creating_file = false;
+
 string GetOutputPath()
 {
 	string resultat;
@@ -83,7 +85,8 @@ string GetOutputPath()
 	if (not test.is_open())
 	{
 		cout << "Le fichier \"" << resultat << "\" est introuvable. Creation d'une nouvelle map..." << endl;
-		return "";
+		creating_file = true;
+		return resultat;
 	}
 
 	return resultat;
@@ -102,7 +105,7 @@ void Frame(MapEditor* m)
 int main()
 {
 	const string outputPath = GetOutputPath();
-	if (outputPath != "")
+	if (not creating_file)
 	{
 		try
 		{

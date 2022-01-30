@@ -25,7 +25,7 @@ MapEditor::MapEditor(const unsigned int mapWidth, const unsigned int mapHeight, 
 	, map_width(mapWidth - (mapWidth % tileSize))
 	, map_height(mapHeight - (mapHeight % tileSize))
 	, outputPath(output_path)
-	, entities(Quadtree(nullptr))
+	, entities(Quadtree(Rect(0, 0, map_width, map_height)))
 {
 	Renderer::Init("Kaki 2 map editor");
 
@@ -40,23 +40,27 @@ MapEditor::MapEditor(const unsigned int mapWidth, const unsigned int mapHeight, 
 	
 	selectedGroundBlock = TextureManager::GetSurface("../Assets/Sol/f.png");
 	cursorImage = TextureManager::GetTexture("../Assets/Sol/f.png");
-	cursor_rect = Renderer::GetRect(cursorImage.get());
+	cursor_rect.w = tile_size;
+	cursor_rect.h = tile_size;
 	Renderer::ShowCursor(true);
-
+		
 	font = std::make_unique<Font>("../Assets/Fonts/arial.ttf", 36);
 	searchBar = std::make_unique<SearchBar>(font.get());
 
+	playerImg = TextureManager::GetTexture("../Assets/MC/down/1.png");
 }
 
 MapEditor::MapEditor(const std::string output_path)
 	: outputPath(output_path)
-	, entities(Quadtree(nullptr))
 {
 	outputMap = std::make_unique<Map>();
 
 	std::string path = std::string("../MapEditor-output/") + outputPath + std::string(".bin");
 	MapFile lecture(path.c_str(), std::ios::binary);
-	if (not lecture.is_open())
+	std::string kaki_path = std::string("../MapEditor-output/") + outputPath + std::string(".kaki");
+	MapFile fichier_kaki(kaki_path.c_str(), std::ios::binary);
+
+	if (not (lecture.is_open() and fichier_kaki.is_open()))
 	{
 		std::cout << "Erreur de lecture : le fichier \"" << output_path << "\" est introuvable." << std::endl;
 		QuitApp();
@@ -71,17 +75,27 @@ MapEditor::MapEditor(const std::string output_path)
 		map_width = outputMap->size_x - (outputMap->size_x % tile_size);
 		map_height = outputMap->size_y - (outputMap->size_y % tile_size);
 
+		fichier_kaki >> outputObstacles;
+		fichier_kaki.close();
+
+		entities = Quadtree(Rect(0, 0, map_width, map_height));
+
 		Renderer::Init("Kaki 2 map editor");
 
 		groundSurface = std::make_unique<Surface>(map_width, map_height);
 		Renderer::ClearSurface(groundSurface.get(), 0, 0, 0);
 		ground = std::make_unique<Texture>(*Renderer::GetRenderer(), *groundSurface->GetRendererSurface());
 
+		LoadAllObstacles();
 		LoadGround();
 
 		selectedGroundBlock = TextureManager::GetSurface("../Assets/Sol/f.png");
+		selectedEntityImg.reset();
+		selectedEntityImgPath = "";
+		groundTile_mode = true;
 		cursorImage = TextureManager::GetTexture("../Assets/Sol/f.png");
-		cursor_rect = Renderer::GetRect(cursorImage.get());
+		cursor_rect.w = tile_size;
+		cursor_rect.h = tile_size;
 		Renderer::ShowCursor(true);
 
 		font = std::make_unique<Font>("../Assets/Fonts/arial.ttf", 36);
@@ -89,6 +103,7 @@ MapEditor::MapEditor(const std::string output_path)
 
 		InitKeyToFunction();
 		CreeQuadrillage();
+		playerImg = TextureManager::GetTexture("../Assets/MC/down/1.png");
 	}
 }
 
@@ -119,8 +134,25 @@ void MapEditor::LoadGround()
 		}
 	}
 	ground = std::make_unique<Texture>(*Renderer::GetRenderer(), *groundSurface->GetRendererSurface());
-	
-	
+}
+
+void MapEditor::LoadAllObstacles()
+{
+	//Doit remplir le quadtree entities à partir de outputObstacles qui a été lu
+
+	for (auto tup : outputObstacles)
+	{
+		if (tup.first == "") continue;
+		auto copy = tup.first;
+		//On supprime "./Content/Entities/" pour ne garder que "tree.ini" et pouvoir l'envoyer dans LoadThisObstacle
+		copy.erase(0, 19);
+		std::cout << copy << std::endl;
+		LoadThisObstacle(copy);
+		for (auto vect : tup.second)
+		{
+			PlaceEntity(Position(vect.first, vect.second));
+		}
+	}
 }
 
 void MapEditor::CreeQuadrillage()
@@ -232,13 +264,17 @@ void MapEditor::PlaceGroundTile(Position worldPos)
 void MapEditor::PlaceEntity(const Position& worldPos)
 {
 	//Si le clic est en dehors de la map on fait rien
-	if ((worldPos.x >= (map_width - cursor_rect.w / 2)) or (worldPos.y >= (map_height - cursor_rect.h / 2)) or (worldPos.x < -cursor_rect.w / 2) or (worldPos.y < -cursor_rect.h / 2))
+	if ((worldPos.x >= (map_width - cursor_rect.w)) or (worldPos.y >= (map_height - cursor_rect.h / 2)) or (worldPos.x < 0) or (worldPos.y < 0))
 		return;
 
-	//Si l'emplacement est invalide ou si une tile a deja ete placee ici on fait rien
+	//Le joueur doit etre unique, ce n'est pas un obstacle
+	if (selectedEntityPath == "./Content/Entities/mc.ini") return SetPlayerSpawnPos(worldPos);
+
+	//Si un obstacle a deja ete place ici on fait rien
 	Position pos = worldPos;
 	if (entities.Find(pos) != nullptr) return;
 
+	oldSelectedEntityPaths.push(selectedEntityPath);
 	is_saved = false;
 
 	//Mettre a jour l'Output du programme pour retenir l'emplacement du nouveau sol
@@ -246,15 +282,19 @@ void MapEditor::PlaceEntity(const Position& worldPos)
 
 
 	Rect entity_rect = Rect(worldPos.x, worldPos.y, cursor_rect.w, cursor_rect.h);
-	auto p = TextureRectMeta(TextureManager::GetTexture(selectedEntityImgPath), entity_rect);
+	std::shared_ptr<TextureRectMeta> p = std::make_shared<TextureRectMeta>(TextureManager::GetTexture(selectedEntityImgPath), entity_rect);
 	//Inserer le pair au bon endroit dans l'arbre
-	entities.Push(p);
+	auto pushed_ptr = entities.Push(p);
 
 
 	//Sauvegarder : avoir un .first de -1 signifie que que c'est un obstacle avec comme .second le pointeur de l'obstacle place dans le quadtree
-	previousPlacements.push(std::make_pair(-1, reinterpret_cast<intptr_t>(entities.Find(p))));
+	previousPlacements.push(std::make_pair(-1, reinterpret_cast<intptr_t>(pushed_ptr)));
 }
 
+void MapEditor::SetPlayerSpawnPos(const Position& worldPos)
+{
+	playerSpawnPos = Position(int((cursor_rect.x - int(screenMapOrigin.x))/zoomCoef), int((cursor_rect.y - int(screenMapOrigin.y))/zoomCoef));
+}
 
 void MapEditor::ActiveCtrl()
 {
@@ -316,6 +356,9 @@ void MapEditor::Ctrl_Z()
 	{
 		auto ptr = reinterpret_cast<Quadtree_node*>(top.second);
 		entities.Remove(ptr);
+		auto index_recherche = oldSelectedEntityPaths.top();
+		oldSelectedEntityPaths.pop();
+		outputObstacles[index_recherche].pop_back();
 		return;
 	}
 
@@ -340,24 +383,27 @@ void MapEditor::Sauvegarder()
 {
 	if (is_saved) return;
 
+	//On sauvegarde le .bin pour l'emplacement des tiles
 	std::string path = std::string("../MapEditor-output/") + outputPath + std::string(".bin");
 	std::ofstream output(path.c_str(), std::ios::binary);
-
-	if (not output.is_open())
-	{
-		std::cout << "Erreur d'enregistrement : le fichier \"" << path << "\" est introuvable." << std::endl;
-		return;
-	}
-
-	/*const char* pass{ "KAKI2" };
-	output.write(pass, strlen(pass));
-	int key = 2;
-	output.write((char*)&key, sizeof(key));*/
 	
+	outputMap->player_spawn_x = playerSpawnPos.x;
+	outputMap->player_spawn_y = playerSpawnPos.y;
+
 	output << *outputMap;
 	output.close();
 
-	std::cout << "Enregistrement reussi. Vous pouvez trouver le fichier de sortie dans le repertoire \"" << path << "\"." << std::endl;
+	
+	//On sauvegarde le .kaki pour l'emplacement des obstacles
+	std::string kaki_path = std::string("../MapEditor-output/") + outputPath + std::string(".kaki");
+
+	std::ofstream kaki_output(kaki_path.c_str(), std::ios::binary);
+
+	kaki_output << outputObstacles;
+	kaki_output.close();
+
+	std::cout << "Enregistrement reussi. Vous pouvez trouver les deux fichiers de sortie dans le repertoire \"" << path << " et " << kaki_path << "\"." << std::endl;
+
 	is_saved = true;
 }
 
@@ -430,19 +476,48 @@ void MapEditor::LoadThisObstacle(const std::string& searched_content)
 		std::map<std::string, std::map<std::string, std::string>> iniOutput;
 		ini_reader->ParseIni(iniFile, iniOutput);
 
-		std::string imgPath = "../" + iniOutput["StaticDraw"]["path"];
+		try
+		{
+			std::string imgPath = "../" + iniOutput["StaticDraw"]["path"];
 
-		selectedEntityImg = Renderer::SurfaceLoadImage(imgPath);
-		//throw ici si l'image n'est pas trouvee, mais ca arrive jamais car tout est bien ecrit depuis les ini.
-		selectedEntityPath = path.erase(0,1);
-		selectedEntityImgPath = imgPath;
+			selectedEntityImg = Renderer::SurfaceLoadImage(imgPath);
+			//Ici ça throw quand l'entity n'a pas de StaticDraw : donc quand on cherche une animation.
+			selectedEntityPath = path.erase(0, 1);
+			selectedEntityImgPath = imgPath;
 
-		cursor_rect.w = StrToInt(iniOutput["StaticDraw"]["width"]);
-		cursor_rect.h = StrToInt(iniOutput["StaticDraw"]["height"]);
+			cursor_rect.w = StrToInt(iniOutput["StaticDraw"]["width"]);
+			cursor_rect.h = StrToInt(iniOutput["StaticDraw"]["height"]);
+
+			cursorImage.reset();
+			cursorImage = TextureManager::GetTexture(imgPath);
+		}
+		catch(...)
+		{
+			//On cherche une animation
+
+			std::string imgPath = "../" + iniOutput["Animation"]["path"] + "/down/1.png";
+			std::cout << imgPath << std::endl;
+			selectedEntityImg = Renderer::SurfaceLoadImage(imgPath);
+			//Ici ça throw pas normalement
+
+			selectedEntityPath = path.erase(0, 1);
+			selectedEntityImgPath = imgPath;
+
+			cursor_rect.w = StrToInt(iniOutput["Animation"]["width"]);
+			cursor_rect.h = StrToInt(iniOutput["Animation"]["height"]);
+
+			if (searched_content == "mc.ini")
+			{
+				playerSpawnPos.w = cursor_rect.w;
+				playerSpawnPos.h = cursor_rect.h;
+			}
+
+			cursorImage.reset();
+			cursorImage = TextureManager::GetTexture(imgPath);
+		}
 
 		groundTile_mode = false;
-		cursorImage.reset();
-		cursorImage = TextureManager::GetTexture(imgPath);
+		shouldDrawQuadrillage = false;
 		selectedGroundBlockLetter = -1;
 		selectedGroundBlock.reset();
 
@@ -523,17 +598,19 @@ void MapEditor::Draw()
 	else
 	{
 		//Pour afficher les obstacles on itere a travers le quadtree contenant tous les obstacles
+		//Grosse triche : on voit pas les obstacles disparaitre en sortant de l'écran juste parce que l'écran est 4 fois plus grand lol
 		Rect tmp_rect;
-		entities.Parcours_Inverse([&](Quadtree_node* e)
+		entities.Parcours_Infixe_Collision(Rect(-screenMapOrigin.x - RES_X, -screenMapOrigin.y - RES_Y, int((int(4 * RES_X)) / zoomCoef), int((int(4 * RES_Y)) / zoomCoef)),
+			[&](Quadtree_node* e)
 			{
-				tmp_rect = { int(e->val.get_x() * zoomCoef + screenMapOrigin.x), int(e->val.get_y() * zoomCoef + screenMapOrigin.y), int(e->val.get_w() * zoomCoef), int(e->val.get_h() * zoomCoef) };
-				Renderer::FullBlit(e->val.get_imgptr(), tmp_rect);
+				tmp_rect = { int(e->val->get_x() * zoomCoef + screenMapOrigin.x), int(e->val->get_y() * zoomCoef + screenMapOrigin.y), int(e->val->get_w() * zoomCoef), int(e->val->get_h() * zoomCoef) };
+				Renderer::FullBlit(e->val->get_imgptr(), tmp_rect);
 			}
 		);
 	}
 	
-	
-
+	Rect playerRect = Rect(int(playerSpawnPos.x * zoomCoef) + screenMapOrigin.x, int(playerSpawnPos.y * zoomCoef) + screenMapOrigin.y, int(playerSpawnPos.w * zoomCoef), int(playerSpawnPos.h * zoomCoef));
+	Renderer::FullBlit(playerImg.get(), playerRect);
 	searchBar->Draw();
 
 	//Curseur
