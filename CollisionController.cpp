@@ -21,6 +21,13 @@ void CollisionController::LoadInitialData(std::map<std::string, std::string>& in
 	bool b;
 	ss >> std::boolalpha >> b;
 	owner->SetMovible(b);
+
+	auto str2 = ini["solid"];
+	std::transform(str2.begin(), str2.end(), str2.begin(), ::tolower);
+	std::istringstream ss2(str);
+	bool b2;
+	ss2 >> std::boolalpha >> b2;
+	owner->SetSolid(not b2);
 }
 
 

@@ -8,6 +8,7 @@
 #include "Resolution.h"
 #include "Utility.h"
 #include "Fader.h"
+#include "Tools/Cardinaux.h"
 
 #include "ControllerFactory.h"
 #include "EntityController.h"
@@ -87,7 +88,7 @@ void MainWorld::InitKeyToEvent()
 
 void MainWorld::CreateWorld()
 {
-	LoadScene(1);
+	LoadScene("1");
 
 	std::ifstream mc_ini("./Content/Entities/mc.ini");
 
@@ -102,7 +103,7 @@ void MainWorld::CreateWorld()
 	entities.push_back(std::move(mc));
 
 	LoadGround();
-	LoadEntities("./Content/Maps/1.kaki");
+	LoadEntities("1");
 
 #if 0
 	std::map<std::string, std::vector<std::pair<int, int>>> m;
@@ -179,10 +180,12 @@ void MainWorld::CreateWorld()
 	}*/
 }
 
+#if 0
 void MainWorld::LoadEntities(std::string bin_map_file_path)
 {
-	MapFile fichier_bin(bin_map_file_path.c_str(), std::ios::binary);
-	if (not fichier_bin.is_open()) throw("Cannot open " + bin_map_file_path);
+	std::string file_path = "./Content/Maps/" + bin_map_file_path + ".kaki";
+	MapFile fichier_bin(file_path.c_str(), std::ios::binary);
+	if (not fichier_bin.is_open()) throw("Cannot open " + file_path);
 
 	//Associe a chaque type d'obstacle l'ensemble de ses positions sur la carte
 	//map de <"nom_du_fichier .ini", liste des positions de cet obstacle>
@@ -215,8 +218,54 @@ void MainWorld::LoadEntities(std::string bin_map_file_path)
 		}
 	}
 	std::sort(entities.begin()+1, entities.end(), [](std::unique_ptr<Entity>& a, std::unique_ptr<Entity>& b) { return a->GetPosition().y < b->GetPosition().y; });
+
+}
+#else
+
+void MainWorld::LoadEntities(std::string bin_map_file_path)
+{
+	std::string file_path = "./Content/Maps/" + bin_map_file_path + ".kaki";
+	MapFile fichier_bin(file_path.c_str(), std::ios::binary);
+	if (not fichier_bin.is_open()) throw("Cannot open " + file_path);
+
+	//Associe a chaque type d'obstacle l'ensemble de ses positions sur la carte
+	//map de <"nom_du_fichier .ini", liste des positions de cet obstacle>
+	//Exemple : <"Arbre.ini", {(x1, y1), (x2,y2), (x3,y3)...}
+	std::map<std::string, std::vector<std::pair<int, int>>> entity_to_pos;
+
+	fichier_bin >> entity_to_pos;
+
+	//Pour chaque obstacle
+	for (auto it = entity_to_pos.begin(); it != entity_to_pos.end(); it++)
+	{
+		if (it->first == "") continue;
+
+		std::ifstream fichier_ini_enitity_actuel(it->first);
+		if (not fichier_ini_enitity_actuel.is_open()) throw("Cannot open " + it->first);
+
+		InitialData ini_actuel;
+		iniReader->ParseIni(fichier_ini_enitity_actuel, ini_actuel.data);
+
+
+		//Pour chaque position d'un obstacle
+		for (auto jt : it->second)
+		{
+			std::unique_ptr<Entity> e = std::make_unique<Entity>();
+			e->LoadInitialData(cf.get(), ini_actuel);
+			e->SetPosition(Position({ jt.first,jt.second }));
+
+			entities.push_back(std::move(e));
+
+			//On revient au debut du fichier sinon reste bloque au EOF
+			fichier_ini_enitity_actuel.clear();
+			fichier_ini_enitity_actuel.seekg(0, std::ios::beg);
+		}
+	}
+	std::sort(entities.begin() + 1, entities.end(), [](std::unique_ptr<Entity>& a, std::unique_ptr<Entity>& b) { return a->GetPosition().y < b->GetPosition().y; });
+
 }
 
+#endif
 #if 0
 void MainWorld::LoadEntities()
 {
@@ -275,15 +324,14 @@ void MainWorld::LoadEntities()
 }
 #endif
 
-void MainWorld::LoadScene(int nb_)
+void MainWorld::LoadScene(std::string bin_path)
 {
 	scene = std::make_unique<Map>();
-	std::ostringstream path;
-	path << "./Content/Maps/" << nb_ << ".bin";
-
+	std::string path;
+	path = "./Content/Maps/" + bin_path + ".bin";
 	try
 	{
-		MapFile fichier(path.str().c_str(), std::ios::binary);
+		MapFile fichier(path.c_str(), std::ios::binary);
 		
 		fichier >> *scene;
 		RemoveZerosStr(scene->tiles);
@@ -295,6 +343,9 @@ void MainWorld::LoadScene(int nb_)
 		log << e.what() << std::endl;
 	}
 }
+
+#if 0 
+//Ancien LoadGround, c'était quand même bien parce que toutes les tiles étaient chargées une seule et unique fois au lancement
 
 void MainWorld::LoadGround()
 {
@@ -348,6 +399,36 @@ void MainWorld::LoadGround()
 	}
 	this->ground = std::make_unique<Texture>(*Renderer::GetRenderer(), &gnd);
 }
+#else
+
+void MainWorld::LoadGround()
+{
+	// Tant qu'on depasse pas la surface et qu'il reste des tiles a placer on lit le prochain bloc et on le place
+
+	const int map_w = scene->size_x;
+	const int map_h = scene->size_y;
+	auto gnd = Surface(map_w, map_h);
+	Rect dst;
+
+	int c{ 0 };
+	for (int y = 0; y < map_h; y += scene->tile_h)
+	{
+		for (int x{ 0 }; (x < map_w) and (c < scene->tiles.length()); x += scene->tile_w)
+		{
+			dst = { x,y,scene->tile_w,scene->tile_h };
+			auto nom_du_bloc = int(scene->tiles[c]);
+			
+			std::string path = std::string("./Assets/Sol/") + std::to_string(nom_du_bloc) + std::string(".png");
+			auto tile = Renderer::SurfaceLoadImage(path);
+			Renderer::CopySurfaceScaled(tile.get(), nullptr, &gnd, &dst);
+			c++;
+			//ptdr c++
+		}
+	}
+	this->ground = std::make_unique<Texture>(*Renderer::GetRenderer(), &gnd);
+}
+
+#endif
 
 MainWorld::~MainWorld()
 {
@@ -374,6 +455,7 @@ void MainWorld::DetectCollisions()
 {
 	for (int i = 1; i < entities.size(); i++)
 	{
+		if (not entities[i]->IsSolid()) continue;
 		if (Collision(player->GetPosition(), *player->GetRectPtr(), entities[i]->GetPosition(), *entities[i]->GetRectPtr()))
 		{
 			Event e = Event(EventEnum::COLLISION, static_cast<void*>(player));
@@ -394,9 +476,16 @@ void MainWorld::CheckIfShouldFade()
 
 	const int min_dist = std::min(min_dist_x, min_dist_y);
 
-	if (min_dist > fade_limit_starts_where)
+	if (min_dist >= fade_limit_starts_where)
 	{
-		fader->SetAlpha(0);
+		if (fader->GetAlpha() > 0)
+		{
+			fader->SetAlpha(MinClamp(fader->GetAlpha() - 5, 0));
+		}
+		else
+		{
+			fader->SetAlpha(0);
+		}
 		return;
 	}
 
@@ -408,6 +497,35 @@ void MainWorld::CheckIfShouldFade()
 
 	const int proportion_255 = min_dist * 255 / fade_limit_starts_where;
 	fader->SetAlpha(255 - proportion_255);
+}
+
+void MainWorld::ChangerScene(std::string __voisin)
+{
+	if (__voisin == "") return;
+
+	std::ifstream test("./Content/Maps/" + __voisin + ".kaki");
+	if (not test.is_open())
+	{
+		std::ofstream log("log.txt", std::ios_base::app);
+		log << __voisin << "n'existe pas." << std::endl;
+		return;
+	}
+
+	scene.reset();
+	entities.resize(1);
+
+	LoadScene(__voisin);
+	player->SetPosition(Position(scene->player_spawn_x, scene->player_spawn_y));
+	//camera->SetPos(player->GetPosition());
+	EventSystem::Clean();
+
+	LoadGround();
+	LoadEntities(__voisin);
+
+	auto fader_tmp = std::make_unique<Fader>();
+	this->fader = fader_tmp.get();
+	entities.push_back(std::move(fader_tmp));
+	fader->SetAlpha(255);
 }
 
 void MainWorld::ProcessInput()
@@ -422,6 +540,33 @@ void MainWorld::ProcessInput()
 
 void MainWorld::Update()
 {
+	//Savoir s'il faut passer a la map suivante
+	if (Clamp(player->GetPositionPtr()->x, 0, scene->size_x))
+	{
+		//horizontal
+		if (player->GetPosition().x == 0)
+		{
+			ChangerScene(scene->voisins[int(Cardinaux::OUEST)]);
+		}
+		else
+		{
+			ChangerScene(scene->voisins[int(Cardinaux::EST)]);
+		}
+	}
+
+	else if (Clamp(player->GetPositionPtr()->y, 0, scene->size_y))
+	{
+		//vertical
+		if (player->GetPosition().y == 0)
+		{
+			ChangerScene(scene->voisins[int(Cardinaux::NORD)]);
+		}
+		else
+		{
+			ChangerScene(scene->voisins[int(Cardinaux::SUD)]);
+		}
+	}
+
 	for (auto&& e : entities)
 	{
 		e->Update();
@@ -434,9 +579,8 @@ void MainWorld::Update()
 	int* w;
 	int* h;
 	player->GetSizePtr(&w, &h);
-	Clamp(player->GetPositionPtr()->x, 0, scene->size_x - *w);
-	Clamp(player->GetPositionPtr()->y, 0, scene->size_y - *h);
 
+	
 	CheckIfShouldFade();
 }
 
@@ -452,8 +596,10 @@ void MainWorld::Draw()
 	Rect groundRect = { -camPos.x, -camPos.y, scene->size_x, scene->size_y };
 	Renderer::FullBlit(ground.get(), groundRect);
 
-	for (auto&& e : entities)
+	for (auto&& e = entities.begin() + 1; e != entities.end() - 1; e++)//: entities)
 	{
-		e->Draw(camPos);
+		(*e)->Draw(camPos);
 	}
+	player->Draw(camPos);
+	fader->Draw(camPos);
 }

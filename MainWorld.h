@@ -36,7 +36,7 @@ private:
 	void LoadGround();
 
 	//Lit l'attribut this->scene a partir d'un fichier
-	void LoadScene(int nb);
+	void LoadScene(std::string bin_path);
 	
 	//Cree des entites a partir d'un fichier binaire
 	void LoadEntities(std::string bin_map_file_path);
@@ -47,6 +47,8 @@ private:
 	/*Change l'attribut alpha du fader en fonction de la position
 	du joueur par rapport aux bords de la scene, s'il en est suffisamment proche*/
 	void CheckIfShouldFade();
+
+	void ChangerScene(std::string __voisin);
 
 protected:
 	std::vector<std::unique_ptr<Entity>> entities;

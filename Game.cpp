@@ -33,9 +33,22 @@ Game::~Game()
 
 void Game::MainLoop()
 {
+	/*int preFrame, postFrame, duree;
+	const double targetDuree = 50. / 3;*/
 	while (running)
 	{
+		//preFrame = Renderer::GetTicks();
 		Frame();
+		/*postFrame = Renderer::GetTicks();
+		duree = postFrame - preFrame;*/
+
+		////On a ainsi la durée d'une frame
+		////Or pour du 60FPS il faut que chaque frame dure 1000/60 = 50/3 = 16.6666667 ms
+		//if (duree < targetDuree)
+		//{
+		//	//Donc si la frame a été trop rapide on attend quelques ms histoire de bien être à 16.666 ms par frame.
+		//	//Renderer::Wait(targetDuree - duree);
+		//}
 	}
 }
 

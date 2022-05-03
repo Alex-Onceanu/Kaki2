@@ -321,3 +321,13 @@ void Renderer::ShowCursor(bool yes)
 {
 	SDL_ShowCursor(int(yes));
 }
+
+int Renderer::GetTicks()
+{
+	return SDL_GetTicks();
+}
+
+void Renderer::Wait(int ms)
+{
+	return SDL_Delay(ms);
+}

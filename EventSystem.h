@@ -13,5 +13,6 @@ namespace EventSystem
 	void Launch(Event* ev);
 	void Post(Event ev);
 	void Update();
+	void Clean();
 };
 

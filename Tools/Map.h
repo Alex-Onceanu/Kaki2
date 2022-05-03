@@ -6,6 +6,7 @@
 #include <map>
 #include <vector>
 #include <tuple>
+#include <array>
 
 #include "Map.h"
 
@@ -30,7 +31,12 @@ public:
 	int size_x = 0, size_y = 0;
 	int tile_w = 1, tile_h = 1;
 	int player_spawn_x = 0, player_spawn_y = 0;
+
+	//Les index sont des int(Cardinaux)
+	std::array<char[10], 4> voisins{ "\0","\0","\0","\0" };
+
 	std::string tiles = "";
+
 };
 
 MapFile& operator >> (MapFile& o, Map& m);

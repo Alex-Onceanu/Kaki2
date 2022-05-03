@@ -86,6 +86,9 @@
     <ClInclude Include="Quadtree.h">
       <Filter>Utility</Filter>
     </ClInclude>
+    <ClInclude Include="Cardinaux.h">
+      <Filter>Small structs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

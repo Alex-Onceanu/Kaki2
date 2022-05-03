@@ -95,7 +95,7 @@ private:
 	//Pour pouvoir ctrl-z
 	std::stack<std::pair<char, intptr_t>> previousPlacements;
 	
-	char selectedGroundBlockLetter = 'f';
+	char selectedGroundBlockLetter = char(41);
 	std::shared_ptr<Surface> selectedGroundBlock;
 
 	bool groundTile_mode = true;

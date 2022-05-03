@@ -86,5 +86,11 @@ namespace Renderer
 	void Clear(int r, int g, int b);
 
 	void ShowCursor(bool yes);
+
+	//Renvoie le nombre de milisecondes écoulées depuis le lancement de Renderer::Init()
+	int GetTicks();
+
+	//Met le programme en attente pendant quelques millisecondes
+	void Wait(int ms);
 };
 

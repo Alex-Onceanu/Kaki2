@@ -12,9 +12,14 @@ namespace EventSystem
 	{
 		for (auto&& l : listeners)
 		{
-			if (l->CanProcess(ev))
-			{
-				l->OnEvent(ev);
+			if (l)
+			{//??????????????????????????????
+				//Des fois l est juste inaccessibile apres avoir changé de map
+				// pourtant listeners est quand meme marqué comme vide
+				if (l->CanProcess(ev))
+				{
+					l->OnEvent(ev);
+				}
 			}
 		}
 	}
@@ -31,5 +36,10 @@ namespace EventSystem
 			Launch(&pe);
 		}
 		postEvents.clear();
+	}
+
+	void Clean()
+	{
+		listeners.resize(4);
 	}
 }

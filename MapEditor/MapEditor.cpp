@@ -17,6 +17,7 @@
 #include "..\Tools\Font.h"
 #include "../Surface.h"
 #include "../Texture.h"
+#include "..\Tools\Cardinaux.h"
 #include "SearchBar.h"
 
 
@@ -38,8 +39,8 @@ MapEditor::MapEditor(const unsigned int mapWidth, const unsigned int mapHeight, 
 	Renderer::ClearSurface(groundSurface.get(), 0, 0, 0);
 	ground = std::make_unique<Texture>(*Renderer::GetRenderer(), *groundSurface->GetRendererSurface());
 	
-	selectedGroundBlock = TextureManager::GetSurface("../Assets/Sol/f.png");
-	cursorImage = TextureManager::GetTexture("../Assets/Sol/f.png");
+	selectedGroundBlock = TextureManager::GetSurface("../Assets/Sol/41.png");
+	cursorImage = TextureManager::GetTexture("../Assets/Sol/41.png");
 	cursor_rect.w = tile_size;
 	cursor_rect.h = tile_size;
 	Renderer::ShowCursor(true);
@@ -89,11 +90,11 @@ MapEditor::MapEditor(const std::string output_path)
 		LoadAllObstacles();
 		LoadGround();
 
-		selectedGroundBlock = TextureManager::GetSurface("../Assets/Sol/f.png");
+		selectedGroundBlock = TextureManager::GetSurface("../Assets/Sol/41.png");
 		selectedEntityImg.reset();
 		selectedEntityImgPath = "";
 		groundTile_mode = true;
-		cursorImage = TextureManager::GetTexture("../Assets/Sol/f.png");
+		cursorImage = TextureManager::GetTexture("../Assets/Sol/41.png");
 		cursor_rect.w = tile_size;
 		cursor_rect.h = tile_size;
 		Renderer::ShowCursor(true);
@@ -114,7 +115,7 @@ MapEditor::~MapEditor()
 
 void MapEditor::LoadGround()
 {
-	//Refaire tout ça
+	//Pas tres opti ? doit charger chaque tile à chaque fois..
 
 	int compt{ 0 };
 	for (int y = 0; y < map_height; y += tile_size)
@@ -122,10 +123,10 @@ void MapEditor::LoadGround()
 		for (int x{ 0 }; (x < map_width) and (compt < outputMap->tiles.length()); x += tile_size)
 		{
 			char c = outputMap->tiles[compt];
-			if ((int(c) >= '1' and int(c) <= '9') or (int(c) >= 'a' and int(c) <= 'j'))
+			if (c >= '(')
 			{
 				Rect dst = { x,y,tile_size,tile_size };
-				std::string path = std::string("../Assets/Sol/") + c + std::string(".png");
+				std::string path = std::string("../Assets/Sol/") + std::to_string(c) + std::string(".png");
 				auto tile = Renderer::SurfaceLoadImage(path);
 
 				Renderer::CopySurfaceScaled(tile.get(), nullptr, groundSurface.get(), &dst);
@@ -363,14 +364,8 @@ void MapEditor::Ctrl_Z()
 	}
 
 	std::shared_ptr<Surface> tmpGround;
-	if (top.first == '.')
-	{
-		tmpGround = Renderer::SurfaceLoadImage("../Assets/Sol/96.png");
-	}
-	else
-	{
-		tmpGround = Renderer::SurfaceLoadImage(std::string("../Assets/Sol/") + top.first + std::string(".png"));
-	}
+	
+	tmpGround = Renderer::SurfaceLoadImage(std::string("../Assets/Sol/") + std::to_string(int(top.first)) + std::string(".png"));
 	outputMap->tiles[top.second] = top.first;
 
 	//Ce calcul donne des coordonnees de tile a partir d'un index de string
@@ -411,8 +406,26 @@ void MapEditor::type_key_enter()
 {
 	if (searchBar->IsEmpty()) return;
 	auto searched_content = searchBar->GetContent();
-	auto ground_path = "../Assets/Sol/" + searched_content;
 	searchBar->Erase();
+
+	std::array<std::string, 4> voisinsPossibles = { "haut", "gauche", "bas", "droite" };
+	auto cherche = std::find(voisinsPossibles.begin(), voisinsPossibles.end(), searched_content);
+	if(cherche != voisinsPossibles.end())
+	{
+		//Faire un std::cin pour récuperer le nom du fichier de la map voisine
+		//ce if se déclenche quand l'utilisateur a écrit "gauche" dans la barre, ou droite, haut etc
+		std::string rep;
+		do
+		{
+			std::cout << "Quelle map est voisine (" << searched_content << ") ?" << std::endl;
+			std::cin >> rep;
+		}while(std::cin.fail() or (rep == "") or (rep.length() >= 10));
+
+		strcpy_s(outputMap->voisins[int(cherche - voisinsPossibles.begin())], sizeof(char[10]),rep.c_str());
+		return;
+	}
+
+	auto ground_path = "../Assets/Sol/" + searched_content;
 
 	auto tmp = std::move(selectedGroundBlock);
 	auto tmp2 = std::move(cursorImage);
@@ -420,7 +433,7 @@ void MapEditor::type_key_enter()
 	{
 		selectedGroundBlock = Renderer::SurfaceLoadImage(ground_path);
 
-		selectedGroundBlockLetter = ground_path[14];
+		selectedGroundBlockLetter = char(StrToInt(searched_content));
 
 		cursorImage = std::make_shared<Texture>(*Renderer::GetRenderer(), selectedGroundBlock.get());
 		if (cursorImage.get() == nullptr) throw;

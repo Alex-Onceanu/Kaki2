@@ -7,7 +7,7 @@ Map::Map(int mapW, int mapH, int tileW, int tileH, int tilesLength)
 	, tile_w(tileW)
 	, tile_h(tileH)
 {
-	tiles.append(tilesLength, '.');
+	tiles.append(tilesLength, char(40));
 }
 
 Map::Map(int mapW, int mapH, int tileW, int tileH, int playerX, int playerY, int tilesLength)
@@ -18,7 +18,7 @@ Map::Map(int mapW, int mapH, int tileW, int tileH, int playerX, int playerY, int
 	, player_spawn_x(playerX)
 	, player_spawn_y(playerY)
 {
-	tiles.append(tilesLength, '.');
+	tiles.append(tilesLength, char(40));
 }
 
 std::ostream& operator << (std::ostream& o, const Map& m)
@@ -66,8 +66,10 @@ MapFile& operator >> (MapFile& o, Map& m)
 #if 0
 		o.read((char*)&m.size_x, sizeof(m.size_x));
 		o.read((char*)&m.size_y, sizeof(m.size_y));
-		o.read((char*)&m.tile_x, sizeof(m.tile_x));
-		o.read((char*)&m.tile_y, sizeof(m.tile_y));
+		o.read((char*)&m.tile_w, sizeof(m.tile_w));
+		o.read((char*)&m.tile_h, sizeof(m.tile_h));
+		o.read((char*)&m.player_spawn_x, sizeof(m.player_spawn_x));
+		o.read((char*)&m.player_spawn_y, sizeof(m.player_spawn_y));
 #else
 		auto s = sizeof(m) - sizeof(m.tiles);
 		o.read((char*)&m, s);
