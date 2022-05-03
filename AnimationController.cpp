@@ -80,7 +80,7 @@ void AnimationController::Update()
 
 	if (frameCount % 11 == 0)
 	{
-		if (++animCount > 3) animCount = 0;
+		animCount = (animCount + 1) % int(currentAnimation->size());
 	}
 
 	Position speed = *owner_pos - oldPosition;

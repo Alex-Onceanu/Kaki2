@@ -46,6 +46,9 @@
     <ClCompile Include="Entity.cpp">
       <Filter>Game\MainWorld</Filter>
     </ClCompile>
+    <ClCompile Include="ObstacleAnimationController.cpp">
+      <Filter>Game\MainWorld\EntityControllers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -86,6 +89,9 @@
     </ClInclude>
     <ClInclude Include="Fader.h">
       <Filter>Game\MainWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="ObstacleAnimationController.h">
+      <Filter>Game\MainWorld\EntityControllers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

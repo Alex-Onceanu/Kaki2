@@ -506,25 +506,37 @@ void MapEditor::LoadThisObstacle(const std::string& searched_content)
 		}
 		catch(...)
 		{
-			//On cherche une animation
-
-			std::string imgPath = "../" + iniOutput["Animation"]["path"] + "/down/1.png";
-			std::cout << imgPath << std::endl;
-			selectedEntityImg = Renderer::SurfaceLoadImage(imgPath);
-			//Ici ça throw pas normalement
-
-			selectedEntityPath = path.erase(0, 1);
-			selectedEntityImgPath = imgPath;
-
-			cursor_rect.w = StrToInt(iniOutput["Animation"]["width"]);
-			cursor_rect.h = StrToInt(iniOutput["Animation"]["height"]);
-
+			std::string imgPath;
 			if (searched_content == "mc.ini")
 			{
+				imgPath = "../" + iniOutput["Animation"]["path"] + "/down/1.png";
+				std::cout << imgPath << std::endl;
+				selectedEntityImg = Renderer::SurfaceLoadImage(imgPath);
+				//Ici ça throw pas normalement
+
+				selectedEntityPath = path.erase(0, 1);
+				selectedEntityImgPath = imgPath;
+
+				cursor_rect.w = StrToInt(iniOutput["Animation"]["width"]);
+				cursor_rect.h = StrToInt(iniOutput["Animation"]["height"]);
+
 				playerSpawnPos.w = cursor_rect.w;
 				playerSpawnPos.h = cursor_rect.h;
 			}
+			else
+			{
+				//On cherche une animation
+				imgPath = "../" + iniOutput["ObstacleAnimation"]["path"] + "/1.png";
+				std::cout << imgPath << std::endl;
+				selectedEntityImg = Renderer::SurfaceLoadImage(imgPath);
+				//Ici ça throw pas normalement
 
+				selectedEntityPath = path.erase(0, 1);
+				selectedEntityImgPath = imgPath;
+
+				cursor_rect.w = StrToInt(iniOutput["ObstacleAnimation"]["width"]);
+				cursor_rect.h = StrToInt(iniOutput["ObstacleAnimation"]["height"]);
+			}
 			cursorImage.reset();
 			cursorImage = TextureManager::GetTexture(imgPath);
 		}
